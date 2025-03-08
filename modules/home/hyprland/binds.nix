@@ -11,7 +11,7 @@ in
     bind = [
       "$modifier,Return,exec,${terminal}"
       "$modifier,R,exec,rofi-launcher"
-      "$modifier,W,exec,web-search"
+      "$modifier SHIFT,W,exec,web-search"
       "$modifier ALT,W,exec,wallsetter"
       "$modifier SHIFT,N,exec,swaync-client -rs"
       "$modifier,W,exec,${browser}"
