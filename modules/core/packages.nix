@@ -29,6 +29,7 @@
     age
     ssh-to-age
     direnv
+    nil
     amfora # Fancy Terminal Browser For Gemini Protocol
     appimage-run # Needed For AppImage Support
     brave # Brave Browser

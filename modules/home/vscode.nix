@@ -74,16 +74,16 @@
       # Nix
       "nix.enableLanguageServer"= true;
       "nix.serverPath" = "nil";
-      "nix.serverSettings" = {
-        "nil" = {
-          "diagnostics" = {
-            "ignored" = ["unused_binding" "unused_with"];
-          };
-          "formatting" = {
-            "command" = ["nixfmt"];
-          };
-        };
-      };
+      # "nix.serverSettings" = {
+      #   "nil" = {
+      #     "diagnostics" = {
+      #       "ignored" = ["unused_binding" "unused_with"];
+      #     };
+      #     "formatting" = {
+      #       "command" = ["nixfmt"];
+      #     };
+      #   };
+      # };
 
       # Copilot
         "github.copilot.enable" = {
