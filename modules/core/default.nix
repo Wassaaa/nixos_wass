@@ -22,5 +22,8 @@
     ./xdg.nix
     ./xserver.nix
     inputs.stylix.nixosModules.stylix
+    ./openssh.nix
+    ./sops.nix
+    inputs.sops-nix.nixosModules.sops
   ];
 }

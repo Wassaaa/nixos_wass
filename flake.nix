@@ -11,6 +11,10 @@
     };
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/master";
     catppuccin.url = "github:catppuccin/nix";
+    sops-nix = {
+      url = "github:mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {nixpkgs, ...} @ inputs: let

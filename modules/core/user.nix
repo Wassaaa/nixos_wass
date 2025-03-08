@@ -41,4 +41,8 @@ in {
     ignoreShellProgramCheck = true;
   };
   nix.settings.allowed-users = ["${username}"];
+
+  sops.secrets.password = {
+    sopsFile = ../../hosts/${host}/secrets.yaml;
+  };
 }

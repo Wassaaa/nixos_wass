@@ -1,0 +1,9 @@
+keys:
+  - &host_wassaa age1fkmzf05vfxfzuedgwsq9paf4ldqw34ud4zc88u6amjpqv47wrsashx0a6k
+  - &user_wassaa age1mnzfczftwm3vkdtsh8ds0jlt7xv7p805zq8ukhwehg65vnfnqe6qpte2p8
+creation_rules:
+  - path_regex: hosts/wassaa/secrets.ya?ml$
+    key_groups:
+    - age:
+      - *host_wassaa
+      - *user_wassaa
