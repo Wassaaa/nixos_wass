@@ -13,7 +13,7 @@
         '';
     });
     enableExtensionUpdateCheck = false;
-    mutableExtensionsDir = false;
+    mutableExtensionsDir = true;
 
     extensions = with pkgs.vscode-extensions; [
       # microsoft
@@ -31,12 +31,19 @@
       # utilities
       ms-vscode.hexeditor
       github.copilot
+      github.copilot-chat
       eamodio.gitlens
 
       # UI
       naumovs.color-highlight
       oderwat.indent-rainbow
+
+      # NIX
       jnoortheen.nix-ide
+      # pinage404.nix-extension-pack
+      arrterian.nix-env-selector
+      mkhl.direnv
+
     ];
     userSettings = {
       # General

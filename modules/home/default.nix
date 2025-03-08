@@ -1,4 +1,4 @@
-{...}: {
+{inputs, ...}: {
   imports = [
     ./bash.nix
     ./bat.nix
@@ -26,5 +26,7 @@
     ./zsh.nix
     ./vscode.nix
     ./chrome.nix
+    ./catppuccin.nix
+    inputs.catppuccin.homeManagerModules.catppuccin
   ];
 }
