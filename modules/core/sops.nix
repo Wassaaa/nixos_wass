@@ -1,4 +1,4 @@
-{ host, config, ... }:
+{ config, ... }:
 let
   isEd = k: k.type == "ed25519";
   getKeyPath = k: k.path;

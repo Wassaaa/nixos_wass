@@ -1,11 +1,10 @@
-{ outputs, lib, config, host, ... }:
+{ lib, host, ... }:
 let
   hostsDir = ../../hosts;
   isHost = name: builtins.pathExists (hostsDir + "/${name}/ssh_host_ed25519_key.pub");
 
   # Get all directories in the hosts directory and put the directory NAMES into a list
   hostDirs = builtins.attrNames (builtins.readDir hostsDir);
-  trace = builtins.trace "Host directories found: ${toString hostDirs}";
   hostNames = builtins.filter (name:
     isHost name
   ) hostDirs;

@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ ... }: {
   programs.google-chrome = {
     enable = true;
     commandLineArgs = [

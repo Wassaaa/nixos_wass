@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   boot = {
@@ -30,13 +30,13 @@
         configurationLimit = 10;
         default = "saved";
         gfxmodeEfi = "2560x1440";
-        # theme = pkgs.fetchzip {
-        #   # https://github.com/AdisonCavani/distro-grub-themes
-        #   url =
-        #     "https://github.com/AdisonCavani/distro-grub-themes/raw/master/themes/nixos.tar";
-        #   hash = "sha256-ivi68lkV2mypf99BOEnRiTpc4bqupfGJR7Q0Fm898kM=";
-        #   stripRoot = false;
-        # };
+        theme = lib.mkForce (pkgs.fetchzip {
+          # https://github.com/AdisonCavani/distro-grub-themes
+          url =
+            "https://github.com/AdisonCavani/distro-grub-themes/raw/master/themes/nixos.tar";
+          hash = "sha256-ivi68lkV2mypf99BOEnRiTpc4bqupfGJR7Q0Fm898kM=";
+          stripRoot = false;
+        });
       };
     };
   };
