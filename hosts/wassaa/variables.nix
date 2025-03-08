@@ -36,7 +36,7 @@
   ];
 
   # Waybar Settings
-  clock24h = false;
+  clock24h = true;
 
   # Program Options
   browser = "google-chrome-stable"; # Set Default Browser (google-chrome-stable for google-chrome)

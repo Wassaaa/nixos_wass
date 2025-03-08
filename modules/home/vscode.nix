@@ -74,6 +74,11 @@
       # Nix
       "nix.enableLanguageServer"= true;
       "nix.serverPath" = "nil";
+
+      # Copilot
+        "github.copilot.enable" = {
+          "*" =  false;
+        };
     };
   };
 }
