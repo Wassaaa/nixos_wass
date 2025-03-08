@@ -70,6 +70,10 @@
       "catppuccin-icons.specificFolders" = true;
       # Set to `true` to only use the `text` fill color for all icons.
       "catppuccin-icons.monochrome" = false;
+
+      # Nix
+      "nix.enableLanguageServer"= true;
+      "nix.serverPath" = "nil";
     };
   };
 }
