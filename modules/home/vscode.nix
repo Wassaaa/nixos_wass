@@ -12,15 +12,14 @@
             --add-flags "--disable-gpu-compositing"
         '';
     });
-    enableExtensionUpdateCheck = false;
+    profiles.default.enableExtensionUpdateCheck = false;
     mutableExtensionsDir = true;
 
-    extensions = with pkgs.vscode-extensions; [
+    profiles.default.extensions = with pkgs.vscode-extensions; [
       # microsoft
       ms-vscode-remote.remote-ssh
       ms-vscode-remote.remote-ssh-edit
       ms-azuretools.vscode-docker
-      catppuccin.catppuccin-vsc
 
       # ts
       yoavbls.pretty-ts-errors
@@ -37,6 +36,8 @@
       # UI
       naumovs.color-highlight
       oderwat.indent-rainbow
+      catppuccin.catppuccin-vsc
+      catppuccin.catppuccin-vsc-icons
 
       # NIX
       jnoortheen.nix-ide
@@ -45,7 +46,7 @@
       mkhl.direnv
 
     ];
-    userSettings = {
+    profiles.default.userSettings = {
       # General
       "editor.fontSize" = 16;
       "editor.fontFamily" = "'Jetbrains Mono', 'monospace', monospace";
@@ -62,6 +63,7 @@
       "diffEditor.ignoreTrimWhitespace" = false;
       # Styling
       "workbench.colorTheme" = "Catppuccin Mocha";
+      "workbench.iconTheme"= "catppuccin-mocha";
       # Set to `true` to disable folding arrows next to folder icons.
       "catppuccin-icons.hidesExplorerArrows" = false;
       # Set to `false` to only use the default folder icon.
