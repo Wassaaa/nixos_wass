@@ -4,7 +4,7 @@
   programs.vscode = {
     enable = true;
     package = pkgs.vscode.overrideAttrs (oldAttrs: {
-      # Create a wrapper script that adds Wayland flags
+    # Create a wrapper script that adds Wayland flags
       postInstall =
         (oldAttrs.postInstall or "")
         + ''
@@ -12,10 +12,8 @@
             --add-flags "--disable-gpu-compositing"
         '';
     });
-    profiles.default.enableExtensionUpdateCheck = false;
-    mutableExtensionsDir = true;
-
-    profiles.default.extensions = with pkgs.vscode-extensions; [
+    # baseline extensions baked by Nix
+    extensions = with pkgs.vscode-extensions; [
       # microsoft
       ms-vscode-remote.remote-ssh
       ms-vscode-remote.remote-ssh-edit
@@ -44,9 +42,11 @@
       # pinage404.nix-extension-pack
       arrterian.nix-env-selector
       mkhl.direnv
-
     ];
-    profiles.default.userSettings = {
+
+    # users are free to add/remove more via the normal UI
+    mutableExtensionsDir = true;
+    userSettings = {
       # General
       "editor.fontSize" = 16;
       "editor.fontFamily" = "'Jetbrains Mono', 'monospace', monospace";
