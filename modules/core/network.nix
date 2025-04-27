@@ -6,6 +6,7 @@
 }: {
   networking = {
     hostName = "${host}";
+    extraHosts = "127.0.0.1 aklein.42.fr";
     networkmanager.enable = true;
     timeServers = options.networking.timeServers.default ++ ["pool.ntp.org"];
     firewall = {
