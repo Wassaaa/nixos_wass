@@ -25,6 +25,10 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    xorg.libX11
+    libGL
+    gnumake
+    cmake
     sops
     age
     ssh-to-age
