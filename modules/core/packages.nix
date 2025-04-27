@@ -25,6 +25,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
+    virtualbox
     xorg.libX11
     libGL
     gnumake
