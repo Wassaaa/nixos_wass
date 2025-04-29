@@ -33,7 +33,7 @@ in
         ];
         numlock_by_default = true;
         repeat_delay = 300;
-        follow_mouse = 1;
+        follow_mouse = 0;
         sensitivity = 0;
         touchpad = {
           natural_scroll = true;
