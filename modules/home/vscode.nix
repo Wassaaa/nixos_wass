@@ -3,12 +3,12 @@
 {
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode-insiders.overrideAttrs (oldAttrs: {
+    package = pkgs.vscode.overrideAttrs (oldAttrs: {
     # Create a wrapper script that adds Wayland flags
       postInstall =
         (oldAttrs.postInstall or "")
         + ''
-          wrapProgram $out/bin/code-insiders \
+          wrapProgram $out/bin/code \
             --add-flags "--disable-gpu-compositing"
         '';
     });
