@@ -9,7 +9,8 @@
       bindkey "\ej" down-line-or-history
       bindkey "\ek" up-line-or-history
       bindkey "\el" forward-word
-       if [ -f $HOME/.zshrc-personal ]; then
+      
+      if [ -f $HOME/.zshrc-personal ]; then
           source $HOME/.zshrc-personal
         fi
     '';
