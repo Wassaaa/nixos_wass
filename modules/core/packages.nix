@@ -33,7 +33,7 @@
     sops
     age
     ssh-to-age
-    # direnv
+    # direnv added via home manager
     nil
     amfora # Fancy Terminal Browser For Gemini Protocol
     appimage-run # Needed For AppImage Support
