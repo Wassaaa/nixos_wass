@@ -5,6 +5,7 @@
     libvirtd.enable = true;
     docker.enable = true;
     podman.enable = false; # Use either docker or podman, not both
+    virtualbox.host.enable = true;
   };
 
   # Virtualization packages
@@ -15,6 +16,7 @@
     spice
     spice-gtk
     spice-protocol
+    virtualbox
     
     # Container tools
     docker-compose
@@ -27,5 +29,5 @@
   ];
 
   # User groups for virtualization
-  users.users.${username}.extraGroups = [ "libvirtd" "docker" ];
+  users.users.${username}.extraGroups = [ "libvirtd" "docker" "vboxusers" ];
 }

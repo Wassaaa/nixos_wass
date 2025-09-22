@@ -5,6 +5,7 @@
     ../../nvf.nix        # Neovim configuration
     ../../gh.nix         # GitHub CLI
     ../../git.nix        # Git configuration
+    ../../direnv.nix     # Development environment management
     
     # Terminal and shell
     ../../bash.nix       # Bash configuration
