@@ -4,25 +4,25 @@
     # Window manager and desktop environment
     ../../hyprland        # Hyprland window manager config
     ../../waybar.nix      # Status bar
-    ../../rofi           # Application launcher  
+    ../../rofi           # Application launcher
     ../../wlogout        # Logout menu
     ../../swaync.nix     # Notification daemon
-    
+
     # Desktop applications
     ../../vscode.nix     # Code editor (GUI)
     ../../chrome.nix     # Web browser
     ../../virtmanager.nix # VM management GUI
-    
+
     # Desktop theming and styling
     ../../gtk.nix        # GTK themes
-    ../../qt.nix         # QT themes  
+    ../../qt.nix         # QT themes
     ../../xdg.nix        # XDG settings for desktop
-    
+
     # Desktop-specific scripts
     ../../scripts        # Includes wallpaper, screenshot, etc.
-    
+
     # Theming
     ../../catppuccin.nix
-    inputs.catppuccin.homeManagerModules.catppuccin
+    inputs.catppuccin.homeModules.catppuccin
   ];
 }
