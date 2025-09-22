@@ -94,9 +94,9 @@
           inherit inputs;
           username = "allar";
           host = "tpad";
-          profile = "nvidia-laptop"; # Hybrid Intel+Nvidia laptop
+          profile = "intel"; # Intel CPU with integrated graphics
         };
-        modules = [./profiles/nvidia-laptop];
+        modules = [./profiles/intel];
       };
       # Example laptop configuration - uncomment and customize as needed
       # laptop = nixpkgs.lib.nixosSystem {
