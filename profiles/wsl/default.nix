@@ -14,7 +14,7 @@
   
   # WSL configuration
   wsl.enable = true;
-  wsl.defaultUser = "nixos";
+  wsl.defaultUser = "wsl";
   
   # System version
   system.stateVersion = "25.05";
