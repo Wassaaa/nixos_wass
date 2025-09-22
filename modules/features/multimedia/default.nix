@@ -11,10 +11,9 @@
   };
 
   # Video and graphics
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   # Multimedia packages
@@ -29,7 +28,7 @@
     audacity
     
     # Video editing
-    kdenlive
+    kdePackages.kdenlive
     obs-studio
     
     # Image editing
@@ -38,7 +37,6 @@
     
     # Media codecs and formats
     ffmpeg
-    gstreamer
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -55,7 +53,7 @@
   # Font configuration for multimedia
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     liberation_ttf
     fira-code
