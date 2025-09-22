@@ -15,7 +15,7 @@
   # WSL configuration
   wsl.enable = true;
   wsl.defaultUser = "wsl";
-  
+  programs.nix-ld.enable = true;  
   # System version
   system.stateVersion = "25.05";
 }
