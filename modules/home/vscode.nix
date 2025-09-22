@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   vscodePkg =
@@ -39,4 +39,27 @@ in {
       catppuccin.catppuccin-vsc-icons
     ];
   };
+
+  # Provide a base settings fragment and merge it into settings.json on activation
+  xdg.configFile."Code/User/settings.base.json" = {
+    source = ./vscode.settings.base.json;
+  };
+
+  home.activation.mergeVscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    set -eu
+    CONFIG_HOME="''${XDG_CONFIG_HOME:-$HOME/.config}"
+    SETTINGS_DIR="$CONFIG_HOME/Code/User"
+    BASE="$SETTINGS_DIR/settings.base.json"
+    USER_SETTINGS="$SETTINGS_DIR/settings.json"
+    TMP="$SETTINGS_DIR/.settings.json.hm-merge"
+
+    mkdir -p "$SETTINGS_DIR"
+    if [ -f "$BASE" ]; then
+      if [ -f "$USER_SETTINGS" ]; then
+        ${pkgs.jq}/bin/jq -s 'add' "$BASE" "$USER_SETTINGS" > "$TMP" && mv "$TMP" "$USER_SETTINGS"
+      else
+        cp "$BASE" "$USER_SETTINGS"
+      fi
+    fi
+  '';
 }
