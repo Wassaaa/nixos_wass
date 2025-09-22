@@ -1,5 +1,5 @@
 # Gaming Features
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true;
@@ -19,10 +19,10 @@
 
   # Gaming-specific kernel modules
   boot.kernelModules = [ "v4l2loopback" ];
-  boot.extraModulePackages = [ pkgs.linuxPackages.v4l2loopback ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
   # Performance optimizations for gaming
-  boot.kernel.sysctl = { 
+  boot.kernel.sysctl = {
     "vm.max_map_count" = 2147483642;
   };
 
@@ -32,11 +32,11 @@
     lutris
     heroic
     bottles
-    
+
     # Performance monitoring
     mangohud
     goverlay
-    
+
     # Game development
     godot_4
     blender
