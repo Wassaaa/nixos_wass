@@ -53,4 +53,11 @@
 
   # Enable Printing Support
   printEnable = false;
+
+  # System Features
+  enableGaming = true;       # Steam, gamescope, etc.
+  enableDesktop = true;      # Full desktop environment
+  enableVirtualization = true; # Docker, VMs, etc.
+  enableDevelopment = true;  # Dev tools, languages
+  enableMultimedia = true;   # Media codecs, players
 }

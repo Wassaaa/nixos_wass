@@ -1,0 +1,5 @@
+{...}: {
+  imports = [
+    ./host-packages.nix
+  ];
+}

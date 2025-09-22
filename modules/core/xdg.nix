@@ -1,15 +1,5 @@
-{pkgs, ...}: {
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal
-    ];
-    configPackages = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal
-    ];
-  };
+# This module is deprecated - desktop features moved to modules/features/desktop
+{ ... }: {
+  # Desktop features are now in modules/features/desktop/default.nix
+  # This file can be removed once migration is complete
 }

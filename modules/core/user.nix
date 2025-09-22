@@ -4,9 +4,11 @@
   username,
   host,
   profile,
+  lib,
   ...
 }: let
   inherit (import ../../hosts/${host}/variables.nix) gitUsername;
+  secretsPath = ../../hosts/${host}/secrets.yaml;
 in {
   imports = [inputs.home-manager.nixosModules.home-manager];
   home-manager = {
@@ -42,7 +44,7 @@ in {
   };
   nix.settings.allowed-users = ["${username}"];
 
-  sops.secrets.password = {
-    sopsFile = ../../hosts/${host}/secrets.yaml;
+  sops.secrets.password = lib.mkIf (builtins.pathExists secretsPath) {
+    sopsFile = secretsPath;
   };
 }

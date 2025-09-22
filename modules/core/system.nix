@@ -1,4 +1,4 @@
-{host, ...}: let
+{host, lib, ...}: let
   inherit (import ../../hosts/${host}/variables.nix) consoleKeyMap;
 in {
   nix = {
@@ -31,5 +31,5 @@ in {
     ZANEYOS = "true";
   };
   console.keyMap = "${consoleKeyMap}";
-  system.stateVersion = "23.11"; # Do not change!
+  system.stateVersion = lib.mkDefault "23.11"; # Do not change!
 }

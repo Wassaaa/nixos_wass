@@ -1,32 +1,6 @@
-{inputs, ...}: {
+{inputs, host, lib, ...}: {
   imports = [
-    ./bash.nix
-    ./bat.nix
-    ./btop.nix
-    ./cava.nix
-    ./emoji.nix
-    ./fastfetch
-    ./gh.nix
-    ./ghostty.nix
-    ./git.nix
-    ./gtk.nix
-    ./hyprland
-    ./kitty.nix
-    ./nvf.nix
-    ./rofi
-    ./qt.nix
-    ./scripts
-    ./starship.nix
-    ./stylix.nix
-    ./swaync.nix
-    ./virtmanager.nix
-    ./waybar.nix
-    ./wlogout
-    ./xdg.nix
-    ./zsh.nix
-    ./vscode.nix
-    ./chrome.nix
-    ./catppuccin.nix
-    inputs.catppuccin.homeManagerModules.catppuccin
+    # Use feature-based loading system
+    ./features.nix
   ];
 }

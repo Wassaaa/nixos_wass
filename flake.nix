@@ -15,9 +15,10 @@
       url = "github:mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
-  outputs = {nixpkgs, ...} @ inputs: let
+  outputs = {nixpkgs, nixos-wsl, ...} @ inputs: let
     system = "x86_64-linux";
     host = "wassaa";
     profile = "nvidia";
@@ -74,6 +75,30 @@
         };
         modules = [./profiles/vm];
       };
+      wsl = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          username = "nixos";
+          host = "wsl";
+          profile = "wsl";
+        };
+        modules = [
+          ./profiles/wsl
+          nixos-wsl.nixosModules.default
+        ];
+      };
+      # Example laptop configuration - uncomment and customize as needed
+      # laptop = nixpkgs.lib.nixosSystem {
+      #   inherit system;
+      #   specialArgs = {
+      #     inherit inputs;
+      #     username = "your-username";
+      #     host = "laptop";
+      #     profile = "nvidia"; # or "amd", "intel" based on your GPU
+      #   };
+      #   modules = [./profiles/nvidia]; # or the appropriate profile
+      # };
     };
   };
 }

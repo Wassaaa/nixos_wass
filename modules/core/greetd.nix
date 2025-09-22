@@ -1,16 +1,5 @@
-{
-  pkgs,
-  username,
-  ...
-}: {
-  services.greetd = {
-    enable = true;
-    vt = 3;
-    settings = {
-      default_session = {
-        user = username;
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland"; # start Hyprland with a TUI login manager
-      };
-    };
-  };
+# This module is deprecated - desktop features moved to modules/features/desktop
+{ ... }: {
+  # Desktop features are now in modules/features/desktop/default.nix
+  # This file can be removed once migration is complete
 }

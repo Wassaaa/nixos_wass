@@ -1,8 +1,14 @@
-{pkgs, ...}: {
-  # Styling Options
+# Core styling - desktop-specific features moved to modules/features/desktop
+{pkgs, host, lib, ...}: let
+  inherit (import ../../hosts/${host}/variables.nix) enableDesktop;
+in {
+  # Basic styling for all systems
   stylix = {
     enable = true;
-    image = ../../wallpapers/zaney-wallpaper.jpg;
+    image = if enableDesktop then ../../wallpapers/zaney-wallpaper.jpg else pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/master/wallpapers/nix-wallpaper-simple-dark-gray.png";
+      sha256 = "sha256-JaLHdBxwrphKVherDVe5fgh+3zqUtpcwuNbjwrBlAok=";
+    };
     base16Scheme = {
       base00 = "313244";
       base01 = "45475a";
@@ -23,11 +29,6 @@
     };
     polarity = "dark";
     opacity.terminal = 1.0;
-    cursor = {
-      package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Ice";
-      size = 24;
-    };
     fonts = {
       monospace = {
         package = pkgs.nerd-fonts.jetbrains-mono;
@@ -44,9 +45,11 @@
       sizes = {
         applications = 12;
         terminal = 15;
-        desktop = 11;
-        popups = 12;
       };
+    };
+    targets = lib.mkIf (!enableDesktop) {
+      # For non-desktop systems, only enable basic targets
+      console.enable = true;
     };
   };
 }

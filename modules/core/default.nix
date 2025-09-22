@@ -1,9 +1,8 @@
 {inputs, ...}: {
   imports = [
+    # Core system modules
     ./boot.nix
-    ./flatpak.nix
     ./fonts.nix
-    ./greetd.nix
     ./hardware.nix
     ./network.nix
     ./nfs.nix
@@ -13,17 +12,18 @@
     ./security.nix
     ./services.nix
     ./starfish.nix
-    ./steam.nix
     ./stylix.nix
     ./syncthing.nix
     ./system.nix
     ./user.nix
-    ./virtualisation.nix
-    ./xdg.nix
-    ./xserver.nix
-    inputs.stylix.nixosModules.stylix
     ./openssh.nix
     ./sops.nix
+    
+    # Feature-based module loader
+    ./features.nix
+    
+    # External modules
+    inputs.stylix.nixosModules.stylix
     inputs.sops-nix.nixosModules.sops
   ];
 }

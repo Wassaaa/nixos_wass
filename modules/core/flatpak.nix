@@ -1,12 +1,5 @@
-{pkgs, ...}: {
-  services = {
-    flatpak.enable = true; # Enable Flatpak
-  };
-  systemd.services.flatpak-repo = {
-    wantedBy = ["multi-user.target"];
-    path = [pkgs.flatpak];
-    script = ''
-      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    '';
-  };
+# This module is deprecated - desktop features moved to modules/features/desktop
+{ ... }: {
+  # Desktop features are now in modules/features/desktop/default.nix
+  # This file can be removed once migration is complete
 }
