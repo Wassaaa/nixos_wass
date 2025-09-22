@@ -1,5 +1,8 @@
 # Development Features
 { pkgs, config, ... }: {
+  # Critical for VSCode Remote and binary compatibility
+  programs.nix-ld.enable = true;
+  
   # Development tools
   environment.systemPackages = with pkgs; [
     # Version control
@@ -10,7 +13,7 @@
     # Editors and IDEs
     vim
     neovim
-    vscode
+    # vscode  # Remove GUI vscode from system packages
     
     # Build tools
     gcc
@@ -37,6 +40,12 @@
     valgrind
     strace
     ltrace
+    
+    # WSL-specific tools
+    wget
+    curl
+    unzip
+    zip
   ];
 
   # Appimage Support for development tools

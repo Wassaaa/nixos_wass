@@ -1,8 +1,8 @@
 # Variables for WSL host
 {
   # Git Configuration
-  gitUsername = "Your Git Username";
-  gitEmail = "your.email@example.com";
+  gitUsername = "Allar Klein";
+  gitEmail = "allarklein@gmail.com";
   
   # System Variables
   keyboardLayout = "us";
