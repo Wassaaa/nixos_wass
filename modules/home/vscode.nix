@@ -1,22 +1,28 @@
 { pkgs, ... }:
 
-{
+let
+  vscodePkg =
+    if pkgs ? vscode-insiders then pkgs.vscode-insiders
+    else if pkgs ? visual-studio-code-insiders then pkgs.visual-studio-code-insiders
+    else pkgs.vscode;
+in {
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode-insiders.overrideAttrs (oldAttrs: {
+    package = vscodePkg.overrideAttrs (oldAttrs: {
       # Wrap insiders and expose it as 'code' for convenience
       postInstall =
         (oldAttrs.postInstall or "")
         + ''
-          # Wrap insiders binary with flags
+          # Prefer insiders if present; otherwise wrap stable
           if [ -x "$out/bin/code-insiders" ]; then
             wrapProgram "$out/bin/code-insiders" \
               --add-flags "--disable-gpu-compositing"
+            rm -f "$out/bin/code" || true
+            ln -s "$out/bin/code-insiders" "$out/bin/code"
+          elif [ -x "$out/bin/code" ]; then
+            wrapProgram "$out/bin/code" \
+              --add-flags "--disable-gpu-compositing"
           fi
-
-          # Provide a 'code' alias pointing to insiders
-          rm -f "$out/bin/code" || true
-          ln -s "$out/bin/code-insiders" "$out/bin/code"
         '';
     });
     mutableExtensionsDir = true;
