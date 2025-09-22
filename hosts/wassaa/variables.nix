@@ -60,4 +60,8 @@
   enableVirtualization = true; # Docker, VMs, etc.
   enableDevelopment = true;  # Dev tools, languages
   enableMultimedia = true;   # Media codecs, players
+
+  # Home-Manager toggles
+  # Set to false to stop Home Manager from writing ~/.config/Code/User/settings.json
+  manageVSCodeSettings = false;
 }
