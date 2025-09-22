@@ -88,6 +88,16 @@
           nixos-wsl.nixosModules.default
         ];
       };
+      tpad = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          username = "allar";
+          host = "tpad";
+          profile = "nvidia-laptop"; # Hybrid Intel+Nvidia laptop
+        };
+        modules = [./profiles/nvidia-laptop];
+      };
       # Example laptop configuration - uncomment and customize as needed
       # laptop = nixpkgs.lib.nixosSystem {
       #   inherit system;
