@@ -6,7 +6,7 @@
       noto-fonts-emoji
       noto-fonts-cjk-sans
       font-awesome
-      symbola
+      # symbola  # Temporarily disabled due to broken download URL
       material-icons
     ];
   };
