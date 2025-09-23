@@ -9,7 +9,7 @@ in
     userEmail = "${gitEmail}";
 
     signing = {
-      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHlvV1koUZBNdWRfZ8SvOMgAkA8/Z3X7ZvpsRNULmoF2";
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbC++MIhGE9FrwsgT6SJp01/a1E3bnhQzbzMSutCKhL";
       signByDefault = true;
     };
 
