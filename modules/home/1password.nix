@@ -1,8 +1,23 @@
-{ pkgs, ... }: {
-  # Install 1Password GUI for desktop
-  home.packages = with pkgs; [
-    _1password-gui  # GUI for desktop environments
-  ];
+{ ... }: {
+  # Note: 1Password packages are installed at system level via desktop features
+
+  # Systemd user service to auto-start 1Password
+  systemd.user.services.onepassword = {
+    Unit = {
+      Description = "1Password";
+      After = [ "graphical-session.target" ];
+      Wants = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "/run/current-system/sw/bin/1password --silent";
+      Restart = "on-failure";
+      RestartSec = "5";
+      Type = "simple";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
 
   # Configure SSH to use 1Password agent by default
   programs.ssh = {

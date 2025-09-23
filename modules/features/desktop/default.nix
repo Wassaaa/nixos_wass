@@ -1,5 +1,9 @@
 # Desktop Environment Features
 { pkgs, username, lib, ... }: {
+  imports = [
+    ./1password.nix  # 1Password system integration
+  ];
+
   # Display Manager
   services.greetd = {
     enable = true;
