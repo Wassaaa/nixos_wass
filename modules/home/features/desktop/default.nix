@@ -2,17 +2,18 @@
 { inputs, ... }: {
   imports = [
     # Window manager and desktop environment
-    ../../hyprland        # Hyprland window manager config
-    ../../waybar.nix      # Status bar
-    ../../rofi           # Application launcher
-    ../../wlogout        # Logout menu
-    ../../swaync.nix     # Notification daemon
+    ../../hyprland            # Hyprland window manager config
+    ../../waybar.nix          # Status bar
+    ../../rofi                # Application launcher
+    ../../wlogout             # Logout menu
+    ../../swaync.nix          # Notification daemon
+    ../../home/clipboard.nix  # Clipboard history manager
 
     # Desktop applications
-    ../../vscode.nix     # Code editor (GUI)
-    ../../chrome.nix     # Web browser
+    ../../vscode.nix      # Code editor (GUI)
+    ../../chrome.nix      # Web browser
     ../../virtmanager.nix # VM management GUI
-    ../../1password.nix  # 1Password SSH agent integration (desktop)
+    ../../1password.nix   # 1Password SSH agent integration (desktop)
 
     # Desktop theming and styling
     ../../gtk.nix        # GTK themes

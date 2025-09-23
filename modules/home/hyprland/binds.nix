@@ -10,6 +10,7 @@ in
   wayland.windowManager.hyprland.settings = {
     bind = [
       "$modifier,Return,exec,${terminal}"
+      "$modifier,V,exec,cliphist list | rofi -dmenu | cliphist decode | wl-copy"
       "$modifier,R,exec,rofi-launcher"
       "$modifier SHIFT,W,exec,web-search"
       "$modifier ALT,W,exec,wallsetter"
