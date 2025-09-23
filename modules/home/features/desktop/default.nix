@@ -7,7 +7,7 @@
     ../../rofi                # Application launcher
     ../../wlogout             # Logout menu
     ../../swaync.nix          # Notification daemon
-    ../../home/clipboard.nix  # Clipboard history manager
+    ../../clipboard.nix  # Clipboard history manager
 
     # Desktop applications
     ../../vscode.nix      # Code editor (GUI)
