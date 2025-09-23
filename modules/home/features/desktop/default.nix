@@ -12,11 +12,16 @@
     ../../vscode.nix     # Code editor (GUI)
     ../../chrome.nix     # Web browser
     ../../virtmanager.nix # VM management GUI
+    ../../1password.nix  # 1Password SSH agent integration (desktop)
 
     # Desktop theming and styling
     ../../gtk.nix        # GTK themes
     ../../qt.nix         # QT themes
     ../../xdg.nix        # XDG settings for desktop
+    ../../stylix.nix     # System-wide theming
+    ../../cava.nix       # Audio visualizer
+    ../../kitty.nix      # Terminal emulator
+    ../../ghostty.nix    # Alternative terminal
 
     # Desktop-specific scripts
     ../../scripts        # Includes wallpaper, screenshot, etc.
