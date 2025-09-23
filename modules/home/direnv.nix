@@ -8,7 +8,7 @@
     nix-direnv.enable = true;
   };
 
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     # Direnv hook for zsh
     eval "$(direnv hook zsh)"
   '';
