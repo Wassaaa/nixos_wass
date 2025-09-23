@@ -1,4 +1,4 @@
-{ host, ... }:
+{ host, pkgs, ... }:
 let
   inherit (import ../../hosts/${host}/variables.nix) gitUsername gitEmail;
 in
@@ -8,21 +8,21 @@ in
     userName = "${gitUsername}";
     userEmail = "${gitEmail}";
 
+    signing = {
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHlvV1koUZBNdWRfZ8SvOMgAkA8/Z3X7ZvpsRNULmoF2";
+      signByDefault = true;
+    };
+
     extraConfig = {
-      # Use 1Password SSH signing for commits (optional but recommended)
-      commit.gpgsign = false; # Set to true if you want to sign commits with SSH
-
-      # Configure SSH signing (if desired)
-      # gpg.format = "ssh";
-      # user.signingkey = "ssh-ed25519 AAAA..."; # Your 1Password SSH key
-
-      # Better Git defaults
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
 
-      # Use 1Password credential helper for HTTPS if needed
-      # credential.helper = "!op-git-credential-helper";
+      # SSH signing configuration
+      gpg = {
+        format = "ssh";
+        ssh.program = "${pkgs._1password-gui}/bin/op-ssh-sign";
+      };
     };
   };
 }
