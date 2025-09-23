@@ -2,6 +2,8 @@
   # Git Configuration ( For Pulling Software Repos )
   gitUsername = "Allar Klein";
   gitEmail = "allarklein@gmail.com";
+  gitSigningKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbC++MIhGE9FrwsgT6SJp01/a1E3bnhQzbzMSutCKhL";
+
 
   # Hyprland Settings
   # extraMonitorSettings = "
@@ -39,8 +41,8 @@
   clock24h = true;
 
   # Program Options
-  browser = "google-chrome-stable"; # Set Default Browser (google-chrome-stable for google-chrome)
-  terminal = "kitty"; # Set Default System Terminal
+  browser = "google-chrome-stable";
+  terminal = "kitty";
   keyboardLayout = "us";
   consoleKeyMap = "us";
 
@@ -60,8 +62,4 @@
   enableVirtualization = true; # Docker, VMs, etc.
   enableDevelopment = true;  # Dev tools, languages
   enableMultimedia = true;   # Media codecs, players
-
-  # Home-Manager toggles
-  # Set to false to stop Home Manager from writing ~/.config/Code/User/settings.json
-  manageVSCodeSettings = false;
 }

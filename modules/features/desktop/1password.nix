@@ -1,9 +1,7 @@
 # 1Password System Integration - Minimal setup for desktop
 { pkgs, ... }: {
-  # Install 1Password system packages
   environment.systemPackages = with pkgs; [
     _1password-gui
-    _1password-cli
   ];
 
   # Enable 1Password system integration

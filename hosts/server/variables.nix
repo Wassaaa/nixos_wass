@@ -3,6 +3,8 @@
   # Git Configuration
   gitUsername = "Allar Klein";
   gitEmail = "allarklein@gmail.com";
+  gitSigningKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbC++MIhGE9FrwsgT6SJp01/a1E3bnhQzbzMSutCKhL";
+
 
   # System Variables
   keyboardLayout = "us";

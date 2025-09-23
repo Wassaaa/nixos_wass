@@ -1,6 +1,6 @@
 { host, pkgs, ... }:
 let
-  inherit (import ../../hosts/${host}/variables.nix) gitUsername gitEmail;
+  inherit (import ../../hosts/${host}/variables.nix) gitUsername gitEmail gitSigningKey;
 in
 {
   programs.git = {
@@ -9,7 +9,7 @@ in
     userEmail = "${gitEmail}";
 
     signing = {
-      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbC++MIhGE9FrwsgT6SJp01/a1E3bnhQzbzMSutCKhL";
+      key = "${gitSigningKey}";
       signByDefault = true;
     };
 
@@ -27,6 +27,6 @@ in
   };
   # Create the allowed signers file
   home.file.".ssh/allowed_signers".text = ''
-    ${gitEmail} ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbC++MIhGE9FrwsgT6SJp01/a1E3bnhQzbzMSutCKhL
+    ${gitEmail} ${gitSigningKey}
   '';
 }
