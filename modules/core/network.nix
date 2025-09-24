@@ -8,6 +8,10 @@
     hostName = "${host}";
     networkmanager.enable = true;
     timeServers = options.networking.timeServers.default ++ ["pool.ntp.org"];
+    hosts = {
+      "127.0.0.1" = [ "tool-tracker.local" ];
+    };
+
     firewall = {
       enable = true;
       allowedTCPPorts = [

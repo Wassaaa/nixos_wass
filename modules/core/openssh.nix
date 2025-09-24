@@ -37,12 +37,7 @@ in {
       publicKeyFile = pubKey name;
       extraHostNames = lib.optional (name == host)
         "localhost"; # Alias for localhost if it's the same host
-    }) hosts // {
-      "tool-tracker.local" = {
-        hostNames = [ "tool-tracker.local" "localhost" ];
-        publicKeyFile = pubKey host; # Use current host's key for localhost routing
-      };
-    };
+    }) hosts;
   };
 
   # Passwordless sudo when SSH'ing with keys
