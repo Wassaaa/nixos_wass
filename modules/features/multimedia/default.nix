@@ -21,20 +21,20 @@
     # Media players
     vlc
     mpv
-    
+
     # Audio tools
     pavucontrol
     easyeffects
     audacity
-    
+
     # Video editing
     kdePackages.kdenlive
     obs-studio
-    
+
     # Image editing
     gimp
     inkscape
-    
+
     # Media codecs and formats
     ffmpeg
     gst_all_1.gstreamer
@@ -43,11 +43,10 @@
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
-    
+
     # Screen capture
     grim
     slurp
-    wl-clipboard
   ];
 
   # Font configuration for multimedia

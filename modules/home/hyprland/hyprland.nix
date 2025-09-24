@@ -7,7 +7,6 @@
     swww
     grim
     slurp
-    wl-clipboard
     swappy
     ydotool
   ];

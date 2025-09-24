@@ -23,6 +23,8 @@ in
         "lxqt-policykit-agent"
         "pypr &"
         "sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/zaney-wallpaper.jpg"
+        "sleep 1.5 && wl-paste --watch clipvault store"
+        "sleep 1.5 && wl-paste --type image --watch clipvault store"
       ];
 
       input = {
