@@ -22,6 +22,7 @@
     # enableNvidiaPatches = false;
     systemd.enable = true;
   };
+
   # Place Files Inside Home Directory
   home.file = {
     "Pictures/Wallpapers" = {

@@ -1,16 +1,28 @@
 # Desktop Environment Features
-{ pkgs, username, lib, ... }: {
+{
+  pkgs,
+  username,
+  lib,
+  ...
+}:
+{
   imports = [
-    ./1password.nix  # 1Password system integration
+    ./1password.nix # 1Password system integration
   ];
 
-  # Display Manager
+  # Display Manager (tuigreet session picker)
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
         user = username;
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        command = ''
+          ${pkgs.tuigreet}/bin/tuigreet \
+            --time \
+            --remember \
+            --remember-session \
+            --sessions /etc/xdg/wayland-sessions
+        '';
       };
     };
   };
@@ -23,18 +35,25 @@
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal
     ];
-    configPackages = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal
-    ];
+    configPackages = [ pkgs.hyprland ];
+    xdgOpenUsePortal = true;
   };
+
+  # Hyprland desktop entry
+  environment.etc."xdg/wayland-sessions/hyprland.desktop".text = ''
+    [Desktop Entry]
+    Name=Hyprland
+    Comment=Hyprland Wayland compositor
+    TryExec=Hyprland
+    Exec=Hyprland
+    Type=Application
+  '';
 
   # GUI App Support
   services.flatpak.enable = true;
   systemd.services.flatpak-repo = {
-    wantedBy = ["multi-user.target"];
-    path = [pkgs.flatpak];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.flatpak ];
     script = ''
       flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     '';
@@ -55,11 +74,13 @@
       configurationLimit = 10;
       default = "saved";
       gfxmodeEfi = "2560x1440";
-      theme = lib.mkForce (pkgs.fetchzip {
-        url = "https://github.com/AdisonCavani/distro-grub-themes/raw/master/themes/nixos.tar";
-        hash = "sha256-ivi68lkV2mypf99BOEnRiTpc4bqupfGJR7Q0Fm898kM=";
-        stripRoot = false;
-      });
+      theme = lib.mkForce (
+        pkgs.fetchzip {
+          url = "https://github.com/AdisonCavani/distro-grub-themes/raw/master/themes/nixos.tar";
+          hash = "sha256-ivi68lkV2mypf99BOEnRiTpc4bqupfGJR7Q0Fm898kM=";
+          stripRoot = false;
+        }
+      );
     };
   };
 

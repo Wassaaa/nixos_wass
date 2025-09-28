@@ -21,7 +21,7 @@ in
       "$modifier,D,exec,discord"
       "$modifier,O,exec,obs"
       "$modifier,C,exec,hyprpicker -a"
-      "$modifier,G,exec,gimp"
+      "$modifier,G,exec,gamescope-steam"
       "$modifier,T,exec,pypr toggle term"
       "$modifier SHIFT,T,exec,pypr toggle thunar"
       "$modifier,M,exec,pavucontrol"

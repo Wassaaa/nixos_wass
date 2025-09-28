@@ -19,8 +19,7 @@ in {
     ./features/development
   ] ++ lib.optionals enableMultimedia [
     ./features/multimedia
+  ] ++ lib.optionals enableGaming [
+    ./features/gaming
   ];
-
-  # Note: Gaming and virtualization don't typically have
-  # user-level home-manager configs, they're system-level
 }
