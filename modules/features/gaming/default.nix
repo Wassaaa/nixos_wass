@@ -39,10 +39,10 @@
     #!/usr/bin/env bash
     # Run Steam in Gamescope (Deck-style session) with sane defaults
     exec dbus-run-session -- \
-      env XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=gamescope \
+      env XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=gamescope MANGOHUD=1 \
       ${pkgs.gamescope}/bin/gamescope \
         -f -r 144 -W 2560 -H 1440 -- \
-        ${pkgs.steam}/bin/steam -gamepadui
+        ${pkgs.steam}/bin/steam
   '')
   ];
 
