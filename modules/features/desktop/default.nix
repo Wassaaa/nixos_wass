@@ -6,14 +6,12 @@
     # --- pick ONE display manager ---
     # ./dm-greetd.nix
     ./dm-gdm.nix          # GNOME’s GDM
-    # ./dm-sddm.nix         # KDE’s SDDM
 
 
 
     # --- desktops / compositors (pick any you actually use) ---
     ./de-hyprland.nix
-    # ./de-gnome.nix
-    # ./de-plasma-x11.nix    # Plasma (Xorg)
+    ./de-gnome.nix
 
     # --- combined portals
     ./portals.nix
