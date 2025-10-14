@@ -27,6 +27,9 @@
     heroic
     bottles
 
+    wineWowPackages.staging
+    winetricks
+
     # Performance monitoring
     mangohud
     goverlay
