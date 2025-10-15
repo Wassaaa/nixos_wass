@@ -23,9 +23,9 @@
   # Gaming packages
   environment.systemPackages = with pkgs; [
     # Game launchers and tools
-    lutris
-    heroic
-    bottles
+    # lutris
+    # heroic
+    # bottles
 
     wineWowPackages.staging
     winetricks
