@@ -31,7 +31,6 @@ in
         kb_layout = "${keyboardLayout}";
         kb_options = [
           "grp:alt_caps_toggle"
-          "caps:super"
         ];
         numlock_by_default = true;
         repeat_delay = 300;
@@ -120,6 +119,8 @@ in
         "tag +im, class:^(teams-for-linux)$"
         "tag +games, class:^(gamescope)$"
         "tag +games, class:^(steam_app_\d+)$"
+        "tag +games, title:^(World of Warcraft)$"
+        "tag +gamestore, title:^(Battle\.net)$"
         "tag +gamestore, class:^([Ss]team)$"
         "tag +gamestore, title:^([Ll]utris)$"
         "tag +gamestore, class:^(com.heroicgameslauncher.hgl)$"
@@ -165,8 +166,13 @@ in
         "opacity 0.95 0.75, title:^(Picture-in-Picture)$"
         "pin, title:^(Picture-in-Picture)$"
         "keepaspectratio, title:^(Picture-in-Picture)$"
-        "noblur, tag:games*"
+
+        "workspace 14 silent, tag:games*"
         "fullscreen, tag:games*"
+        "noblur, tag:games*"
+        "immediate, tag:games*"
+        "suppressevent maximize, tag:games*"
+        "suppressevent fullscreen, tag:games*"
       ];
 
       env = [
