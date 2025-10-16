@@ -14,6 +14,7 @@
     ../../chrome.nix      # Web browser
     ../../virtmanager.nix # VM management GUI
     ../../1password.nix   # 1Password SSH agent integration (desktop)
+    ../../qbittorrent.nix # Torrent client (GUI)
 
     # Desktop theming and styling
     ../../gtk.nix        # GTK themes
