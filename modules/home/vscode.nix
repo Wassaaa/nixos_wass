@@ -44,11 +44,17 @@
       
       mkdir -p "$SETTINGS_DIR"
       if [ -f "$BASE" ]; then
+        # Strip comments from JSONC before merging
+        local BASE_CLEAN="$SETTINGS_DIR/.settings.base.clean.json"
+        ${pkgs.jq}/bin/jq . "$BASE" > "$BASE_CLEAN" 2>/dev/null || cp "$BASE" "$BASE_CLEAN"
+        
         if [ -f "$USER_SETTINGS" ]; then
-          ${pkgs.jq}/bin/jq -s 'add' "$BASE" "$USER_SETTINGS" > "$TMP" && mv "$TMP" "$USER_SETTINGS"
+          ${pkgs.jq}/bin/jq -s 'add' "$BASE_CLEAN" "$USER_SETTINGS" > "$TMP" && mv "$TMP" "$USER_SETTINGS"
         else
-          cp "$BASE" "$USER_SETTINGS"
+          cp "$BASE_CLEAN" "$USER_SETTINGS"
         fi
+        
+        rm -f "$BASE_CLEAN"
       fi
     }
     
