@@ -10,7 +10,8 @@
     ../../clipboard.nix  # Clipboard history manager
 
     # Desktop applications
-    ../../vscode.nix      # Code editor (GUI)
+    # ../../vscode.nix      # Code editor (GUI) - NixOS-managed (backup)
+    ../../vscode-flatpak.nix  # Code editor via Flatpak (user-updatable)
     ../../chrome.nix      # Web browser
     ../../virtmanager.nix # VM management GUI
     ../../1password.nix   # 1Password SSH agent integration (desktop)

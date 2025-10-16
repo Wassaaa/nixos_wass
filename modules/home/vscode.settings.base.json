@@ -1,21 +1,12 @@
 {
-  "editor.fontSize": 16,
   "editor.fontFamily": "'Jetbrains Mono', 'monospace', monospace",
-  "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'monospace', monospace",
-  "window.zoomLevel": 1,
-  "editor.multiCursorModifier": "ctrlCmd",
-  "workbench.startupEditor": "none",
-  "explorer.compactFolders": false,
-  "files.trimTrailingWhitespace": true,
-  "files.trimFinalNewlines": true,
-  "files.insertFinalNewline": true,
-  "diffEditor.ignoreTrimWhitespace": false,
+
   "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.iconTheme": "catppuccin-mocha",
+
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nil",
-  "github.copilot.enable": {
-    "*": false
-  }
+
+  "settingsSync.keybindingsPerPlatform": false
 }
