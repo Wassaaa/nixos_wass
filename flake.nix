@@ -10,6 +10,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/master";
+    vscode-insiders = {
+      url = "github:iosmanthus/code-insiders-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     catppuccin.url = "github:catppuccin/nix";
     sops-nix = {
       url = "github:mic92/sops-nix";

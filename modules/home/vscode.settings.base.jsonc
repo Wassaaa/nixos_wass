@@ -1,0 +1,80 @@
+{
+  // Visual/Theme settings
+  "editor.fontFamily": "'Jetbrains Mono', 'monospace', monospace",
+  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'monospace', monospace",
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
+
+  // Editor behavior
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": false,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "boundary",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.suggest.insertMode": "replace",
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.autoClosingBrackets": "always",
+  "editor.autoClosingQuotes": "always",
+  "editor.autoSurround": "languageDefined",
+  "editor.semanticHighlighting.enabled": true,
+  "editor.parameterHints.enabled": true,
+  "editor.suggestOnTriggerCharacters": true,
+
+  // Editor IntelliSense
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+
+  // Formatting (Prettier as default for supported files)
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnType": false,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+
+  // File management
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 2000,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/.DS_Store": false,
+    "**/.git": false,
+    "**/.hg": false,
+    "**/.svn": false,
+    "**/Thumbs.db": false
+  },
+
+  // Explorer
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.compactFolders": false,
+
+  // Git
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.ignoreLimitWarning": true,
+
+  // Breadcrumbs
+  "breadcrumbs.enabled": true,
+  "breadcrumbs.showFiles": false,
+
+  // Nix language server
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nil",
+
+  // Misc
+  "settingsSync.keybindingsPerPlatform": false,
+  "extensions.ignoreRecommendations": false
+}
+
