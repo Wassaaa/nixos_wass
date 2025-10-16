@@ -3,20 +3,32 @@
   xdg.portal = {
     enable = true;
 
-    wlr.enable = true;
-
     # Backends to provide:
+    # - Hyprland portal for Hyprland-specific features
     # - GNOME portal for GNOME sessions
-    # - GTK portal as a general fallback on both GNOME and wlroots
+    # - GTK portal as fallback for OpenURI and other interfaces
     extraPortals = [
+      pkgs.xdg-desktop-portal-hyprland
       pkgs.xdg-desktop-portal-gnome
       pkgs.xdg-desktop-portal-gtk
     ];
 
-    # Helps route xdg-open through the portal (good for Flatpak/sandboxed apps)
-    xdgOpenUsePortal = true;
+    # Don't force xdg-open through portal - let it use fallback if needed
+    xdgOpenUsePortal = false;
 
-    # Let Hyprland ship its session-specific portal config (harmless on GNOME)
-    configPackages = [ pkgs.hyprland ];
+    # Explicit portal configuration for each desktop environment
+    config = {
+      common = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+      };
+      hyprland = {
+        default = [ "hyprland" "gtk" ];
+        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+      };
+      gnome = {
+        default = [ "gnome" ];
+      };
+    };
   };
 }
