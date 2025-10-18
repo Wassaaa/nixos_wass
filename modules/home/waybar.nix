@@ -21,6 +21,7 @@ in
           modules-left = [
             "custom/startmenu"
             "hyprland/window"
+            "hyprland/language"
             "pulseaudio"
             "cpu"
             "memory"
@@ -59,6 +60,9 @@ in
             rewrite = {
               "" = " 🙈 No Windows? ";
             };
+          };
+          "hyprland/language" = {
+            format = " {}";
           };
           "memory" = {
             interval = 5;
@@ -236,7 +240,7 @@ in
           tooltip label {
             color: #${config.lib.stylix.colors.base08};
           }
-          #window, #pulseaudio, #cpu, #memory, #idle_inhibitor {
+          #window, #pulseaudio, #cpu, #memory, #idle_inhibitor, #language {
             font-weight: bold;
             margin: 4px 0px;
             margin-left: 7px;

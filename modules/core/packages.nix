@@ -48,6 +48,7 @@
     hyprpicker # Color Picker
     eog # For Image Viewing
     inxi # CLI System Information Tool
+    jq # JSON Processor For Terminal
     killall # For Killing All Instances Of Programs
     libnotify # For Notifications
     libvirt # Needed For Virtualisation Support

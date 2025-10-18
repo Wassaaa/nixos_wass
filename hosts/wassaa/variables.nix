@@ -43,7 +43,7 @@
   # Program Options
   browser = "google-chrome-stable";
   terminal = "kitty";
-  keyboardLayout = "us";
+  keyboardLayout = "us,ee";
   consoleKeyMap = "us";
 
   # For Nvidia Prime support

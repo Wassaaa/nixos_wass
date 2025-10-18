@@ -20,41 +20,69 @@
   # Provide a base settings fragment for both VS Code and VS Code Insiders
   xdg.configFile."Code/User/settings.base.json" = {
     source = ./vscode.settings.base.jsonc;
-  };
+    onChange = ''
+      CONFIG_HOME="''${XDG_CONFIG_HOME:-$HOME/.config}"
+      echo "Merging VS Code settings for Code..."
 
-  xdg.configFile."Code - Insiders/User/settings.base.json" = {
-    source = ./vscode.settings.base.jsonc;
-  };
+      SETTINGS_DIR="$CONFIG_HOME/Code/User"
+      BASE="$SETTINGS_DIR/settings.base.json"
+      USER_SETTINGS="$SETTINGS_DIR/settings.json"
+      TMP="$SETTINGS_DIR/.settings.json.hm-merge"
 
-  home.activation.mergeVscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    set -eu
-    CONFIG_HOME="''${XDG_CONFIG_HOME:-$HOME/.config}"
-
-    # Function to merge settings for a specific VS Code variant
-    merge_settings() {
-      local SETTINGS_DIR="$1"
-      local BASE="$SETTINGS_DIR/settings.base.json"
-      local USER_SETTINGS="$SETTINGS_DIR/settings.json"
-      local TMP="$SETTINGS_DIR/.settings.json.hm-merge"
-
-      mkdir -p "$SETTINGS_DIR"
       if [ -f "$BASE" ]; then
-        # Strip comments from JSONC before merging
-        local BASE_CLEAN="$SETTINGS_DIR/.settings.base.clean.json"
-        ${pkgs.jq}/bin/jq . "$BASE" > "$BASE_CLEAN" 2>/dev/null || cp "$BASE" "$BASE_CLEAN"
+        BASE_CLEAN="$SETTINGS_DIR/.settings.base.clean.json"
+        USER_CLEAN="$SETTINGS_DIR/.settings.user.clean.json"
+
+        # Strip comments from JSONC files
+        ${pkgs.gnused}/bin/sed -e 's|//.*$||' -e '/\/\*/,/\*\//d' "$BASE" | ${pkgs.jq}/bin/jq . > "$BASE_CLEAN" 2>/dev/null || cp "$BASE" "$BASE_CLEAN"
 
         if [ -f "$USER_SETTINGS" ]; then
-          ${pkgs.jq}/bin/jq -s 'add' "$BASE_CLEAN" "$USER_SETTINGS" > "$TMP" && mv "$TMP" "$USER_SETTINGS"
+          # Strip comments from user settings too (VS Code supports JSONC)
+          ${pkgs.gnused}/bin/sed -e 's|//.*$||' -e '/\/\*/,/\*\//d' "$USER_SETTINGS" | ${pkgs.jq}/bin/jq . > "$USER_CLEAN" 2>/dev/null || cp "$USER_SETTINGS" "$USER_CLEAN"
+
+          # Deep merge: base * user (user values override base)
+          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$BASE_CLEAN" "$USER_CLEAN" > "$TMP" && mv "$TMP" "$USER_SETTINGS"
+          rm -f "$USER_CLEAN"
         else
           cp "$BASE_CLEAN" "$USER_SETTINGS"
         fi
 
         rm -f "$BASE_CLEAN"
       fi
-    }
+    '';
+  };
 
-    # Merge settings for both stable and insiders
-    merge_settings "$CONFIG_HOME/Code/User"
-    merge_settings "$CONFIG_HOME/Code - Insiders/User"
-  '';
+  xdg.configFile."Code - Insiders/User/settings.base.json" = {
+    source = ./vscode.settings.base.jsonc;
+    onChange = ''
+      CONFIG_HOME="''${XDG_CONFIG_HOME:-$HOME/.config}"
+      echo "Merging VS Code settings for Code - Insiders..."
+
+      SETTINGS_DIR="$CONFIG_HOME/Code - Insiders/User"
+      BASE="$SETTINGS_DIR/settings.base.json"
+      USER_SETTINGS="$SETTINGS_DIR/settings.json"
+      TMP="$SETTINGS_DIR/.settings.json.hm-merge"
+
+      if [ -f "$BASE" ]; then
+        BASE_CLEAN="$SETTINGS_DIR/.settings.base.clean.json"
+        USER_CLEAN="$SETTINGS_DIR/.settings.user.clean.json"
+
+        # Strip comments from JSONC files
+        ${pkgs.gnused}/bin/sed -e 's|//.*$||' -e '/\/\*/,/\*\//d' "$BASE" | ${pkgs.jq}/bin/jq . > "$BASE_CLEAN" 2>/dev/null || cp "$BASE" "$BASE_CLEAN"
+
+        if [ -f "$USER_SETTINGS" ]; then
+          # Strip comments from user settings too (VS Code supports JSONC)
+          ${pkgs.gnused}/bin/sed -e 's|//.*$||' -e '/\/\*/,/\*\//d' "$USER_SETTINGS" | ${pkgs.jq}/bin/jq . > "$USER_CLEAN" 2>/dev/null || cp "$USER_SETTINGS" "$USER_CLEAN"
+
+          # Deep merge: base * user (user values override base)
+          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' "$BASE_CLEAN" "$USER_CLEAN" > "$TMP" && mv "$TMP" "$USER_SETTINGS"
+          rm -f "$USER_CLEAN"
+        else
+          cp "$BASE_CLEAN" "$USER_SETTINGS"
+        fi
+
+        rm -f "$BASE_CLEAN"
+      fi
+    '';
+  };
 }

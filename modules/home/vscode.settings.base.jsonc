@@ -1,6 +1,6 @@
 {
   // Visual/Theme settings
-  "editor.fontFamily": "'Jetbrains Mono', 'monospace', monospace",
+  "editor.fontFamily": "'JetBrainsMono Nerd Font Mono', 'monospace', monospace",
   "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'monospace', monospace",
   "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.iconTheme": "catppuccin-mocha",
@@ -77,4 +77,3 @@
   "settingsSync.keybindingsPerPlatform": false,
   "extensions.ignoreRecommendations": false
 }
-
