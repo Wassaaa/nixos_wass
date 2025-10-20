@@ -172,6 +172,10 @@ in
         "immediate, tag:games*"
         "suppressevent maximize, tag:games*"
         "suppressevent fullscreen, tag:games*"
+
+        "tag +sfml, title:^(Survive)$"
+
+        "float, tag:sfml*"
       ];
 
       env = [
