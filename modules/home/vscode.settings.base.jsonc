@@ -71,7 +71,12 @@
 
   // Nix language server
   "nix.enableLanguageServer": true,
-  "nix.serverPath": "nil",
+  "nix.serverPath": "nixd",
+  "nixd": {
+    "formatting": {
+      "command": ["nixfmt"]
+    }
+  },
 
   // Misc
   "settingsSync.keybindingsPerPlatform": false,

@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs = {
     firefox.enable = false; # Firefox is not installed by defualt
     dconf.enable = true;
@@ -29,7 +30,6 @@
     age
     ssh-to-age
     direnv
-    nil
     appimage-run # Needed For AppImage Support
     brave # Brave Browser
     brightnessctl # For Screen Brightness Control
@@ -51,6 +51,7 @@
     jq # JSON Processor For Terminal
     killall # For Killing All Instances Of Programs
     libnotify # For Notifications
+    nixd # Nix LSP server
     libvirt # Needed For Virtualisation Support
     lm_sensors # Used For Getting Hardware Temps
     lolcat # Add Colors To Your Terminal Command Output
