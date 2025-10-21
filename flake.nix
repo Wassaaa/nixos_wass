@@ -22,97 +22,49 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
-  outputs = {nixpkgs, nixos-wsl, ...} @ inputs: let
-    system = "x86_64-linux";
-    host = "wassaa";
-    profile = "nvidia";
-    username = "wassaa";
-  in {
-    nixosConfigurations = {
-      amd = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
+  outputs =
+    { nixpkgs, nixos-wsl, ... }@inputs:
+    let
+      system = "x86_64-linux";
+    in
+    {
+      nixosConfigurations = {
+        # Main desktop system with NVIDIA GPU
+        wassaa = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            username = "wassaa";
+            host = "wassaa";
+            profile = "nvidia";
+          };
+          modules = [ ./profiles/nvidia ];
+        }; # ThinkPad laptop with Intel integrated graphics
+        tpad = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            username = "allar";
+            host = "tpad";
+            profile = "intel";
+          };
+          modules = [ ./profiles/intel ];
         };
-        modules = [./profiles/amd];
-      };
-      nvidia = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
+
+        # WSL configuration
+        wsl = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            username = "nixos";
+            host = "wsl";
+            profile = "wsl";
+          };
+          modules = [
+            ./profiles/wsl
+            nixos-wsl.nixosModules.default
+          ];
         };
-        modules = [./profiles/nvidia];
       };
-      nvidia-laptop = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
-        modules = [./profiles/nvidia-laptop];
-      };
-      intel = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
-        modules = [./profiles/intel];
-      };
-      vm = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
-        };
-        modules = [./profiles/vm];
-      };
-      wsl = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "nixos";
-          host = "wsl";
-          profile = "wsl";
-        };
-        modules = [
-          ./profiles/wsl
-          nixos-wsl.nixosModules.default
-        ];
-      };
-      tpad = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          username = "allar";
-          host = "tpad";
-          profile = "intel"; # Intel CPU with integrated graphics
-        };
-        modules = [./profiles/intel];
-      };
-      # Example laptop configuration - uncomment and customize as needed
-      # laptop = nixpkgs.lib.nixosSystem {
-      #   inherit system;
-      #   specialArgs = {
-      #     inherit inputs;
-      #     username = "your-username";
-      #     host = "laptop";
-      #     profile = "nvidia"; # or "amd", "intel" based on your GPU
-      #   };
-      #   modules = [./profiles/nvidia]; # or the appropriate profile
-      # };
     };
-  };
 }
