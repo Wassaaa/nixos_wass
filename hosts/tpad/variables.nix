@@ -3,14 +3,13 @@
   enableDesktop = true;
   enableGaming = false;
   enableDevelopment = true;
-  enableVirtualization = false;
+  enableVirtualization = true;
   enableMultimedia = true;
 
   # Git Configuration ( For Pulling Software Repos )
   gitUsername = "Allar Klein";
   gitEmail = "allarklein@gmail.com";
   gitSigningKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFbC++MIhGE9FrwsgT6SJp01/a1E3bnhQzbzMSutCKhL";
-
 
   # Hyprland Settings
   # extraMonitorSettings = "
@@ -29,7 +28,17 @@
       primary = true;
       x = 0;
       y = 0;
-      workspace = [ "1" "2" "3" "4" "5" "6" "7" "8" "9" ];
+      workspace = [
+        "1"
+        "2"
+        "3"
+        "4"
+        "5"
+        "6"
+        "7"
+        "8"
+        "9"
+      ];
     }
   ];
 
