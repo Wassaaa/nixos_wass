@@ -5,15 +5,15 @@ in
 {
   programs.git = {
     enable = true;
-    userName = "${gitUsername}";
-    userEmail = "${gitEmail}";
 
     signing = {
       key = "${gitSigningKey}";
       signByDefault = true;
     };
 
-    extraConfig = {
+    settings = {
+      user.name = "${gitUsername}";
+      user.email = "${gitEmail}";
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
