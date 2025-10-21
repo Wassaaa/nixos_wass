@@ -17,7 +17,7 @@
     ./system.nix
     ./user.nix
     ./openssh.nix
-    ./sops.nix
+    ./sops
     
     # Feature-based module loader
     ./features.nix
