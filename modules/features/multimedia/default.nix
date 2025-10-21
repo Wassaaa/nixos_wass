@@ -1,5 +1,6 @@
 # Multimedia Features
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   # Audio support
   security.rtkit.enable = true;
   services.pipewire = {
@@ -30,6 +31,11 @@
     # Video editing
     kdePackages.kdenlive
     obs-studio
+
+    # Webcam tools
+    v4l-utils
+    android-tools
+    adb-sync
 
     # Image editing
     gimp
