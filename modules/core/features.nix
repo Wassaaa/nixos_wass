@@ -28,18 +28,18 @@ in
     # Conditionally import feature modules
   ]
   ++ lib.optionals enableDesktop [
-    ../features/desktop
+    ./features/desktop
   ]
   ++ lib.optionals enableGaming [
-    ../features/gaming
+    ./features/gaming
   ]
   ++ lib.optionals enableDevelopment [
-    ../features/development
+    ./features/development
   ]
   ++ lib.optionals enableVirtualization [
-    ../features/virtualization
+    ./features/virtualization
   ]
   ++ lib.optionals enableMultimedia [
-    ../features/multimedia
+    ./features/multimedia
   ];
 }
