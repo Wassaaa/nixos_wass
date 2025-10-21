@@ -1,11 +1,12 @@
 { ... }:
 {
   imports = [
+    ./packages.nix
     ./1password.nix
 
     # --- pick ONE display manager ---
     # ./dm-greetd.nix
-    ./dm-gdm.nix          # GNOME’s GDM
+    ./dm-gdm.nix          # GNOME's GDM
 
 
 
@@ -20,5 +21,10 @@
     ./flatpak.nix
     ./boot-theme.nix
     ./stylix.nix
+    ./fonts.nix
+    ./hardware.nix
+    ./stylix.nix
+    ./printing.nix
+    ./nfs.nix
   ];
 }

@@ -1,54 +1,12 @@
 # Development Features
 { pkgs, config, ... }:
 {
+  imports = [
+    ./packages.nix
+  ];
+  
   # Critical for VSCode Remote and binary compatibility
   programs.nix-ld.enable = true;
-
-  # Development tools
-  environment.systemPackages = with pkgs; [
-    # Version control
-    git
-    git-lfs
-    gh
-
-    # Editors and IDEs
-    vim
-    neovim
-    # vscode  # Remove GUI vscode from system packages
-
-    # Build tools
-    gcc
-    man-pages
-    gnumake
-    cmake
-    meson
-    ninja
-
-    # Language toolchains
-    nodejs
-    python3
-    rustc
-    cargo
-    go
-
-    # Development utilities
-    direnv
-    just
-    hyperfine
-    tokei
-
-    # Debugging and profiling
-    gdb
-    valgrind
-    strace
-    ltrace
-
-    # WSL-specific tools
-    wget
-    curl
-    unzip
-    zip
-  ];
 
   # Appimage Support for development tools
   boot.binfmt.registrations.appimage = {

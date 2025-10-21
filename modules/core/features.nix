@@ -11,24 +11,19 @@ let
 in
 {
   imports = [
-    # Always import core system modules
+    # Always import core system modules (minimal, work everywhere)
     ./boot.nix
-    ./fonts.nix
-    ./hardware.nix
     ./network.nix
-    ./nfs.nix
-    ./nh.nix
-    ./packages.nix
-    ./printing.nix
     ./security.nix
-    ./services.nix
-    ./starfish.nix
-    ./stylix.nix
-    ./syncthing.nix
     ./system.nix
     ./user.nix
     ./openssh.nix
+    ./services.nix
     ./sops
+    ./packages.nix  # Only core CLI utilities
+    ./nh.nix        # NixOS helper - useful everywhere
+    ./syncthing.nix # File syncing - useful everywhere
+    ./starfish.nix  # Shell prompt - useful everywhere
 
     # Conditionally import feature modules
   ]

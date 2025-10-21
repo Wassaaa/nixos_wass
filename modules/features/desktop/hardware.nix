@@ -1,5 +1,6 @@
-{ pkgs, ... }:
-{
+{ pkgs, host, lib, ... }: let
+  inherit (import ../../hosts/${host}/variables.nix) enableDesktop;
+in {
   hardware = {
     sane = {
       enable = true;
@@ -14,5 +15,4 @@
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
   };
-  local.hardware-clock.enable = false;
 }

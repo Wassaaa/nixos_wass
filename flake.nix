@@ -56,7 +56,7 @@
           inherit system;
           specialArgs = {
             inherit inputs;
-            username = "nixos";
+            username = "wsl";
             host = "wsl";
             profile = "wsl";
           };

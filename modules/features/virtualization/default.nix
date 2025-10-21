@@ -1,5 +1,9 @@
 # Virtualization Features
 { pkgs, username, ... }: {
+  imports = [
+    ./packages.nix
+  ];
+  
   # Container and VM support
   virtualisation = {
     libvirtd.enable = true;
@@ -7,26 +11,6 @@
     podman.enable = false; # Use either docker or podman, not both
     virtualbox.host.enable = true;
   };
-
-  # Virtualization packages
-  environment.systemPackages = with pkgs; [
-    # VM management
-    virt-manager
-    virt-viewer
-    spice
-    spice-gtk
-    spice-protocol
-    virtualbox
-    
-    # Container tools
-    docker-compose
-    distrobox
-    
-    # Kubernetes tools (optional)
-    kubectl
-    kubernetes-helm
-    k9s
-  ];
 
   # User groups for virtualization
   users.users.${username}.extraGroups = [ "libvirtd" "docker" "vboxusers" ];

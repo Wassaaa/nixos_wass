@@ -1,16 +1,8 @@
-{host, ...}: {
+{host, inputs, username, ...}: {
   imports = [
     ../../hosts/${host}
-    ../../modules/drivers
-    ../../modules/core
+    ../../modules/core  # Now uses feature-based loading
   ];
-  
-  # Disable all GPU drivers for WSL
-  drivers.amdgpu.enable = false;
-  drivers.nvidia.enable = false;
-  drivers.nvidia-prime.enable = false;
-  drivers.intel.enable = false;
-  vm.guest-services.enable = false;
   
   # WSL configuration
   wsl.enable = true;
@@ -26,6 +18,8 @@
     keep-derivations = true;
     # Ensure daemon can be reached
     use-xdg-base-directories = false;
+    # Allow the WSL user to connect to the system nix daemon
+    trusted-users = [ "root" "@wheel" "wsl" ];
   };
   
   # Ensure systemd works properly in WSL
