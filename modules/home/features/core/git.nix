@@ -1,6 +1,5 @@
-{ host, pkgs, ... }:
-let
-  inherit (import ../../hosts/${host}/variables.nix) gitUsername gitEmail gitSigningKey;
+{host, pkgs, ...}: let
+  inherit (import ../../../hosts/${host}/variables.nix) gitUsername gitEmail gitSigningKey;
 in
 {
   programs.git = {
