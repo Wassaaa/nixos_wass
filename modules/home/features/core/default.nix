@@ -10,7 +10,6 @@
     ../../git.nix         # Git configuration
     ../../starship.nix    # Cross-shell prompt
     ../../zsh.nix         # Zsh shell config
-    ../../nvf.nix         # Neovim configuration
     ../../emoji.nix       # Emoji support
   ]
   # Profile-specific configurations

@@ -9,7 +9,6 @@
 
     # Editors and IDEs
     vim
-    neovim
 
     # Build tools
     gcc

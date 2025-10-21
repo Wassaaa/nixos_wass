@@ -2,7 +2,6 @@
 { ... }: {
   imports = [
     # Development tools
-    ../../nvf.nix        # Neovim configuration
     ../../gh.nix         # GitHub CLI
     ../../git.nix        # Git configuration
     ../../direnv.nix     # Development environment management
@@ -18,8 +17,5 @@
     ../../bat.nix        # Better cat
     ../../btop.nix       # System monitor
     ../../fastfetch      # System info
-    
-    # Basic theming (works everywhere)
-    ../../stylix.nix     # Base16 theming
   ];
 }
