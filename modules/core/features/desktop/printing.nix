@@ -1,5 +1,5 @@
-{host, ...}: let
-  inherit (import ../../../hosts/${host}/variables.nix) printEnable;
+{host, flakeRoot, ...}: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") printEnable;
 in {
   services = {
     printing = {

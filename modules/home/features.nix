@@ -1,6 +1,6 @@
 # Home Manager Feature-based module loader
-{ host, lib, inputs, ... }: let
-  inherit (import ../../hosts/${host}/variables.nix)
+{ host, lib, inputs, flakeRoot, ... }: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     enableGaming
     enableDesktop
     enableVirtualization

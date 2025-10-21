@@ -1,7 +1,7 @@
 # Feature-based module loader
-{ host, lib, ... }:
+{ host, lib, flakeRoot, ... }:
 let
-  inherit (import ../../hosts/${host}/variables.nix)
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     enableGaming
     enableDesktop
     enableVirtualization

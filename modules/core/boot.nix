@@ -1,6 +1,6 @@
 # Core boot configuration - desktop-specific features moved to modules/features/desktop
-{ pkgs, lib, config, host, ... }: let
-  inherit (import ../../hosts/${host}/variables.nix) enableDesktop;
+{host, lib, pkgs, flakeRoot, ...}: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableDesktop;
   # Check if we're in WSL to avoid boot conflicts
   isWSL = host == "wsl";
 in {

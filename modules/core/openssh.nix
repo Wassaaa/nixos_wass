@@ -1,6 +1,6 @@
-{ lib, host, ... }:
+{ lib, host, flakeRoot, ... }:
 let
-  hostsDir = ../../hosts;
+  hostsDir = "${flakeRoot}/hosts";
   isHost = name: builtins.pathExists (hostsDir + "/${name}/ssh_host_ed25519_key.pub");
 
   # Get all directories in the hosts directory and put the directory NAMES into a list
@@ -11,7 +11,7 @@ let
 
   hosts = builtins.listToAttrs (map (name: { inherit name; value = {}; }) hostNames);
 
-  pubKey = host: ../../hosts/${host}/ssh_host_ed25519_key.pub;
+  pubKey = host: "${flakeRoot}/hosts/${host}/ssh_host_ed25519_key.pub";
 
 in {
   services.openssh = {

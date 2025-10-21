@@ -1,6 +1,6 @@
 # Core styling - desktop-specific features moved to modules/features/desktop
-{pkgs, host, lib, ...}: let
-  inherit (import ../../../hosts/${host}/variables.nix) enableDesktop;
+{pkgs, host, lib, flakeRoot, ...}: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableDesktop;
 in {
   # Basic styling for desktop systems only
   stylix = lib.mkIf enableDesktop {

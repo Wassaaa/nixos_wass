@@ -1,7 +1,7 @@
-{host, inputs, username, ...}: {
+{host, inputs, username, flakeRoot, ...}: {
   imports = [
-    ../../hosts/${host}
-    ../../modules/core  # Now uses feature-based loading
+    "${flakeRoot}/hosts/${host}"
+    "${flakeRoot}/modules/core"  # Now uses feature-based loading
   ];
   
   # WSL configuration

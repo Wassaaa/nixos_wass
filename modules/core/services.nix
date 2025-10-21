@@ -1,5 +1,5 @@
-{profile, host, lib, ...}: let
-  inherit (import ../../hosts/${host}/variables.nix) enableDesktop;
+{profile, host, lib, flakeRoot, ...}: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableDesktop;
 in {
   # Services to start
   services = {

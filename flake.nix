@@ -25,6 +25,7 @@
     { nixpkgs, nixos-wsl, ... }@inputs:
     let
       system = "x86_64-linux";
+      flakeRoot = ./.;
     in
     {
       nixosConfigurations = {
@@ -32,7 +33,7 @@
         wassaa = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs;
+            inherit inputs flakeRoot;
             username = "wassaa";
             host = "wassaa";
             profile = "nvidia";
@@ -42,7 +43,7 @@
         tpad = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs;
+            inherit inputs flakeRoot;
             username = "allar";
             host = "tpad";
             profile = "intel";
@@ -54,7 +55,7 @@
         wsl = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs;
+            inherit inputs flakeRoot;
             username = "wsl";
             host = "wsl";
             profile = "wsl";

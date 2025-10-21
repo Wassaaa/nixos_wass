@@ -1,8 +1,8 @@
-{host, ...}: {
+{host, flakeRoot, ...}: {
   imports = [
-    ../../hosts/${host}
-    ../../modules/drivers
-    ../../modules/core
+    "${flakeRoot}/hosts/${host}"
+    "${flakeRoot}/modules/drivers"
+    "${flakeRoot}/modules/core"
   ];
   # Enable GPU Drivers
   drivers.amdgpu.enable = true;

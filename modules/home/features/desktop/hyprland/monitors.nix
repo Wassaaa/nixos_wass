@@ -1,6 +1,6 @@
-{ host, lib, ... }:
+{ host, lib, flakeRoot, ... }:
 let
-  inherit (import ../../../../hosts/${host}/variables.nix)
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     monitors
     ;
 in

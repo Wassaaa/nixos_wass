@@ -2,10 +2,11 @@
   host,
   username,
   config,
+  flakeRoot,
   ...
 }:
 let
-  inherit (import ../../../../hosts/${host}/variables.nix)
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     # extraMonitorSettings
     keyboardLayout
     ;

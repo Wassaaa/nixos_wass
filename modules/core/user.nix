@@ -5,17 +5,18 @@
   host,
   profile,
   lib,
+  flakeRoot,
   ...
 }: let
-  inherit (import ../../hosts/${host}/variables.nix) gitUsername;
-  secretsPath = ../../hosts/${host}/secrets.yaml;
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") gitUsername;
+  secretsPath = "${flakeRoot}/hosts/${host}/secrets.yaml";
 in {
   imports = [inputs.home-manager.nixosModules.home-manager];
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
     backupFileExtension = "backup";
-    extraSpecialArgs = {inherit inputs username host profile;};
+    extraSpecialArgs = {inherit inputs username host profile flakeRoot;};
     users.${username} = {
       imports = [./../home];
       home = {

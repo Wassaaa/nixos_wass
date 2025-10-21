@@ -1,5 +1,5 @@
-{host, lib, ...}: let
-  inherit (import ../../hosts/${host}/variables.nix) consoleKeyMap;
+{host, lib, flakeRoot, ...}: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") consoleKeyMap;
 in {
   nix = {
     settings = {

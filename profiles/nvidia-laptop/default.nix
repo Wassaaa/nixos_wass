@@ -1,5 +1,5 @@
-{host, ...}: let
-  inherit (import ../../hosts/${host}/variables.nix) intelID nvidiaID;
+{host, flakeRoot, ...}: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") intelID nvidiaID;
 in {
   imports = [
     ../../hosts/${host}

@@ -1,5 +1,5 @@
-{ pkgs, host, lib, ... }: let
-  inherit (import ../../../hosts/${host}/variables.nix) enableDesktop;
+{ pkgs, host, lib, flakeRoot, ... }: let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableDesktop;
 in {
   hardware = {
     sane = {
