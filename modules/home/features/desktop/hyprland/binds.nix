@@ -1,11 +1,17 @@
-{host, flakeRoot, ...}: let
+{
+  host,
+  pkgs,
+  flakeRoot,
+  ...
+}:
+let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     browser
     terminal
     ;
 in
 {
-  home.packages = with pkgs; [hyprsome];
+  home.packages = with pkgs; [ hyprsome ];
   wayland.windowManager.hyprland.settings = {
     bind = [
       "$modifier,Return,exec,${terminal}"

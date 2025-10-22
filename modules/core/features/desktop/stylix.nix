@@ -1,11 +1,19 @@
 # Core styling - desktop-specific features moved to modules/features/desktop
-{pkgs, host, lib, flakeRoot, ...}: let
+{
+  pkgs,
+  host,
+  lib,
+  flakeRoot,
+  ...
+}:
+let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableDesktop;
-in {
+in
+{
   # Basic styling for desktop systems only
   stylix = lib.mkIf enableDesktop {
     enable = true;
-    image = ../../wallpapers/zaney-wallpaper.jpg;
+    image = "${flakeRoot}/wallpapers/zaney-wallpaper.jpg";
     base16Scheme = {
       base00 = "313244";
       base01 = "45475a";
@@ -31,6 +39,7 @@ in {
         package = pkgs.nerd-fonts.jetbrains-mono;
         name = "JetBrains Mono";
       };
+
       sansSerif = {
         package = pkgs.montserrat;
         name = "Montserrat";
@@ -51,6 +60,6 @@ in {
       name = "Bibata-Modern-Ice";
       size = 24;
     };
-    targets.qt.platform = "qtct";  # Prefer qtct platform for Qt theming
+    # targets.qt.platform = "qtct"; # Prefer qtct platform for Qt theming
   };
 }

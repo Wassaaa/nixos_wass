@@ -1,8 +1,10 @@
 {
   pkgs,
   username,
+  flakeRoot,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     swww
     grim
@@ -26,7 +28,7 @@
   # Place Files Inside Home Directory
   home.file = {
     "Pictures/Wallpapers" = {
-      source = ../../../wallpapers;
+      source = "${flakeRoot}/wallpapers";
       recursive = true;
     };
     ".face.icon".source = ./face.jpg;

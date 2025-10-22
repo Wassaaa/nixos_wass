@@ -18,7 +18,7 @@ in {
     backupFileExtension = "backup";
     extraSpecialArgs = {inherit inputs username host profile flakeRoot;};
     users.${username} = {
-      imports = [./../home];
+      imports = ["${flakeRoot}/modules/home"];
       home = {
         username = "${username}";
         homeDirectory = "/home/${username}";

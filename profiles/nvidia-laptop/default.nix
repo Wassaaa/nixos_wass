@@ -1,10 +1,12 @@
-{host, flakeRoot, ...}: let
+{ host, flakeRoot, ... }:
+let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") intelID nvidiaID;
-in {
+in
+{
   imports = [
-    ../../hosts/${host}
-    ../../modules/drivers
-    ../../modules/core
+    "${flakeRoot}/hosts/${host}"
+    "${flakeRoot}/modules/drivers"
+    "${flakeRoot}/modules/core"
   ];
   # Enable GPU Drivers
   drivers.amdgpu.enable = false;
