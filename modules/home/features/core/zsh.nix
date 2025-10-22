@@ -1,4 +1,7 @@
-{ host, ... }:
+{ host, flakeRoot, ... }:
+let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") flakeDir;
+in
 {
   programs.zsh = {
     enable = true;
@@ -28,7 +31,7 @@
       ls = "eza --icons --group-directories-first -1";
       ll = "eza --icons -a --group-directories-first -1 --no-user --long";
       tree = "eza --icons --tree --group-directories-first";
-      code-update = "nix flake update vscode-insiders && fr -q";
+      code-update = "nix flake update vscode-insiders --flake ${flakeDir} && fr -q";
     };
   };
 }

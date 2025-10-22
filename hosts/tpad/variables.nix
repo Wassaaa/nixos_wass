@@ -1,4 +1,7 @@
 {
+  # Flake Directory
+  flakeDir = "/home/allar/nixos_wass";
+
   # Feature flags for modular system
   enableDesktop = true;
   enableGaming = false;
