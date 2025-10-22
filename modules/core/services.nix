@@ -4,12 +4,14 @@ in {
   # Services to start
   services = {
     # Always enabled services
-    fstrim.enable = true; # SSD Optimizer
     openssh.enable = true; # Enable SSH
+    
+    # Only enable disk-related services on real hardware
+    fstrim.enable = lib.mkIf (profile != "vm" && profile != "wsl") true; # SSD Optimizer
     
     smartd = {
       enable =
-        if profile == "vm"
+        if (profile == "vm" || profile == "wsl")
         then false
         else true;
       autodetect = true;

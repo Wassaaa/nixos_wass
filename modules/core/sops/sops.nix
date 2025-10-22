@@ -14,6 +14,8 @@
 #        sops hosts/HOST/secrets.yaml
 #
 # User editing key (on your workstation):
+#   0) Generate SSH ed25519 key if you don't have one
+#        ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/id_ed25519
 #   1) Create age private key from your SSH key
 #        mkdir -p ~/.config/sops/age && \
 #        ssh-to-age -private-key -i ~/.ssh/id_ed25519 > ~/.config/sops/age/keys.txt
