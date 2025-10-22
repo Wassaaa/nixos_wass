@@ -8,7 +8,6 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions/master";
     vscode-insiders = {
       url = "github:iosmanthus/code-insiders-flake";
       inputs.nixpkgs.follows = "nixpkgs";
