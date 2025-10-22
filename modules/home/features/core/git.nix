@@ -1,5 +1,6 @@
-{host, pkgs, flakeRoot, ...}: let
+{host, pkgs, profile, flakeRoot, ...}: let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") gitUsername gitEmail gitSigningKey;
+  isWSL = profile == "wsl";
 in
 {
   programs.git = {
@@ -20,8 +21,14 @@ in
       # SSH signing configuration
       gpg = {
         format = "ssh";
-        ssh.program = "${pkgs._1password-gui}/bin/op-ssh-sign";
+        ssh.program = 
+          if isWSL
+          then "/mnt/c/Users/allar/AppData/Local/1Password/app/8/op-ssh-sign-wsl"
+          else "${pkgs._1password-gui}/bin/op-ssh-sign";
       };
+      
+      # Use Windows SSH for Git operations on WSL
+      core.sshCommand = if isWSL then "ssh.exe" else "ssh";
     };
   };
   # Create the allowed signers file

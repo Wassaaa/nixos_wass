@@ -1,41 +1,40 @@
 { pkgs, ... }: {
-  # Install 1Password CLI for WSL (no GUI needed)
+  # Install 1Password CLI for WSL
   home.packages = with pkgs; [
-    _1password-cli  # CLI only
+    _1password  # 1Password CLI
   ];
 
-  # Configure SSH to use Windows 1Password SSH agent via WSL interop
+  # Configure basic SSH settings (Git hosting services)
   programs.ssh = {
     enable = true;
-    enableDefaultConfig = false;  # Disable defaults to avoid future warnings
     matchBlocks = {
-      # Default configuration for all hosts
-      "*" = {
-        identityAgent = "\\\\\.\\pipe\\openssh-ssh-agent";
-      };
-
-      # Specific configurations for Git hosting services
+      # Git hosting services
       "github.com" = {
         hostname = "github.com";
         user = "git";
-        identityAgent = "\\\\\.\\pipe\\openssh-ssh-agent";
       };
 
       "gitlab.com" = {
         hostname = "gitlab.com";
         user = "git";
-        identityAgent = "\\\\\.\\pipe\\openssh-ssh-agent";
       };
 
       "bitbucket.org" = {
         hostname = "bitbucket.org";
         user = "git";
-        identityAgent = "\\\\\.\\pipe\\openssh-ssh-agent";
       };
     };
-  };  # Set up environment for WSL 1Password integration
-  home.sessionVariables = {
-    # Use Windows SSH agent through named pipe
-    SSH_AUTH_SOCK = "\\.\pipe\openssh-ssh-agent";
+  };
+
+  # Use Windows SSH tools to access 1Password agent
+  # The Windows versions can directly communicate with the 1Password agent
+  programs.zsh.shellAliases = {
+    ssh = "ssh.exe";
+    ssh-add = "ssh-add.exe";
+  };
+
+  programs.bash.shellAliases = {
+    ssh = "ssh.exe";
+    ssh-add = "ssh-add.exe";
   };
 }
