@@ -174,7 +174,8 @@ in
         "suppressevent maximize, tag:games*"
         "suppressevent fullscreen, tag:games*"
 
-        "tag +sfml, title:^(Survive)$"
+        "tag +sfml, title:^([Ss]urvive)$"
+        "tag +sfml, title:^([Tt]ower [Dd]efense)$"
 
         "float, tag:sfml*"
       ];
