@@ -19,6 +19,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    solaar = {
+      url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # For latest stable version
+      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/0.1.3.tar.gz"; # uncomment line for solaar version 1.1.15
+      #url = "github:Svenum/Solaar-Flake/main"; # Uncomment line for latest unstable version
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -26,6 +32,7 @@
       nixpkgs,
       nixpkgs-stable,
       nixos-wsl,
+      solaar,
       ...
     }@inputs:
     let
@@ -57,6 +64,7 @@
             profile = "nvidia";
           };
           modules = [
+            solaar.nixosModules.default
             ./profiles/nvidia
             { nixpkgs.overlays = [ stableOverlay ]; }
           ];
