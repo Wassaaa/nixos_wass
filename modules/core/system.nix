@@ -1,6 +1,13 @@
-{host, lib, flakeRoot, ...}: let
+{
+  host,
+  lib,
+  flakeRoot,
+  ...
+}:
+let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") consoleKeyMap;
-in {
+in
+{
   nix = {
     settings = {
       download-buffer-size = 250000000;

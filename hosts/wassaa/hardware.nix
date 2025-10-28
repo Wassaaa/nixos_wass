@@ -21,8 +21,13 @@
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "nct6775"
+  ];
   boot.extraModulePackages = [ ];
+
+  zramSwap.enable = true;
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/b0894acb-d137-403f-8cbe-a1f8a0c225a5";

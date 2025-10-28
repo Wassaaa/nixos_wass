@@ -29,8 +29,8 @@
     audacity
 
     # Video editing
-    kdePackages.kdenlive
-    obs-studio
+    # kdePackages.kdenlive
+    # kdePackages.breeze-icons
 
     # Webcam tools
     v4l-utils
