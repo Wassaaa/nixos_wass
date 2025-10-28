@@ -66,6 +66,7 @@
   # Program Options
   browser = "google-chrome-stable";
   terminal = "kitty";
+  myshell = "fish"; # or zsh/bash
   keyboardLayout = "us,ee";
   consoleKeyMap = "us";
 

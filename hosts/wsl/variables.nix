@@ -14,7 +14,8 @@
 
   # Program Options (minimal for WSL)
   browser = ""; # No browser needed for WSL - will use Windows default
-  terminal = "bash"; # or zsh
+  terminal = "bash";
+  myshell = "fish"; # or zsh/bash
 
   # Hyprland Settings (not used in WSL)
   monitors = [ ];

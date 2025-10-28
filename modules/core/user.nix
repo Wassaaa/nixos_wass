@@ -7,18 +7,28 @@
   lib,
   flakeRoot,
   ...
-}: let
-  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") gitUsername;
+}:
+let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") gitUsername myshell;
   secretsPath = "${flakeRoot}/hosts/${host}/secrets.yaml";
-in {
-  imports = [inputs.home-manager.nixosModules.home-manager];
+in
+{
+  imports = [ inputs.home-manager.nixosModules.home-manager ];
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
     backupFileExtension = "backup";
-    extraSpecialArgs = {inherit inputs username host profile flakeRoot;};
+    extraSpecialArgs = {
+      inherit
+        inputs
+        username
+        host
+        profile
+        flakeRoot
+        ;
+    };
     users.${username} = {
-      imports = ["${flakeRoot}/modules/home"];
+      imports = [ "${flakeRoot}/modules/home" ];
       home = {
         username = "${username}";
         homeDirectory = "/home/${username}";
@@ -40,10 +50,10 @@ in {
       "scanner"
       "wheel"
     ];
-    shell = pkgs.zsh;
+    shell = pkgs.${myshell};
     ignoreShellProgramCheck = true;
   };
-  nix.settings.allowed-users = ["${username}"];
+  nix.settings.allowed-users = [ "${username}" ];
 
   sops.secrets.password = lib.mkIf (builtins.pathExists secretsPath) {
     sopsFile = secretsPath;

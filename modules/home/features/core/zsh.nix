@@ -9,18 +9,12 @@ in
     syntaxHighlighting.enable = true;
 
     initContent = ''
-      bindkey "\eh" backward-word
-      bindkey "\ej" down-line-or-history
-      bindkey "\ek" up-line-or-history
-      bindkey "\el" forward-word
-       if [ -f $HOME/.zshrc-personal ]; then
-          source $HOME/.zshrc-personal
-        fi
+      if [ -f $HOME/.zshrc-personal ]; then
+         source $HOME/.zshrc-personal
+       fi
     '';
 
     shellAliases = {
-      sv = "sudo nvim";
-      v = "nvim";
       c = "clear";
       fr = "nh os switch --hostname ${host}";
       fb = "nh os boot --hostname ${host}";
@@ -32,7 +26,7 @@ in
       ll = "eza --icons -a --group-directories-first -1 --no-user --long";
       tree = "eza --icons --tree --group-directories-first";
       code-update = "nix flake update vscode-insiders --flake ${flakeDir} && fr -q";
-      usage = "ncdu -x ~";
+      usage = "ncdu -xt 12";
     };
   };
 }
