@@ -1,5 +1,6 @@
 # Gaming Features
-{ pkgs, config, ... }: {
+{ pkgs, config, ... }:
+{
   programs.steam = {
     enable = true;
     gamescopeSession.enable = true; # enables "Steam (Gamescope)" at login
@@ -25,7 +26,7 @@
     # Game launchers and tools
     # lutris
     # heroic
-    # bottles
+    bottles
 
     wineWowPackages.staging
     winetricks
@@ -39,14 +40,14 @@
     vulkan-validation-layers
 
     (pkgs.writeShellScriptBin "steam-gamescope" ''
-    #!/usr/bin/env bash
-    # Run Steam in Gamescope (Deck-style session) with sane defaults
-    exec dbus-run-session -- \
-      env XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=gamescope MANGOHUD=1 \
-      ${pkgs.gamescope}/bin/gamescope \
-        -f -r 144 -W 2560 -H 1440 -- \
-        ${pkgs.steam}/bin/steam
-  '')
+      #!/usr/bin/env bash
+      # Run Steam in Gamescope (Deck-style session) with sane defaults
+      exec dbus-run-session -- \
+        env XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=gamescope MANGOHUD=1 \
+        ${pkgs.gamescope}/bin/gamescope \
+          -f -r 144 -W 2560 -H 1440 -- \
+          ${pkgs.steam}/bin/steam
+    '')
   ];
 
   environment.etc."xdg/wayland-sessions/steam-gamescope.desktop".text = ''
@@ -57,6 +58,5 @@
     Exec=steam-gamescope
     Type=Application
   '';
-
 
 }
