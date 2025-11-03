@@ -34,25 +34,17 @@
     fsType = "ext4";
   };
 
+  fileSystems."/home" = {
+    device = "/dev/disk/by-label/NIX-HOME";
+    fsType = "ext4";
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/B984-8190";
     fsType = "vfat";
     options = [
       "fmask=0077"
       "dmask=0077"
-    ];
-  };
-
-  fileSystems."/mnt/data" = {
-    device = "/dev/disk/by-uuid/2EA7F6006D854BEB";
-    fsType = "ntfs-3g";
-    options = [
-      "uid=1001"
-      "gid=100"
-      "umask=002"
-      "windows_names"
-      "exec"
-      "big_writes"
     ];
   };
 

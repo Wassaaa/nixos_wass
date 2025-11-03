@@ -176,6 +176,7 @@ in
 
         "tag +sfml, title:^([Ss]urvive)$"
         "tag +sfml, title:^([Tt]ower [Dd]efense)$"
+        "tag +sfml, title:^([Rr]unner)$"
 
         "float, tag:sfml*"
       ];
