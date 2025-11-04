@@ -33,7 +33,7 @@
 
     # Performance monitoring
     mangohud
-    goverlay
+
 
     vulkan-tools
     vulkan-loader

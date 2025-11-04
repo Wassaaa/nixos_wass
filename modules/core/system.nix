@@ -55,5 +55,5 @@ in
     LC_TIME = "en_IE.UTF-8";
   };
   console.keyMap = "${consoleKeyMap}";
-  system.stateVersion = lib.mkDefault "23.11"; # Do not change!
+  system.stateVersion = lib.mkDefault "25.05"; # Do not change!
 }

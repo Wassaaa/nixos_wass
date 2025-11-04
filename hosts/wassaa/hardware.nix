@@ -18,6 +18,7 @@
     "xhci_pci"
     "ahci"
     "usbhid"
+    "uas"
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
@@ -30,7 +31,7 @@
   zramSwap.enable = true;
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/b0894acb-d137-403f-8cbe-a1f8a0c225a5";
+    device = "/dev/disk/by-label/NIX-ROOT";
     fsType = "ext4";
   };
 
@@ -40,11 +41,11 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/B984-8190";
+    device = "/dev/disk/by-label/BOOT";
     fsType = "vfat";
     options = [
-      "fmask=0077"
-      "dmask=0077"
+      "fmask=0022"
+      "dmask=0022"
     ];
   };
 
