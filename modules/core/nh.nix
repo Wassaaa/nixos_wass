@@ -1,5 +1,4 @@
 {
-  pkgs,
   host,
   flakeRoot,
   ...
@@ -16,9 +15,4 @@ in
     };
     flake = flakeDir;
   };
-
-  environment.systemPackages = with pkgs; [
-    nix-output-monitor
-    nvd
-  ];
 }
