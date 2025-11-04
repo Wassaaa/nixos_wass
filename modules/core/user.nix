@@ -5,7 +5,6 @@
   username,
   host,
   profile,
-  lib,
   flakeRoot,
   stable,
   ...
@@ -55,12 +54,12 @@ in
     ];
     shell = pkgs.${myshell};
     ignoreShellProgramCheck = true;
-    # Use sops-encrypted password if secrets file exists, no password otherwise
-    hashedPasswordFile = lib.mkIf (builtins.pathExists secretsPath) config.sops.secrets.password.path;
+    # Use sops-encrypted password
+    hashedPasswordFile = config.sops.secrets.password.path;
   };
   nix.settings.allowed-users = [ "${username}" ];
 
-  sops.secrets.password = lib.mkIf (builtins.pathExists secretsPath) {
+  sops.secrets.password = {
     sopsFile = secretsPath;
     neededForUsers = true;
   };
