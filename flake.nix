@@ -10,7 +10,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-insiders = {
-      url = "github:iosmanthus/code-insiders-flake";
+      url = "github:Wassaaa/code-insiders-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     catppuccin.url = "github:catppuccin/nix";
