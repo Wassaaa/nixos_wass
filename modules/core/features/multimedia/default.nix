@@ -21,7 +21,6 @@
   environment.systemPackages = with pkgs; [
     # Media players
     vlc
-    mpv
 
     # Audio tools
     pavucontrol
@@ -53,15 +52,5 @@
     # Screen capture
     grim
     slurp
-  ];
-
-  # Font configuration for multimedia
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-emoji
-    liberation_ttf
-    fira-code
-    fira-code-symbols
   ];
 }

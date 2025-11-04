@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    audacity
     (pkgs.makeDesktopItem {
       name = "discord";
       exec = "${pkgs.discord}/bin/discord --use-gl=desktop --enable-gpu-rasterization  --enable-features=UseOzonePlatform --ozone-platform=wayland";

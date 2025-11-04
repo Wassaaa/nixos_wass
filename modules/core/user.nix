@@ -6,6 +6,7 @@
   profile,
   lib,
   flakeRoot,
+  stable,
   ...
 }:
 let
@@ -25,6 +26,7 @@ in
         host
         profile
         flakeRoot
+        stable
         ;
     };
     users.${username} = {

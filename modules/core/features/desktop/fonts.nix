@@ -3,10 +3,13 @@
 {
   fonts = {
     packages = with pkgs; [
-      noto-fonts-emoji
+      noto-fonts
       noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+      liberation_ttf
+      fira-code
+      fira-code-symbols
       font-awesome
-      # symbola  # Temporarily disabled due to broken download URL
       material-icons
     ];
   };

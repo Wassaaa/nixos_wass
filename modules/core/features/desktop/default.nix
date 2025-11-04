@@ -6,9 +6,7 @@
 
     # --- pick ONE display manager ---
     # ./dm-greetd.nix
-    ./dm-gdm.nix          # GNOME's GDM
-
-
+    ./dm-gdm.nix # GNOME's GDM
 
     # --- desktops / compositors (pick any you actually use) ---
     ./de-hyprland.nix
@@ -21,7 +19,6 @@
     ./flatpak.nix
     ./boot-theme.nix
     ./stylix.nix
-    ./fonts.nix
     ./hardware.nix
     ./stylix.nix
     ./printing.nix

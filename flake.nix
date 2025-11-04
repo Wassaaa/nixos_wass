@@ -19,12 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-    solaar = {
-      url = "https://flakehub.com/f/Svenum/Solaar-Flake/*.tar.gz"; # For latest stable version
-      #url = "https://flakehub.com/f/Svenum/Solaar-Flake/0.1.3.tar.gz"; # uncomment line for solaar version 1.1.15
-      #url = "github:Svenum/Solaar-Flake/main"; # Uncomment line for latest unstable version
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -32,72 +26,62 @@
       nixpkgs,
       nixpkgs-stable,
       nixos-wsl,
-      solaar,
       ...
     }@inputs:
     let
-      system = "x86_64-linux";
       flakeRoot = ./.;
 
-      # Overlay to replace specific packages with stable versions
-      # Just add package names here - each will be pulled from nixpkgs-stable
-      stableOverlay = final: prev: {
-        # qgnomeplatform = nixpkgs-stable.legacyPackages.${system}.qgnomeplatform;
-        # qt6 = nixpkgs-stable.legacyPackages.${system}.qt6;
-        # gnome = nixpkgs-stable.legacyPackages.${system}.gnome;
-        # bat-extras = nixpkgs-stable.legacyPackages.${system}.bat-extras;
-
-        # Add more stable packages here as needed:
-        # firefox = nixpkgs-stable.legacyPackages.${system}.firefox;
-        # gdm = nixpkgs-stable.legacyPackages.${system}.gdm;
-      };
+      mkSystem =
+        {
+          username,
+          host,
+          profile,
+          extraModules ? [ ],
+        }:
+        nixpkgs.lib.nixosSystem {
+          modules = [
+            { nixpkgs.hostPlatform = "x86_64-linux"; }
+            ./profiles/${profile}
+          ]
+          ++ extraModules;
+          specialArgs = {
+            inherit
+              inputs
+              flakeRoot
+              username
+              host
+              profile
+              ;
+            # Make stable packages globally available with proper dependencies
+            stable = import nixpkgs-stable {
+              localSystem = "x86_64-linux";
+              config.allowUnfree = true;
+            };
+          };
+        };
     in
     {
       nixosConfigurations = {
         # Main desktop system with NVIDIA GPU
-        wassaa = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs flakeRoot;
-            username = "wassaa";
-            host = "wassaa";
-            profile = "nvidia";
-          };
-          modules = [
-            solaar.nixosModules.default
-            ./profiles/nvidia
-            { nixpkgs.overlays = [ stableOverlay ]; }
-          ];
+        wassaa = mkSystem {
+          username = "wassaa";
+          host = "wassaa";
+          profile = "nvidia";
         };
+
         # ThinkPad laptop with Intel integrated graphics
-        tpad = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs flakeRoot;
-            username = "allar";
-            host = "tpad";
-            profile = "intel";
-          };
-          modules = [
-            ./profiles/intel
-            { nixpkgs.overlays = [ stableOverlay ]; }
-          ];
+        tpad = mkSystem {
+          username = "allar";
+          host = "tpad";
+          profile = "intel";
         };
 
         # WSL configuration
-        wsl = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs flakeRoot;
-            username = "wsl";
-            host = "wsl";
-            profile = "wsl";
-          };
-          modules = [
-            ./profiles/wsl
-            nixos-wsl.nixosModules.default
-            { nixpkgs.overlays = [ stableOverlay ]; }
-          ];
+        wsl = mkSystem {
+          username = "wsl";
+          host = "wsl";
+          profile = "wsl";
+          extraModules = [ nixos-wsl.nixosModules.default ];
         };
       };
     };
