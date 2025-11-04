@@ -42,10 +42,10 @@
       # Overlay to replace specific packages with stable versions
       # Just add package names here - each will be pulled from nixpkgs-stable
       stableOverlay = final: prev: {
-        qgnomeplatform = nixpkgs-stable.legacyPackages.${system}.qgnomeplatform;
-        qt6 = nixpkgs-stable.legacyPackages.${system}.qt6;
+        # qgnomeplatform = nixpkgs-stable.legacyPackages.${system}.qgnomeplatform;
+        # qt6 = nixpkgs-stable.legacyPackages.${system}.qt6;
         # gnome = nixpkgs-stable.legacyPackages.${system}.gnome;
-        bat-extras = nixpkgs-stable.legacyPackages.${system}.bat-extras;
+        # bat-extras = nixpkgs-stable.legacyPackages.${system}.bat-extras;
 
         # Add more stable packages here as needed:
         # firefox = nixpkgs-stable.legacyPackages.${system}.firefox;
