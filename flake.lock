@@ -485,11 +485,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1762298032,
-        "narHash": "sha256-TpVErC5+QKBkDIH7iMlYRyvFH04nzGM/iXLo5w0Gm0o=",
+        "lastModified": 1762322945,
+        "narHash": "sha256-VUlmeIBQ+s1TBQ+BMskG6ldXcY6oKn1IUor3WJHOgrA=",
         "owner": "Wassaaa",
         "repo": "code-insiders-flake",
-        "rev": "b66343c7d88462fb0120b21934c24c707ccb0f9c",
+        "rev": "af1f8ae838c6ea108d1d31f3bdc718935804c5fe",
         "type": "github"
       },
       "original": {
