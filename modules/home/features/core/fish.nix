@@ -18,6 +18,7 @@ in
       ll = "eza --icons -a --group-directories-first -1 --no-user --long";
       tree = "eza --icons --tree --group-directories-first";
       code-update = "nix flake update vscode-insiders --flake ${flakeDir} && fr -q";
+      nordvpn-update = "update-nordvpn";
 
       usage = "ncdu -xt 12";
     };
