@@ -3,11 +3,12 @@
   host,
   options,
   ...
-}: {
+}:
+{
   networking = {
     hostName = "${host}";
     networkmanager.enable = true;
-    timeServers = options.networking.timeServers.default ++ ["pool.ntp.org"];
+    timeServers = options.networking.timeServers.default ++ [ "pool.ntp.org" ];
     hosts = {
       "127.0.0.1" = [ "tool-tracker.local" ];
     };
@@ -18,16 +19,18 @@
         22
         80
         443
+        1194 # NordVPN OpenVPN TCP
         59010
         59011
         8080
       ];
       allowedUDPPorts = [
+        1194 # NordVPN OpenVPN UDP
         59010
         59011
       ];
     };
   };
 
-  environment.systemPackages = with pkgs; [networkmanagerapplet];
+  environment.systemPackages = with pkgs; [ networkmanagerapplet ];
 }

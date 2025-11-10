@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, flakeRoot, ... }:
 {
   imports = [
-    ../../modules/core/nordvpn
+    "${flakeRoot}/modules/core/nordvpn"
   ];
 
   environment.systemPackages = with pkgs; [
@@ -11,7 +11,6 @@
       # withOpenASAR = true;
       withVencord = true;
     })
-    wgnord
   ];
 
   services.nordvpn = {
