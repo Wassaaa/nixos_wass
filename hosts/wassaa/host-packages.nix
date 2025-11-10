@@ -16,6 +16,7 @@
 
   services.nordvpn = {
     enable = true;
+    enableGui = true;
     users = [ "wassaa" ];
   };
 }

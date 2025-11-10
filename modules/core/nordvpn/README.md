@@ -7,7 +7,8 @@ NordVPN package and service module for NixOS.
 ```
 nordvpn/
 ├── default.nix           # NixOS module + update script wrapper
-├── package.nix           # NordVPN package definition
+├── package.nix           # NordVPN CLI package definition
+├── package-gui.nix       # NordVPN GUI package definition
 ├── update-nordvpn.sh     # Update script (bash)
 └── README.md             # This file
 ```
@@ -29,6 +30,7 @@ imports = [
 ```nix
 services.nordvpn = {
   enable = true;
+  enableGui = true;  # Optional: Enable GUI application (default: false)
   users = [ "yourusername" ];
   includeUpdateScript = true;  # Default: true
 };

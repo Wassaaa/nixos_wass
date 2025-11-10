@@ -9,8 +9,9 @@ with lib;
 let
   cfg = config.services.nordvpn;
 
-  # NordVPN package
+  # NordVPN packages
   nordVpnPkg = pkgs.callPackage ./package.nix { };
+  nordVpnGuiPkg = pkgs.callPackage ./package-gui.nix { };
 
   # Update script with resholve
   updateScript = pkgs.resholve.mkDerivation {
@@ -58,6 +59,12 @@ in
       description = "List of users to add to the nordvpn group";
     };
 
+    enableGui = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable NordVPN GUI application";
+    };
+
     includeUpdateScript = mkOption {
       type = types.bool;
       default = true;
@@ -68,7 +75,11 @@ in
   config = mkIf cfg.enable {
     networking.firewall.checkReversePath = false;
 
-    environment.systemPackages = [ nordVpnPkg ] ++ lib.optional cfg.includeUpdateScript updateScript;
+    environment.systemPackages = [
+      nordVpnPkg
+    ]
+    ++ lib.optional cfg.enableGui nordVpnGuiPkg
+    ++ lib.optional cfg.includeUpdateScript updateScript;
 
     users.groups.nordvpn = { };
     users.users = builtins.listToAttrs (
