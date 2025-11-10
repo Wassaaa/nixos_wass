@@ -10,7 +10,7 @@
   libnotify,
   libappindicator-gtk3,
   libayatana-appindicator,
-  wrapGAppsHook,
+  wrapGAppsHook3,
 }:
 let
   pname = "nordvpn-gui";
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     stdenv.cc.cc.lib
   ];
 
@@ -49,10 +49,26 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    mv usr/* $out/
-    runHook postInstall
+        runHook preInstall
+        mkdir -p $out/bin
+
+        # Move the opt directory to lib
+        mkdir -p $out/lib
+        mv opt/nordvpn-gui $out/lib/
+
+        # Move usr contents if they exist
+        if [ -d usr ]; then
+          cp -r usr/* $out/
+        fi
+
+        # Create a wrapper script for the executable
+        cat > $out/bin/nordvpn-gui <<EOF
+    #!/bin/sh
+    exec $out/lib/nordvpn-gui/nordvpn-gui "\$@"
+    EOF
+        chmod +x $out/bin/nordvpn-gui
+
+        runHook postInstall
   '';
 
   meta = with lib; {

@@ -38,7 +38,8 @@ let
 
     postFixup = ''
       substituteInPlace $out/bin/update-nordvpn \
-        --replace '@moduleFile@' '${flakeRoot}/modules/core/nordvpn/package.nix'
+        --replace '@cliModuleFile@' '${flakeRoot}/modules/core/nordvpn/package.nix' \
+        --replace '@guiModuleFile@' '${flakeRoot}/modules/core/nordvpn/package-gui.nix'
     '';
 
     meta = {
