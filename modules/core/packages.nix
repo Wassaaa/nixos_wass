@@ -18,7 +18,7 @@
     sops
     age
     ssh-to-age
-    
+
     # CLI Utilities
     cmatrix
     cowsay
