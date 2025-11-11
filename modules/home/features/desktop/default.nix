@@ -4,6 +4,7 @@
   imports = [
     # Window manager and desktop environment
     ./hyprland # Hyprland window manager config
+    # ./niri # Alternative: Niri scrollable-tiling compositor
     ./waybar.nix # Status bar
     ./rofi # Application launcher
     ./wlogout # Logout menu

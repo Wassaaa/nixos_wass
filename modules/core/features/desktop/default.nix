@@ -10,6 +10,7 @@
 
     # --- desktops / compositors (pick any you actually use) ---
     ./de-hyprland.nix
+    ./de-niri.nix
     ./de-gnome.nix
 
     # --- combined portals
