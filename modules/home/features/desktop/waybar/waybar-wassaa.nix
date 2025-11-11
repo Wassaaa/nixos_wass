@@ -20,10 +20,11 @@ with lib;
       {
         layer = "top";
         position = "top";
-        modules-center = [ "hyprland/workspaces" ];
+        modules-center = [ "hyprland/workspaces" "niri/workspaces" ];
         modules-left = [
           "custom/startmenu"
           "hyprland/window"
+          "niri/window"
           "hyprland/language"
           "pulseaudio"
           "cpu"
@@ -50,12 +51,27 @@ with lib;
           on-scroll-up = "hyprctl dispatch workspace e+1";
           on-scroll-down = "hyprctl dispatch workspace e-1";
         };
+        "niri/workspaces" = {
+          format = "{name}";
+          format-icons = {
+            default = " ";
+            active = " ";
+            urgent = " ";
+          };
+        };
         "clock" = {
           format = if clock24h == true then '' {:L%H:%M}'' else '' {:L%I:%M %p}'';
           tooltip = true;
           tooltip-format = "<big>{:%A, %d.%B %Y }</big>\n<tt><small>{calendar}</small></tt>";
         };
         "hyprland/window" = {
+          max-length = 22;
+          separate-outputs = false;
+          rewrite = {
+            "" = " 🙈 No Windows? ";
+          };
+        };
+        "niri/window" = {
           max-length = 22;
           separate-outputs = false;
           rewrite = {

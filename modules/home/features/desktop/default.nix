@@ -1,14 +1,18 @@
 # Desktop Home Manager Features - GUI applications and desktop environment
-{ inputs, ... }:
+{ inputs, host, lib, flakeRoot, ... }:
+let
+  variables = import "${flakeRoot}/hosts/${host}/variables.nix";
+  inherit (variables) waybarChoice;
+  
+  barChoice = variables.barChoice or "waybar";
+in
 {
   imports = [
     # Window manager and desktop environment
     ./hyprland # Hyprland window manager config
-    # ./niri # Alternative: Niri scrollable-tiling compositor
-    ./waybar.nix # Status bar
+    ./niri # Alternative: Niri scrollable-tiling compositor
     ./rofi # Application launcher
     ./wlogout # Logout menu
-    ./swaync.nix # Notification daemon
     ./clipboard.nix # Clipboard history manager
 
     # Desktop applications
@@ -33,5 +37,14 @@
     # Theming
     ./catppuccin.nix
     inputs.catppuccin.homeModules.catppuccin
+  ]
+  
+  # Bar/Shell - conditional import based on barChoice
+  ++ lib.optionals (barChoice == "noctalia") [
+    ./noctalia-shell
+  ]
+  ++ lib.optionals (barChoice == "waybar") [
+    waybarChoice
+    ./swaync.nix # Notifications only work with waybar
   ];
 }

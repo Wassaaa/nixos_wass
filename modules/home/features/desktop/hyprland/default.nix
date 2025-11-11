@@ -7,5 +7,6 @@
     ./hyprland.nix
     ./hyprlock.nix
     ./pyprland.nix
+    ./waybar-service.nix
   ];
 }

@@ -63,6 +63,27 @@
   # Waybar Settings
   clock24h = true;
 
+  # Bar/Shell Choice
+  # Options: "waybar" or "noctalia"
+  # waybar - Traditional status bar (requires waybarChoice below)
+  # noctalia - Complete desktop shell (bar, dock, control center, etc.)
+  barChoice = "waybar";
+
+  # Waybar Style Choice (only used when barChoice = "waybar")
+  # Available options:
+  # waybar-wassaa.nix (your original with niri support)
+  # waybar-dwm.nix (default with niri/hyprland workspaces)
+  # waybar-simple.nix
+  # waybar-curved.nix
+  # waybar-tony.nix
+  waybarChoice = ../../modules/home/features/desktop/waybar/waybar-wassaa.nix;
+  #waybarChoice = ../../modules/home/waybar/Jerry-waybars.nix;
+  #waybarChoice = ../../modules/home/waybar/waybar-simple.nix;
+  #waybarChoice = ../../modules/home/waybar/waybar-curved.nix;
+  #waybarChoice = ../../modules/home/waybar/waybar-nekodyke.nix;
+  #waybarChoice = ../../modules/home/waybar/waybar-jerry.nix;
+  #waybarChoice = ../../modules/home/waybar/waybar-ddubs.nix;
+
   # Program Options
   browser = "google-chrome-stable";
   terminal = "kitty";

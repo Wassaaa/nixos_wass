@@ -19,6 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    noctalia.url = "github:noctalia-dev/noctalia-shell";
   };
 
   outputs =
