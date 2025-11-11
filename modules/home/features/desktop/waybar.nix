@@ -67,12 +67,12 @@ with lib;
         };
         "memory" = {
           interval = 5;
-          format = " {}%";
+          format = " {}%";
           tooltip = true;
         };
         "cpu" = {
           interval = 5;
-          format = " {usage:2}%";
+          format = " {usage:2}%";
           tooltip = true;
         };
         "custom/gpu-power" = {
