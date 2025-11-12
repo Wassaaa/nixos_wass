@@ -5,6 +5,11 @@
 }:
 ''
   binds {
+        // === System & Overview ===
+      Mod+X repeat=false { toggle-overview; }
+      Mod+O repeat=false { toggle-overview; }
+      Mod+Shift+Slash { show-hotkey-overlay; }
+
       // === Essential Applications ===
       Mod+Return { spawn "${terminal}"; }
       Mod+W { spawn "${browser}"; }
@@ -24,12 +29,20 @@
       Mod+Right { focus-column-right; }
       Mod+Up { focus-window-up; }
       Mod+Down { focus-window-down; }
+      Mod+Shift+WheelScrollDown cooldown-ms=150 { focus-column-right; }
+      Mod+Shift+WheelScrollUp cooldown-ms=150 { focus-column-left; }
 
       // === Window Movement (Shift + Arrows) ===
       Mod+Shift+Left { move-column-left; }
       Mod+Shift+Right { move-column-right; }
       Mod+Shift+Up { move-window-up; }
       Mod+Shift+Down { move-window-down; }
+
+      // === Column Navigation ===
+      Mod+Home { focus-column-first; }
+      Mod+End  { focus-column-last; }
+      Mod+Ctrl+Home { move-column-to-first; }
+      Mod+Ctrl+End  { move-column-to-last; }
 
       // === Monitor Navigation ===
       Mod+Ctrl+Left { focus-monitor-left; }
