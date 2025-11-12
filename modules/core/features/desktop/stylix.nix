@@ -13,7 +13,7 @@ in
   # Basic styling for desktop systems only
   stylix = lib.mkIf stylixEnable {
     enable = true;
-    image = stylixImage;
+    image = "${flakeRoot}/${stylixImage}";
     # Color scheme auto-generated from wallpaper!
     # Uncomment base16Scheme below to override with manual colors
     # base16Scheme = {
