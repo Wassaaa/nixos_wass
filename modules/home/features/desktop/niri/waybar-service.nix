@@ -5,14 +5,13 @@
     Unit = {
       Description = "Waybar status bar (Niri session)";
       PartOf = "graphical-session.target";
-      After = "graphical-session.target";
-      ConditionEnvironment = "XDG_CURRENT_DESKTOP=niri";
+      After = [ "graphical-session.target" "niri.service" ];
     };
     Service = {
       ExecStart = "${pkgs.waybar}/bin/waybar";
       Restart = "on-failure";
       RestartSec = "1s";
     };
-    Install.WantedBy = [ "graphical-session.target" ];
+    Install.WantedBy = [ "niri.service" ];
   };
 }

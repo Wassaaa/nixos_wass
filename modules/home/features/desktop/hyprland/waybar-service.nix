@@ -5,14 +5,13 @@
     Unit = {
       Description = "Waybar status bar (Hyprland session)";
       PartOf = "graphical-session.target";
-      After = "graphical-session.target";
-      ConditionEnvironment = "XDG_CURRENT_DESKTOP=Hyprland";
+      After = [ "graphical-session.target" "hyprland-session.target" ];
     };
     Service = {
       ExecStart = "${pkgs.waybar}/bin/waybar";
       Restart = "on-failure";
       RestartSec = "1s";
     };
-    Install.WantedBy = [ "graphical-session.target" ];
+    Install.WantedBy = [ "hyprland-session.target" ];
   };
 }
