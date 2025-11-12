@@ -1,6 +1,7 @@
 {
   host,
   flakeRoot,
+  config,
   pkgs,
   ...
 }:
@@ -8,7 +9,13 @@ let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     browser
     terminal
+    stylixImage
     ;
+
+  # Import modular config parts
+  startupConfig = import ./startup.nix { inherit stylixImage; };
+  keybindsConfig = import ./keybinds.nix { inherit browser terminal; };
+  layoutConfig = import ./layout.nix { inherit config; };
 in
 {
   # Install niri and X11 compatibility
@@ -18,12 +25,12 @@ in
     grim
     slurp
     wl-clipboard
+    swww
   ];
 
-  # Minimal niri config - uses sensible defaults
+  # Niri configuration - modular structure
   xdg.configFile."niri/config.kdl".text = ''
-    // Minimal Niri configuration - relying on defaults
-    // Customize later as needed
+    // Niri Configuration - Modular Setup
 
     input {
         keyboard {
@@ -31,6 +38,17 @@ in
                 layout "us,ee"
                 options "grp:alt_caps_toggle"
             }
+        }
+
+        touchpad {
+            tap
+            natural-scroll
+            dwt
+            dwtp
+        }
+
+        mouse {
+            accel-speed 0.0
         }
     }
 
@@ -48,23 +66,21 @@ in
 
     screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
+    ${layoutConfig}
+
     environment {
-      XDG_CURRENT_DESKTOP "niri"
-      GTK_USE_PORTAL "1"
-      MOZ_ENABLE_WAYLAND "1"
-      QT_QPA_PLATFORM "wayland"
-      ELECTRON_OZONE_PLATFORM_HINT "wayland"
-      TERMINAL "${terminal}"
+        XDG_CURRENT_DESKTOP "niri"
+        GTK_USE_PORTAL "1"
+        MOZ_ENABLE_WAYLAND "1"
+        QT_QPA_PLATFORM "wayland"
+        ELECTRON_OZONE_PLATFORM_HINT "wayland"
+        NIXOS_OZONE_WL "1"
+        TERMINAL "${terminal}"
     }
 
-    binds {
-        // Essential keybinds
-        Mod+Return { spawn "${terminal}"; }
-        Mod+Q { close-window; }
-        Mod+Shift+Q { quit; }
-        Mod+W { spawn "${browser}"; }
-        Mod+R { spawn "rofi" "-show" "drun"; }
-    }
+    ${startupConfig}
+
+    ${keybindsConfig}
   '';
 
   # XWayland satellite service for X11 app support (Discord, etc.)

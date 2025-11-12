@@ -1,6 +1,5 @@
 {
   host,
-  username,
   config,
   flakeRoot,
   ...
@@ -9,6 +8,7 @@ let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     # extraMonitorSettings
     keyboardLayout
+    stylixImage
     ;
 in
 {
@@ -23,7 +23,7 @@ in
         "nm-applet --indicator"
         "lxqt-policykit-agent"
         "pypr &"
-        "sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/zaney-wallpaper.jpg"
+        "sleep 1.5 && swww img ${stylixImage}"
         "sleep 1.5 && wl-paste --watch clipvault store"
         "sleep 1.5 && wl-paste --type image --watch clipvault store"
       ];

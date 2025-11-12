@@ -63,6 +63,9 @@
   # Waybar Settings
   clock24h = true;
 
+  # Wallpaper
+  stylixImage = "/home/wassaa/Pictures/Wallpapers/zaney-wallpaper.jpg";
+
   # Bar/Shell Choice
   # Options: "waybar" or "noctalia"
   # waybar - Traditional status bar (requires waybarChoice below)
