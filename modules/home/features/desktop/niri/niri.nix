@@ -13,7 +13,7 @@ let
     ;
 
   # Import modular config parts
-  startupConfig = import ./startup.nix { inherit stylixImage; };
+  startupConfig = import ./startup.nix { inherit stylixImage flakeRoot; };
   keybindsConfig = import ./keybinds.nix { inherit browser terminal; };
   layoutConfig = import ./layout.nix { inherit config; };
 in

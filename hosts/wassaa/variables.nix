@@ -64,7 +64,7 @@
   clock24h = true;
 
   # Wallpaper & Styling
-  stylixImage = "wallpapers/8.png"; # Relative to flakeRoot
+  stylixImage = "wallpapers/20.png"; # Relative to flakeRoot
   stylixEnable = true;
 
   # Bar/Shell Choice
