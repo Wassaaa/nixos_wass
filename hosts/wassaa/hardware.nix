@@ -49,6 +49,19 @@
     ];
   };
 
+  fileSystems."/home/wassaa/shared" = {
+    device = "/dev/disk/by-label/SHARED";
+    fsType = "ntfs";
+    options = [
+      "rw"
+      "uid=1000"
+      "gid=100"
+      "fmask=0133"
+      "dmask=0022"
+      "nofail"
+    ];
+  };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

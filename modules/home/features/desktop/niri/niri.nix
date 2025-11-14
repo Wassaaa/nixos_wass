@@ -26,6 +26,7 @@ in
     slurp
     wl-clipboard
     swww
+    xdg-desktop-portal-gnome
   ];
 
   # Niri configuration - modular structure
@@ -76,6 +77,13 @@ in
         ELECTRON_OZONE_PLATFORM_HINT "wayland"
         NIXOS_OZONE_WL "1"
         TERMINAL "${terminal}"
+
+        // NVIDIA Gaming Optimizations
+        __GL_GSYNC_ALLOWED "1"
+        __GL_VRR_ALLOWED "1"
+        PROTON_ENABLE_NVAPI "1"
+        PROTON_HIDE_NVIDIA_GPU "0"
+        PROTON_ENABLE_NGX_UPDATER "1"
     }
 
     ${startupConfig}
@@ -117,6 +125,7 @@ in
       Restart = "on-failure";
       Environment = [
         "XDG_CURRENT_DESKTOP=niri"
+        "WAYLAND_DISPLAY=wayland-1"
       ];
     };
     Install.WantedBy = [ "graphical-session.target" ];
@@ -147,7 +156,7 @@ in
 
   systemd.user.services.xdg-desktop-portal-gtk = {
     Unit = {
-      Description = "Portal service (GTK implementation)";
+      Description = "Portal service (GTK/GNOME implementation)";
       After = [
         "graphical-session.target"
         "xdg-desktop-portal.service"
@@ -163,7 +172,15 @@ in
     Install.WantedBy = [ "graphical-session.target" ];
   };
 
-  # XDG Desktop Portal configuration for screencasting
+  # XDG Desktop Portal configuration
+  xdg.configFile."xdg-desktop-portal/portals.conf".text = ''
+    [preferred]
+    default=gtk
+    org.freedesktop.impl.portal.FileChooser=gtk
+    org.freedesktop.impl.portal.Screenshot=gnome
+    org.freedesktop.impl.portal.ScreenCast=gnome
+  '';
+
   xdg.configFile."xdg-desktop-portal/niri-portals.conf".text = ''
     [preferred]
     default=gtk

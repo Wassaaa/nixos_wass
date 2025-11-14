@@ -1,13 +1,9 @@
 # Gaming Features
 { pkgs, config, ... }:
 {
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true; # enables "Steam (Gamescope)" at login
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = false;
-    extraCompatPackages = [ pkgs.proton-ge-bin ];
-  };
+  imports = [
+    ./steam.nix
+  ];
 
   programs.gamescope = {
     enable = true;
