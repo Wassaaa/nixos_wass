@@ -16,24 +16,24 @@ in
     image = "${flakeRoot}/${stylixImage}";
     # Color scheme auto-generated from wallpaper!
     # Uncomment base16Scheme below to override with manual colors
-    # base16Scheme = {
-    #   base00 = "313244";
-    #   base01 = "45475a";
-    #   base02 = "585b70";
-    #   base03 = "7f849c";
-    #   base04 = "89dceb";
-    #   base05 = "cdd6f4";
-    #   base06 = "cdd6f4";
-    #   base07 = "cdd6f4";
-    #   base08 = "f38ba8";
-    #   base09 = "f5c2e7";
-    #   base0A = "a6e3a1";
-    #   base0B = "f9e2af";
-    #   base0C = "a1efe4";
-    #   base0D = "62d6e8";
-    #   base0E = "89b4fa";
-    #   base0F = "a6e3a1";
-    # };
+    base16Scheme = {
+      base00 = "313244";
+      base01 = "45475a";
+      base02 = "585b70";
+      base03 = "7f849c";
+      base04 = "89dceb";
+      base05 = "cdd6f4";
+      base06 = "cdd6f4";
+      base07 = "cdd6f4";
+      base08 = "f38ba8";
+      base09 = "f5c2e7";
+      base0A = "a6e3a1";
+      base0B = "f9e2af";
+      base0C = "a1efe4";
+      base0D = "62d6e8";
+      base0E = "89b4fa";
+      base0F = "a6e3a1";
+    };
     polarity = "dark";
     opacity.terminal = 1.0;
     fonts = {
