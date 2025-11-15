@@ -558,11 +558,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1763035774,
-        "narHash": "sha256-wLQDtKQStA0z7oq37JW9Sk3eb3/m52E3DnF5SQa9uxI=",
+        "lastModified": 1763166096,
+        "narHash": "sha256-BEvOB6UZxvBf0sGsfv3XkjldhxXyNw24VRFOqYzAUWU=",
         "owner": "Wassaaa",
         "repo": "code-insiders-flake",
-        "rev": "fe4032c63a7708dc0735ed681f3b673772efe7df",
+        "rev": "f954cbe82816a80d5d6e8940d1673355bbcdfee6",
         "type": "github"
       },
       "original": {
