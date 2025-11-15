@@ -135,6 +135,12 @@ in {
 
         modules-right = [
           "custom/separator#line"
+          "cpu"
+          "custom/separator#line"
+          "memory"
+          "custom/separator#line"
+          "custom/gpu-power"
+          "custom/separator#line"
           "custom/swaync"
           "custom/separator#line"
           "idle_inhibitor"
@@ -387,10 +393,9 @@ in {
             "ignored-sinks" = ["Easy Effects Sink"];
           };
           "scroll-step" = 5.0;
-          "on-click" = "$HOME/.config/hypr/scripts/Volume.sh --toggle";
-          "on-click-right" = "pavucontrol -t 3";
-          "on-scroll-up" = "$HOME/.config/hypr/scripts/Volume.sh --inc";
-          "on-scroll-down" = "$HOME/.config/hypr/scripts/Volume.sh --dec";
+          "on-click" = "pavucontrol";
+          "on-scroll-up" = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+          "on-scroll-down" = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
           "tooltip-format" = "{icon} {desc} | {volume}%";
           "smooth-scrolling-threshold" = 1;
         };
@@ -612,6 +617,14 @@ in {
           exec = "sh -lc 'WEATHER_ICON_STYLE=emoji WEATHER_TOOLTIP_MARKUP=1 ~/.config/waybar/scripts/Weather.py'";
           interval = 600;
           tooltip = true;
+        };
+
+        "custom/gpu-power" = {
+          exec = "nvidia-smi --query-gpu=utilization.gpu,power.draw --format=csv,noheader,nounits | awk -F', ' '{printf \"%d%% %dW\", $1, $2}'";
+          interval = 2;
+          format = "󰢮 {}";
+          tooltip = true;
+          "tooltip-format" = "GPU Usage | Power Draw";
         };
 
         "custom/file_manager" = {
@@ -922,6 +935,7 @@ in {
       #custom-cycle_wall,
       #custom-dot_update,
       #custom-file_manager,
+      #custom-gpu-power,
       #custom-keybinds,
       #custom-keyboard,
       #custom-light_dark,
