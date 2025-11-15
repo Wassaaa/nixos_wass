@@ -8,6 +8,29 @@ let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") consoleKeyMap;
 in
 {
+  nixpkgs.overlays = [
+    (final: prev:
+      let
+        removeStylixDarkPatch = pkg:
+          pkg.overrideAttrs (old: {
+            patches =
+              let
+                existing = old.patches or [ ];
+                keepPatch = patch:
+                  let
+                    patchStr = builtins.toString patch;
+                  in
+                  builtins.match ".*shell_remove_dark_mode.*" patchStr == null;
+              in
+              builtins.filter keepPatch existing;
+          });
+
+      in
+      lib.optionalAttrs (prev ? gnome-shell) {
+        gnome-shell = removeStylixDarkPatch prev.gnome-shell;
+      })
+  ];
+
   nix = {
     settings = {
       download-buffer-size = 250000000;
@@ -23,6 +46,7 @@ in
         "https://nixpkgs-unfree.cachix.org"
         "https://cuda-maintainers.cachix.org"
       ];
+
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -55,5 +79,13 @@ in
     LC_TIME = "en_IE.UTF-8";
   };
   console.keyMap = "${consoleKeyMap}";
+
+  # Disable slow man-db cache generation on rebuilds
+  documentation = {
+    enable = true;
+    man.enable = true;
+    man.generateCaches = false;  # This is what makes rebuilds slow
+  };
+
   system.stateVersion = lib.mkDefault "25.05"; # Do not change!
 }

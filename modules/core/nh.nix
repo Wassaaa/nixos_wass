@@ -15,4 +15,9 @@ in
     };
     flake = flakeDir;
   };
+
+  # Export NH_OS_FLAKE for nh to use automatically
+  environment.sessionVariables = {
+    NH_FLAKE = flakeDir;
+  };
 }

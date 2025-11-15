@@ -11,9 +11,9 @@ in
     c = "clear";
 
     # NixOS rebuild shortcuts
-    fr = "nh os switch --hostname ${host}";
-    fb = "nh os boot --hostname ${host}";
-    fu = "nh os switch --hostname ${host} --update";
+    fr = "nh os switch";
+    fb = "nh os boot";
+    fu = "nh os switch --update";
 
     # Garbage collection
     ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
