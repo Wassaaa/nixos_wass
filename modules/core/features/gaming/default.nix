@@ -20,7 +20,7 @@
   # Gaming packages
   environment.systemPackages = with pkgs; [
     # Game launchers and tools
-    # lutris
+    lutris
     # heroic
     bottles
 
