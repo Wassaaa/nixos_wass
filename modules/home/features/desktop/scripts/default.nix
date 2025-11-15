@@ -17,5 +17,7 @@
     (import ./rofi-launcher.nix {inherit pkgs;})
     (import ./screenshootin.nix {inherit pkgs;})
     (import ./hyprsomescroll.nix {inherit pkgs;})
+    (import ./webapp-install.nix {inherit pkgs;})
+    (import ./webapp-remove.nix {inherit pkgs;})
   ];
 }
