@@ -24,7 +24,7 @@
     [scratchpads.thunar]
     animation = "fromBottom"
     command = "thunar"
-    class = "thunar"
+    class = "Thunar"
     size = "75% 60%"
   '';
 }

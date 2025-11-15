@@ -8,23 +8,20 @@ let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     # extraMonitorSettings
     keyboardLayout
-    stylixImage
     ;
 in
 {
   wayland.windowManager.hyprland = {
     settings = {
       exec-once = [
-        "killall -q swww;sleep .5 && swww init"
-        "killall -q waybar;sleep .5 && waybar"
-        # Waybar is now managed by systemd service (waybar-hyprland)
-        "killall -q swaync;sleep .5 && swaync"
-        "nm-applet --indicator"
-        "lxqt-policykit-agent"
+        "waybar &"
+        # swaync is started by systemd service
+        "nm-applet --indicator &"
+        "lxqt-policykit-agent &"
         "pypr &"
-        "sleep 1.5 && swww img ${stylixImage}"
-        "sleep 1.5 && wl-paste --watch clipvault store"
-        "sleep 1.5 && wl-paste --type image --watch clipvault store"
+        "wl-paste --type text --watch cliphist store"
+        "wl-paste --type image --watch cliphist store"
+        "killall -q swww-daemon;sleep .5 && swww-daemon"
       ];
 
       input = {
@@ -131,6 +128,12 @@ in
         "tag +settings, class:^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$"
         "tag +settings, class:^(nwg-look|qt5ct|qt6ct|[Yy]ad)$"
         "tag +settings, class:(xdg-desktop-portal-gtk)"
+        "tag +polkit, class:^(lxqt-policykit-agent|org.kde.polkit-kde-authentication-agent-1)$"
+        "tag +polkit, title:^(PolicyKit|Authentication)$"
+        "tag +1password-prompt, class:^(1password)$, title:^(.*SSH.*|.*Unlock.*|.*Authorize.*|.*Authentication.*)$"
+        "tag +1password-prompt, class:^(1password)$, title:^(1Password)$, floating:1"
+        # Catch any small floating 1Password window (prompts are typically small)
+        "tag +1password-prompt, class:^(1password)$, floating:1, maxsize:600 400"
         "move 72% 7%,title:^(Picture-in-Picture)$"
         "center, class:^([Ff]erdium)$"
         "center, class:^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$"
@@ -150,8 +153,16 @@ in
         "float, initialTitle:(Add Folder to Workspace)"
         "float, initialTitle:(Open Files)"
         "float, initialTitle:(wants to save)"
+        "float, tag:polkit*"
+        "center, tag:polkit*"
+        "float, tag:1password-prompt*"
+        "center, tag:1password-prompt*"
+        "pin, tag:1password-prompt*"
+        "minsize 800 600, tag:1password-prompt*"
         "size 70% 60%, initialTitle:(Open Files)"
         "size 70% 60%, initialTitle:(Add Folder to Workspace)"
+        "size 30% 25%, tag:polkit*"
+        "size 800 600, tag:1password-prompt*"
         "size 70% 70%, tag:settings*"
         "size 60% 70%, class:^([Ff]erdium)$"
         "opacity 1.0 1.0, tag:browser*"
