@@ -21,7 +21,7 @@ in
       "$modifier ALT,W,exec,wallsetter"
       "$modifier SHIFT,N,exec,swaync-client -rs"
       "$modifier,W,exec,${browser}"
-      "$modifier,E,exec,emopicker9000"
+      "$modifier,E,exec,pypr toggle nautilus"
       "$modifier,S,exec,screenshootin"
       "$modifier,D,exec,discord"
       "$modifier,O,exec,obs"

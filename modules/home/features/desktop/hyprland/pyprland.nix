@@ -21,10 +21,11 @@
     lazy = true
     size = "40% 90%"
 
-    [scratchpads.thunar]
+    [scratchpads.nautilus]
     animation = "fromBottom"
-    command = "thunar"
-    class = "Thunar"
+    command = "nautilus"
+    class = "org.gnome.Nautilus"
+    lazy = true
     size = "75% 60%"
   '';
 }

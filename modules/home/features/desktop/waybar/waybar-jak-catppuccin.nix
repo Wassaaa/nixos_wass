@@ -516,7 +516,7 @@ in {
             "class<nwg-look>" = " ";
             "class<[Pp]avucontrol|org.pulseaudio.pavucontrol>" = "󱡫 ";
             "class<steam>" = " ";
-            "class<thunar|nemo>" = "󰝰 ";
+            "class<org.gnome.Nautilus|nemo>" = "󰝰 ";
             "class<Gparted>" = "";
             "class<gimp>" = " ";
             "class<emulator>" = "📱 ";

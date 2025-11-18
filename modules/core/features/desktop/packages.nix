@@ -6,13 +6,6 @@
     dconf.enable = true;
     seahorse.enable = true;
     adb.enable = true;
-    thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin
-        thunar-volman
-      ];
-    };
   };
 
   # Desktop GUI applications
@@ -30,6 +23,7 @@
     lm_sensors
     lxqt.lxqt-policykit # Policy kit GUI
     mpv # Video player
+    nautilus # File manager (GNOME Files)
     pavucontrol # Audio control GUI
     picard # Music tagger GUI
     playerctl # Media control
