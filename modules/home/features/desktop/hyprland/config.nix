@@ -12,13 +12,18 @@ let
 in
 {
   wayland.windowManager.hyprland = {
+    # Fix for systemd services (hypridle, etc.) - exports all environment variables
+    systemd.variables = ["--all"];
+
     settings = {
       exec-once = [
-        "waybar &"
-        # swaync is started by systemd service
-        "nm-applet --indicator &"
+        # Start compositor-dependent services
         "lxqt-policykit-agent &"
+        "nm-applet --indicator &"
+        # Start UI components
+        "waybar &"
         "pypr &"
+        # Start background services
         "wl-paste --type text --watch cliphist store"
         "wl-paste --type image --watch cliphist store"
         "killall -q swww-daemon;sleep .5 && swww-daemon"
@@ -57,6 +62,18 @@ in
         initial_workspace_tracking = 0;
         mouse_move_enables_dpms = true;
         key_press_enables_dpms = false;
+      };
+
+      plugin = {
+        hyprexpo = {
+          columns = 3;
+          gap_size = 5;
+          bg_col = "rgb(111111)";
+          workspace_method = "center current";
+          enable_gesture = true;
+          gesture_fingers = 3;
+          gesture_distance = 300;
+        };
       };
 
       dwindle = {
@@ -100,97 +117,6 @@ in
         ];
       };
 
-      windowrulev2 = [
-        "tag +file-manager, class:^([Tt]hunar|org.gnome.Nautilus|[Pp]cmanfm-qt)$"
-        "tag +terminal, class:^(Alacritty|kitty|kitty-dropterm)$"
-        "tag +browser, class:^(Brave-browser(-beta|-dev|-unstable)?)$"
-        "tag +browser, class:^([Ff]irefox|org.mozilla.firefox|[Ff]irefox-esr)$"
-        "tag +browser, class:^([Gg]oogle-chrome(-beta|-dev|-unstable|-stable)?)$"
-        "tag +browser, class:^([Tt]horium-browser|[Cc]achy-browser)$"
-        "tag +projects, class:^(codium|codium-url-handler|VSCodium)$"
-        "tag +projects, class:^(VSCode|code-url-handler)$"
-        "tag +im, class:^([Dd]iscord|[Ww]ebCord|[Vv]esktop)$"
-        "tag +im, class:^([Ff]erdium)$"
-        "tag +im, class:^([Ww]hatsapp-for-linux)$"
-        "tag +im, class:^(org.telegram.desktop|io.github.tdesktop_x64.TDesktop)$"
-        "tag +im, class:^(teams-for-linux)$"
-        "tag +games, class:^(gamescope)$"
-        "tag +games, class:^(steam_app_\d+)$"
-        "tag +games, title:^(World of Warcraft)$"
-        "tag +gamestore, title:^(Battle\.net)$"
-        "tag +gamestore, class:^([Ss]team)$"
-        "tag +gamestore, title:^([Ll]utris)$"
-        "tag +gamestore, class:^(com.heroicgameslauncher.hgl)$"
-        "tag +settings, class:^(gnome-disks|wihotspot(-gui)?)$"
-        "tag +settings, class:^([Rr]ofi)$"
-        "tag +settings, class:^(file-roller|org.gnome.FileRoller)$"
-        "tag +settings, class:^(nm-applet|nm-connection-editor|blueman-manager)$"
-        "tag +settings, class:^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$"
-        "tag +settings, class:^(nwg-look|qt5ct|qt6ct|[Yy]ad)$"
-        "tag +settings, class:(xdg-desktop-portal-gtk)"
-        "tag +polkit, class:^(lxqt-policykit-agent|org.kde.polkit-kde-authentication-agent-1)$"
-        "tag +polkit, title:^(PolicyKit|Authentication)$"
-        "tag +1password-prompt, class:^(1password)$, title:^(.*SSH.*|.*Unlock.*|.*Authorize.*|.*Authentication.*)$"
-        "tag +1password-prompt, class:^(1password)$, title:^(1Password)$, floating:1"
-        # Catch any small floating 1Password window (prompts are typically small)
-        "tag +1password-prompt, class:^(1password)$, floating:1, maxsize:600 400"
-        "move 72% 7%,title:^(Picture-in-Picture)$"
-        "center, class:^([Ff]erdium)$"
-        "center, class:^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$"
-        "center, class:([Tt]hunar), title:negative:(.*[Tt]hunar.*)"
-        "center, title:^(Authentication Required)$"
-        "idleinhibit fullscreen, class:^(*)$"
-        "idleinhibit fullscreen, title:^(*)$"
-        "idleinhibit fullscreen, fullscreen:1"
-        "float, tag:settings*"
-        "float, class:^([Ff]erdium)$"
-        "float, title:^(Picture-in-Picture)$"
-        "float, class:^(mpv|com.github.rafostar.Clapper)$"
-        "float, title:^(Authentication Required)$"
-        "float, class:(codium|codium-url-handler|VSCodium), title:negative:(.*codium.*|.*VSCodium.*)"
-        "float, class:^(com.heroicgameslauncher.hgl)$, title:negative:(Heroic Games Launcher)"
-        "float, class:([Tt]hunar), title:negative:(.*[Tt]hunar.*)"
-        "float, initialTitle:(Add Folder to Workspace)"
-        "float, initialTitle:(Open Files)"
-        "float, initialTitle:(wants to save)"
-        "float, tag:polkit*"
-        "center, tag:polkit*"
-        "float, tag:1password-prompt*"
-        "center, tag:1password-prompt*"
-        "pin, tag:1password-prompt*"
-        "minsize 800 600, tag:1password-prompt*"
-        "size 70% 60%, initialTitle:(Open Files)"
-        "size 70% 60%, initialTitle:(Add Folder to Workspace)"
-        "size 30% 25%, tag:polkit*"
-        "size 800 600, tag:1password-prompt*"
-        "size 70% 70%, tag:settings*"
-        "size 60% 70%, class:^([Ff]erdium)$"
-        "opacity 1.0 1.0, tag:browser*"
-        "opacity 0.9 0.8, tag:projects*"
-        "opacity 0.94 0.86, tag:im*"
-        "opacity 0.9 0.8, tag:file-manager*"
-        "opacity 0.9 0.8, tag:terminal*"
-        "opacity 0.9 0.8, tag:settings*"
-        "opacity 0.9 0.8, class:^(gedit|org.gnome.TextEditor|mousepad)$"
-        "opacity 0.9 0.8, class:^(seahorse)$ # gnome-keyring gui"
-        "opacity 0.95 0.75, title:^(Picture-in-Picture)$"
-        "pin, title:^(Picture-in-Picture)$"
-        "keepaspectratio, title:^(Picture-in-Picture)$"
-
-        "workspace 14 silent, tag:games*"
-        "fullscreen, tag:games*"
-        "noblur, tag:games*"
-        "immediate, tag:games*"
-        "suppressevent maximize, tag:games*"
-        "suppressevent fullscreen, tag:games*"
-
-        "tag +sfml, title:^([Ss]urvive)$"
-        "tag +sfml, title:^([Tt]ower [Dd]efense)$"
-        "tag +sfml, title:^([Rr]unner)$"
-
-        "float, tag:sfml*"
-      ];
-
       env = [
         "NIXOS_OZONE_WL, 1"
         "NIXPKGS_ALLOW_UNFREE, 1"
@@ -205,11 +131,97 @@ in
         "SDL_VIDEODRIVER, x11"
         "MOZ_ENABLE_WAYLAND, 1"
       ];
+
+      # Window rules converted to new Hyprland syntax
+      # Note: windowrulev2 is deprecated, using extraConfig with new syntax
     };
 
-    # extraConfig = "
-    #   monitor=,preferred,auto,auto
-    #   ${extraMonitorSettings}
-    # ";
+    extraConfig = ''
+      # Window rules - new syntax for Hyprland 0.52.0+
+      windowrule = match:class ^([Tt]hunar|org.gnome.Nautilus|[Pp]cmanfm-qt)$, tag +file-manager
+      windowrule = match:class ^(Alacritty|kitty|kitty-dropterm)$, tag +terminal
+      windowrule = match:class ^(Brave-browser(-beta|-dev|-unstable)?)$, tag +browser
+      windowrule = match:class ^([Ff]irefox|org.mozilla.firefox|[Ff]irefox-esr)$, tag +browser
+      windowrule = match:class ^([Gg]oogle-chrome(-beta|-dev|-unstable|-stable)?)$, tag +browser
+      windowrule = match:class ^([Tt]horium-browser|[Cc]achy-browser)$, tag +browser
+      windowrule = match:class ^(codium|codium-url-handler|VSCodium)$, tag +projects
+      windowrule = match:class ^(VSCode|code-url-handler)$, tag +projects
+      windowrule = match:class ^([Dd]iscord|[Ww]ebCord|[Vv]esktop)$, tag +im
+      windowrule = match:class ^([Ff]erdium)$, tag +im
+      windowrule = match:class ^([Ww]hatsapp-for-linux)$, tag +im
+      windowrule = match:class ^(org.telegram.desktop|io.github.tdesktop_x64.TDesktop)$, tag +im
+      windowrule = match:class ^(teams-for-linux)$, tag +im
+      windowrule = match:class ^(gamescope)$, tag +games
+      windowrule = match:class ^(steam_app_\d+)$, tag +games
+      windowrule = match:title ^(World of Warcraft)$, tag +games
+      windowrule = match:title ^(Battle\.net)$, tag +gamestore
+      windowrule = match:class ^([Ss]team)$, tag +gamestore
+      windowrule = match:title ^([Ll]utris)$, tag +gamestore
+      windowrule = match:class ^(com.heroicgameslauncher.hgl)$, tag +gamestore
+      windowrule = match:class ^(gnome-disks|wihotspot(-gui)?)$, tag +settings
+      windowrule = match:class ^([Rr]ofi)$, tag +settings
+      windowrule = match:class ^(file-roller|org.gnome.FileRoller)$, tag +settings
+      windowrule = match:class ^(nm-applet|nm-connection-editor|blueman-manager)$, tag +settings
+      windowrule = match:class ^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$, tag +settings
+      windowrule = match:class ^(nwg-look|qt5ct|qt6ct|[Yy]ad)$, tag +settings
+      windowrule = match:class (xdg-desktop-portal-gtk), tag +settings
+      windowrule = match:class ^(lxqt-policykit-agent|org.kde.polkit-kde-authentication-agent-1)$, tag +polkit
+      windowrule = match:title ^(PolicyKit|Authentication)$, tag +polkit
+      windowrule = match:class ^(1password)$ match:title ^(.*SSH.*|.*Unlock.*|.*Authorize.*|.*Authentication.*)$, tag +1password-prompt
+      windowrule = match:class ^(1password)$ match:title ^(1Password)$ match:float true, tag +1password-prompt
+      windowrule = match:class ^(1password)$ match:float true match:maxsize 600 400, tag +1password-prompt
+      windowrule = match:title ^(Picture-in-Picture)$, move 72% 7%
+      windowrule = match:class ^([Ff]erdium)$, center 1
+      windowrule = match:class ^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$, center 1
+      windowrule = match:class ([Tt]hunar) match:title negative:(.*[Tt]hunar.*), center 1
+      windowrule = match:title ^(Authentication Required)$, center 1
+      windowrule = match:class ^(*)$, idle_inhibit fullscreen
+      windowrule = match:title ^(*)$, idle_inhibit fullscreen
+      windowrule = match:fullscreen true, idle_inhibit fullscreen
+      windowrule = match:tag settings*, float 1
+      windowrule = match:class ^([Ff]erdium)$, float 1
+      windowrule = match:title ^(Picture-in-Picture)$, float 1
+      windowrule = match:class ^(mpv|com.github.rafostar.Clapper)$, float 1
+      windowrule = match:title ^(Authentication Required)$, float 1
+      windowrule = match:class (codium|codium-url-handler|VSCodium) match:title negative:(.*codium.*|.*VSCodium.*), float 1
+      windowrule = match:class ^(com.heroicgameslauncher.hgl)$ match:title negative:(Heroic Games Launcher), float 1
+      windowrule = match:class ([Tt]hunar) match:title negative:(.*[Tt]hunar.*), float 1
+      windowrule = match:initial_title (Add Folder to Workspace), float 1
+      windowrule = match:initial_title (Open Files), float 1
+      windowrule = match:initial_title (wants to save), float 1
+      windowrule = match:tag polkit*, float 1
+      windowrule = match:tag polkit*, center 1
+      windowrule = match:tag 1password-prompt*, float 1
+      windowrule = match:tag 1password-prompt*, center 1
+      windowrule = match:tag 1password-prompt*, pin 1
+      windowrule = match:tag 1password-prompt*, min_size 800 600
+      windowrule = match:initial_title (Open Files), size 70% 60%
+      windowrule = match:initial_title (Add Folder to Workspace), size 70% 60%
+      windowrule = match:tag polkit*, size 30% 25%
+      windowrule = match:tag 1password-prompt*, size 800 600
+      windowrule = match:tag settings*, size 70% 70%
+      windowrule = match:class ^([Ff]erdium)$, size 60% 70%
+      windowrule = match:tag browser*, opacity 1.0 1.0
+      windowrule = match:tag projects*, opacity 0.9 0.8
+      windowrule = match:tag im*, opacity 0.94 0.86
+      windowrule = match:tag file-manager*, opacity 0.9 0.8
+      windowrule = match:tag terminal*, opacity 0.9 0.8
+      windowrule = match:tag settings*, opacity 0.9 0.8
+      windowrule = match:class ^(gedit|org.gnome.TextEditor|mousepad)$, opacity 0.9 0.8
+      windowrule = match:class ^(seahorse)$, opacity 0.9 0.8
+      windowrule = match:title ^(Picture-in-Picture)$, opacity 0.95 0.75
+      windowrule = match:title ^(Picture-in-Picture)$, pin 1
+      windowrule = match:title ^(Picture-in-Picture)$, keep_aspect_ratio 1
+      windowrule = match:tag games*, workspace 14 silent
+      windowrule = match:tag games*, fullscreen 1
+      windowrule = match:tag games*, no_blur 1
+      windowrule = match:tag games*, immediate 1
+      windowrule = match:tag games*, suppress_event maximize
+      windowrule = match:tag games*, suppress_event fullscreen
+      windowrule = match:title ^([Ss]urvive)$, tag +sfml
+      windowrule = match:title ^([Tt]ower [Dd]efense)$, tag +sfml
+      windowrule = match:title ^([Rr]unner)$, tag +sfml
+      windowrule = match:tag sfml*, float 1
+    '';
   };
 }
