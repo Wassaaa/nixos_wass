@@ -5,10 +5,10 @@ in {
   services = {
     # Always enabled services
     openssh.enable = true; # Enable SSH
-    
+
     # Only enable disk-related services on real hardware
     fstrim.enable = lib.mkIf (profile != "vm" && profile != "wsl") true; # SSD Optimizer
-    
+
     smartd = {
       enable =
         if (profile == "vm" || profile == "wsl")
@@ -23,7 +23,7 @@ in {
     blueman.enable = true; # Bluetooth Support
     tumbler.enable = true; # Image/video preview
     gnome.gnome-keyring.enable = true;
-    
+
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -31,4 +31,7 @@ in {
       pulse.enable = true;
     };
   };
+
+  # Disable orca screen reader (auto-enabled by GNOME services but not needed)
+  systemd.user.services.orca.enable = lib.mkIf enableDesktop false;
 }
