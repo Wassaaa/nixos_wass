@@ -18,20 +18,23 @@ in
       pull.rebase = true;
       push.autoSetupRemote = true;
 
-      # SSH signing configuration
+      core.sshCommand = if isWSL then "ssh.exe" else "ssh";
+
       gpg = {
         format = "ssh";
-        ssh.program = 
-          if isWSL
-          then "/mnt/c/Users/allar/AppData/Local/1Password/app/8/op-ssh-sign-wsl"
-          else "${pkgs._1password-gui}/bin/op-ssh-sign";
+        ssh = {
+          # 1. The Program
+          program =
+            if isWSL
+            then "op-ssh-sign-wsl.exe"
+            else "${pkgs._1password-gui}/bin/op-ssh-sign";
+          allowedSignersFile = "~/.ssh/allowed_signers";
+        };
       };
-      
-      # Use Windows SSH for Git operations on WSL
-      core.sshCommand = if isWSL then "ssh.exe" else "ssh";
     };
   };
-  # Create the allowed signers file
+
+  # Create the file content
   home.file.".ssh/allowed_signers".text = ''
     ${gitEmail} ${gitSigningKey}
   '';
