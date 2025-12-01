@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   # Install 1Password CLI for WSL
   home.packages = with pkgs; [
-    _1password  # 1Password CLI
+    _1password-cli  # 1Password CLI
   ];
 
   # Configure basic SSH settings (Git hosting services)
