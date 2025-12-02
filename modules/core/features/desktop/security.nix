@@ -1,4 +1,5 @@
-_: {
+{ ... }:
+{
   security = {
     rtkit.enable = true;
     polkit = {
@@ -19,4 +20,5 @@ _: {
       text = ''auth include login '';
     };
   };
+
 }

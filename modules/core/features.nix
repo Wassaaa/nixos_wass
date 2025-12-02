@@ -14,7 +14,6 @@ in
     # Always import core system modules (minimal, work everywhere)
     ./boot.nix
     ./network.nix
-    ./security.nix
     ./system.nix
     ./user.nix
     ./openssh.nix

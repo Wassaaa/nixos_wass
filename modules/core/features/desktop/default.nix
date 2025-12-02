@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./security.nix
     ./packages.nix
     ./1password.nix
 
