@@ -5,12 +5,12 @@ keys:
   # Host keys (from hosts/*/ssh_host_ed25519_key.pub -> age format)
   - &host_wassaa age1fkmzf05vfxfzuedgwsq9paf4ldqw34ud4zc88u6amjpqv47wrsashx0a6k
   - &host_tpad age18krrdn63ezwvcn2n9nt4tdwxkw4s5qqdfjrtu54raych3rmpfvxsnnpcax
-  - &host_wsl age1qkc4a2h6xzf0rr4atnesqtdlxlqan93pe44u2sckmkf096kfvquq0lwlk4
+  - &host_wsl age10yqneck2xn6kmq8380xuuu7hceggkummg5pf5arx36s5jrhw7gps9a6lul
 
   # User keys (from ~/.ssh/id_ed25519.pub -> age format)
   # This user key is included in all creation rules by default
   - &user_wassaa age1mnzfczftwm3vkdtsh8ds0jlt7xv7p805zq8ukhwehg65vnfnqe6qpte2p8
-  - &user_wsl age159td5wduyczywjfsnj3a0aeek6nq4s9mzh6e7hgcqpvvp8agq96qp55tjj
+  - &user_wsl age1f7fx70fkrq22url8gx0hrlk6hr99klhan3tzjaqgk5uh2rp2m3hqhczrrs
 creation_rules:
   - path_regex: hosts/wassaa/secrets.ya?ml$
     key_groups:
@@ -27,3 +27,4 @@ creation_rules:
       - age:
           - *host_wsl
           - *user_wassaa
+          - *user_wsl
