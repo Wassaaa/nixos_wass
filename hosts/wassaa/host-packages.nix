@@ -18,4 +18,6 @@
     enableGui = true;
     users = [ "wassaa" ];
   };
+
+  services.tailscale.enable = true;
 }

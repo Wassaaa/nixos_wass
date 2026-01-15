@@ -16,8 +16,9 @@
         })
       '';
     };
-    pam.services.swaylock = {
-      text = ''auth include login '';
+    pam.services = {
+      swaylock.text = ''auth include login '';
+      gdm.enableGnomeKeyring = true; # Auto-unlock keyring on login
     };
   };
 
