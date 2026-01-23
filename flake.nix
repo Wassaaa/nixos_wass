@@ -25,6 +25,10 @@
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     noctalia.url = "github:noctalia-dev/noctalia-shell";
+    opencode = {
+      url = "github:anomalyco/opencode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -32,6 +36,7 @@
       nixpkgs,
       nixpkgs-stable,
       nixos-wsl,
+      opencode,
       ...
     }@inputs:
     let

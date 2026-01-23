@@ -1,10 +1,11 @@
 # Development Features
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./packages.nix
+    ./opencode.nix
   ];
-  
+
   # Critical for VSCode Remote and binary compatibility
   programs.nix-ld.enable = true;
 

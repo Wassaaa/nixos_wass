@@ -31,6 +31,7 @@ in
     # Custom flake updates
     code-update = "nix flake update vscode-insiders --flake ${flakeDir} && fr -q";
     nordvpn-update = "update-nordvpn";
+    opencode-update = "nix flake update opencode --flake ${flakeDir} && fr -q";
 
     # Disk usage
     usage = "ncdu -xt 12";
