@@ -33,6 +33,9 @@ in
     nordvpn-update = "update-nordvpn";
     opencode-update = "nix flake update opencode --flake ${flakeDir} && fr -q";
 
+    # Antigravity
+    antikit = "npx @vudovn/ag-kit init";
+
     # Disk usage
     usage = "ncdu -xt 12";
   };
