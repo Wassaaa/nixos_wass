@@ -20,7 +20,8 @@
 
     # Language toolchains
     nodejs
-    python3
+    python314
+    python314Packages.playwright
     rustc
     cargo
     go
