@@ -19,8 +19,8 @@ in
     ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
 
     # Better defaults
-    cat = "bat";
-    man = "batman";
+    # cat = "bat";
+    # man = "batman";
 
     # Eza (better ls)
     ls = "eza --icons --group-directories-first -1";
