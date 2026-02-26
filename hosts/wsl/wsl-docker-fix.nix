@@ -1,55 +1,80 @@
 {
+  config,
   pkgs,
   lib,
   ...
 }:
 
-let
-  # Define the "Fixer Script" as a package
-  dockerFixScript = pkgs.writeShellScript "docker-fix.sh" ''
-    # 1. Add necessary tools to the path
-    export PATH=$PATH:${
-      lib.makeBinPath [
-        pkgs.docker
-        pkgs.docker-compose
-        pkgs.jq
-      ]
-    }
-
-    # Log output for debugging
-    exec 1>/tmp/docker-fix.log 2>&1
-    echo "Starting Docker Fixer..."
-
-    # 2. Wait for Docker Socket to be active
-    # We loop until 'docker info' succeeds
-    while ! docker info > /dev/null 2>&1; do
-      echo "Waiting for Docker Daemon..."
-      sleep 2
-    done
-
-    echo "Docker is up! Waiting 5s for mounts to settle..."
-    sleep 5
-
-    # 3. Restart all active stacks
-    # We use 'docker compose ls' to find running projects and restart them
-    # This forces them to re-mount the volumes correctly
-    for config in $(docker compose ls --format=json | jq -r '.[].ConfigFiles'); do
-      echo "Restarting stack: $config"
-      docker compose -f "$config" restart
-    done
-
-    echo "Done!"
-  '';
-in
 {
-  # Ensure these tools are installed system-wide
+  # 1. Make sure required tools are installed
   environment.systemPackages = with pkgs; [
     docker
     docker-compose
     jq
   ];
 
-  # Configure /etc/wsl.conf to run the script on boot
-  # We use 'su -l' to run it as YOUR user, not root
-  wsl.wslConf.boot.command = "su -l wsl -c '${dockerFixScript}'";
+  # 2. Define the Systemd Service
+  systemd.services.docker-mount-fix = {
+    description = "Fix Docker Desktop mounts on WSL start";
+    wantedBy = [ "multi-user.target" ];
+
+    # We remove the dependency on docker.socket because Docker Desktop manages that externally
+    # We only wait for the network to be up generally
+    after = [ "network.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      # IMPORTANT: Change 'nixos' to your actual username (run 'whoami')
+      User = "wsl";
+      Group = "users";
+      # If the script fails, don't consider the boot failed
+      RemainAfterExit = true;
+    };
+
+    script = ''
+      # 1. Setup Path
+      export PATH=${
+        lib.makeBinPath [
+          pkgs.docker
+          pkgs.docker-compose
+          pkgs.jq
+        ]
+      }:$PATH
+
+      echo "Starting Docker Fixer..."
+
+      # 2. Wait for Docker Desktop to connect the socket
+      # Since we don't have a systemd unit to wait for, we just poll the command
+      retries=0
+      while ! docker info > /dev/null 2>&1; do
+        sleep 2
+        retries=$((retries+1))
+        if [ $retries -gt 30 ]; then
+            echo "Timed out waiting for Docker Desktop."
+            exit 1
+        fi
+      done
+
+      echo "Docker is online! Waiting 5s for volume mounts to stabilize..."
+      sleep 5
+
+      # 3. Restart Stacks
+      # Use the 'docker compose' plugin syntax
+      echo "Restarting containers..."
+
+      # We find all running compose projects and restart them
+      projects=$(docker compose ls --format=json | jq -r '.[].ConfigFiles')
+
+      if [ -z "$projects" ]; then
+          echo "No active Docker Compose projects found to restart."
+      else
+          for config in $projects; do
+            echo "Restarting stack defined in: $config"
+            docker compose -f "$config" restart || echo "Failed to restart $config"
+          done
+      fi
+
+      echo "Done!"
+    '';
+  };
 }

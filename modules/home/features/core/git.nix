@@ -1,4 +1,11 @@
-{host, pkgs, profile, flakeRoot, ...}: let
+{
+  host,
+  pkgs,
+  profile,
+  flakeRoot,
+  ...
+}:
+let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") gitUsername gitEmail gitSigningKey;
   isWSL = profile == "wsl";
 in
@@ -25,9 +32,10 @@ in
         ssh = {
           # 1. The Program
           program =
-            if isWSL
-            then "op-ssh-sign-wsl.exe"
-            else "${pkgs._1password-gui}/bin/op-ssh-sign";
+            if isWSL then
+              "/mnt/c/Program Files/1Password/app/8/op-ssh-sign-wsl.exe"
+            else
+              "${pkgs._1password-gui}/bin/op-ssh-sign";
           allowedSignersFile = "~/.ssh/allowed_signers";
         };
       };

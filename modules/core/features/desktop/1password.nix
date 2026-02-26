@@ -1,5 +1,6 @@
 # 1Password System Integration - Minimal setup for desktop
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   environment.systemPackages = with pkgs; [
     _1password-gui
   ];
