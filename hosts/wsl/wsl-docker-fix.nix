@@ -6,6 +6,14 @@
 }:
 
 {
+  # --- FIX 1: Fix Docker Desktop WSL Integration (The 'whoami' error) ---
+  wsl.extraBin = with pkgs; [
+    { src = "${coreutils}/bin/whoami"; }
+    { src = "${coreutils}/bin/uname"; }
+    { src = "${coreutils}/bin/dirname"; }
+    { src = "${coreutils}/bin/readlink"; }
+  ];
+
   # 1. Make sure required tools are installed
   environment.systemPackages = with pkgs; [
     docker
@@ -13,6 +21,7 @@
     jq
   ];
 
+  # --- FIX 2: Fix Docker Mounts (Your existing script) ---
   # 2. Define the Systemd Service
   systemd.services.docker-mount-fix = {
     description = "Fix Docker Desktop mounts on WSL start";
