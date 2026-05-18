@@ -6,13 +6,13 @@
 
 **Architecture:** NixOS declaratively installs the shared Hermes package and host tooling, creates dedicated Linux users, and eventually defines one systemd service per gateway. Each gateway runs as its own Unix user with its own `$HOME` and `$HERMES_HOME`, giving separate configs, sessions, memories, toolsets, env files, and OS filesystem permissions.
 
-**Tech Stack:** NixOS modules in `/home/wsl/nixos_wass`, local Hermes flake input at `/home/wsl/hermes-agent`, systemd system services, mutable Hermes homes under `/home/<gateway-user>/.hermes`.
+**Tech Stack:** NixOS modules in `/home/wsl/nixos_wass`, upstream Hermes flake input `github:nousresearch/hermes-agent`, systemd system services, mutable Hermes homes under `/home/<gateway-user>/.hermes`.
 
 ---
 
 ## Current Design Decisions
 
-- Keep the shared Hermes package deterministic via `inputs.hermes-agent.packages.${pkgs.system}.default` in `modules/core/features/hermes/default.nix`.
+- Keep the shared Hermes package deterministic via the pinned `github:nousresearch/hermes-agent` flake input and local package overrides in `modules/core/features/hermes/`.
 - Keep runtime state mutable and outside Nix:
   - `/home/hermes-admin/.hermes`
   - `/home/hermes-user/.hermes`
@@ -294,6 +294,26 @@ fr
 systemctl status hermes-gateway-admin --no-pager
 systemctl status hermes-gateway-user --no-pager
 ```
+
+---
+
+## Updating Hermes Agent
+
+The Hermes flake input now follows upstream GitHub directly:
+
+```nix
+hermes-agent.url = "github:nousresearch/hermes-agent";
+```
+
+To update only Hermes and rebuild:
+
+```bash
+cd /home/wsl/nixos_wass
+nix flake update hermes-agent --flake .
+fr
+```
+
+The broad update alias `fu` / `nh os switch --update` can also update it as part of all flake inputs. Local Hermes-specific dependency choices, such as `messaging` and `tts-premium`, stay in this NixOS repo as package overrides rather than requiring a local Hermes checkout.
 
 ---
 

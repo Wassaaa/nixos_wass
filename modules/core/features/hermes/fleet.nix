@@ -6,7 +6,15 @@
 }:
 
 let
-  hermesPkg = inputs.hermes-agent.packages.${pkgs.system}.default;
+  hermesPkg = inputs.hermes-agent.packages.${pkgs.system}.default.override {
+    # Keep fleet services on the same Hermes runtime as the interactive install:
+    # Discord gateway/voice deps plus ElevenLabs TTS live inside Hermes' sealed
+    # Python env, while ffmpeg/libopus/etc. are provided through service PATH.
+    extraDependencyGroups = [
+      "messaging"
+      "tts-premium"
+    ];
+  };
   fleetAdminUser = username;
 
   # Built-in/configurable toolsets managed by the fleet presets. Platform-scoped
