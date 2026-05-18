@@ -30,8 +30,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hermes-agent = {
-      # Use upstream Hermes directly; local feature choices like gateway/TTS
-      # dependency groups live in this NixOS repo as package overrides.
+      # Use upstream Hermes directly for normal updates via `fu` / flake updates.
+      # For local Hermes development, temporarily swap this to:
+      # url = "path:/home/wsl/hermes-agent";
+      # When using the path input, manage Hermes source updates manually.
+      # Local feature choices like gateway/TTS dependency groups live in this
+      # NixOS repo as package overrides.
       url = "github:nousresearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
