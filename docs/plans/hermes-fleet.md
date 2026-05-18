@@ -188,8 +188,11 @@ Repeat for `hermes-user` after its config/env is ready.
 **Commands:**
 
 ```bash
+sudo -u hermes-admin -H hermes setup
+sudo -u hermes-user -H hermes setup
+# Or narrower sections if preferred:
+sudo -u hermes-admin -H hermes setup model
 sudo -u hermes-admin -H hermes gateway setup
-sudo -u hermes-user -H hermes gateway setup
 ```
 
 Or manually edit:
@@ -200,6 +203,41 @@ Or manually edit:
 ```
 
 **Important:** Each Discord gateway should generally use a different Discord bot token. Do not run the same Discord token from multiple gateways simultaneously.
+
+---
+
+## Step 4A: Toolset Variants Without Profiles
+
+**Objective:** Keep one session/memory/config root per gateway user, but allow quick, predetermined Discord toolset presets before starting/restarting a gateway.
+
+**Rationale:** Hermes profiles are process-level state roots. A single Discord gateway does not dynamically switch profiles per friend/message. For now, use the same gateway user and same `.hermes` state, and only swap Discord toolsets when starting/restarting the service.
+
+**Implemented helper:**
+
+```bash
+hermes-fleet variants
+hermes-fleet apply admin dev    # apply toolset preset, do not start
+hermes-fleet start admin dev    # apply preset, then restart service
+hermes-fleet start admin full
+hermes-fleet start user full
+hermes-fleet status
+```
+
+**Current variants:**
+
+```text
+admin: full, dev
+user:  full
+```
+
+**Notes:**
+- `full` is the broad/default-ish Discord preset.
+- `dev` keeps development-heavy tools and drops media/messaging fluff.
+- These do not create Hermes profiles, so sessions/memory remain under the same gateway user's `.hermes`.
+- Toolsets can still be changed at runtime from Discord with `/tools` or equivalent, then `/restart`/service restart for new sessions.
+- Adding a future `mom` gateway should mean adding another Unix user/service plus one or more variants in `modules/core/features/hermes/fleet.nix`.
+
+**Status:** Implemented as `/run/current-system/sw/bin/hermes-fleet` after the next `fr`; Nix build of the WSL toplevel succeeds.
 
 ---
 
