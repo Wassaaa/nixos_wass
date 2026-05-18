@@ -1,6 +1,10 @@
 { pkgs, inputs, ... }:
 
 {
+  imports = [
+    ./fleet.nix
+  ];
+
   # Shared Hermes feature: install the Hermes CLI/package and host-side tools the
   # agent can call from terminal/tools/skills. Runtime state intentionally stays
   # mutable in the invoking user's HOME (~/.hermes); this module does not manage
