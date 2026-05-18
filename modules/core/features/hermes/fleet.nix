@@ -2,6 +2,7 @@
 
 let
   hermesPkg = inputs.hermes-agent.packages.${pkgs.system}.default;
+  fleetAdminUser = "wsl";
 
   # Built-in/configurable toolsets managed by the fleet presets. Platform-scoped
   # or provider-specific tools can still be toggled manually from Discord later.
@@ -196,6 +197,22 @@ let
       shell = pkgs.bashInteractive;
     };
   };
+
+  adminAclForInstance = _name: cfg: ''
+    if ${pkgs.coreutils}/bin/id -u ${fleetAdminUser} >/dev/null 2>&1 && [ -d ${cfg.home} ]; then
+      echo "Granting ${fleetAdminUser} admin ACL access to ${cfg.home}"
+      ${pkgs.acl}/bin/setfacl -m u:${fleetAdminUser}:rwx ${cfg.home}
+      ${pkgs.acl}/bin/setfacl -R -m u:${fleetAdminUser}:rwX ${cfg.home}
+      ${pkgs.acl}/bin/setfacl -R -d -m u:${fleetAdminUser}:rwX ${cfg.home}
+    fi
+  '';
+
+  adminAclScript = builtins.concatStringsSep "
+" (
+    builtins.map (name: adminAclForInstance name gatewayInstances.${name}) (
+      builtins.attrNames gatewayInstances
+    )
+  );
 in
 {
   # Step 1 of the Hermes fleet rollout: create the gateway identities only.
@@ -210,7 +227,13 @@ in
 
   environment.systemPackages = [
     hermesFleet
+    pkgs.acl
   ];
+
+  # This is a single-user/admin WSL host: the normal `wsl` account is allowed to
+  # browse and edit every Hermes fleet user's full home from VS Code. Ownership
+  # remains with each gateway user, and future files inherit the ACL.
+  system.activationScripts.hermesFleetAdminHomeAcls.text = adminAclScript;
 
   # Step 2: bootstrap the mutable Hermes state directories. These directories
   # are intentionally state, not Nix-owned config: config.yaml, .env, auth.json,

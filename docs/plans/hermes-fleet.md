@@ -241,6 +241,41 @@ user:  full
 
 **Status:** Implemented as `/run/current-system/sw/bin/hermes-fleet` after the next `fr`; the helper is now backed by Nix-generated fleet JSON plus an external `hermes-fleet.sh` script for human-editable logic. It supports list/status/apply/start/restart/stop/logs/cat-service, and Nix build of the WSL toplevel succeeds.
 
+
+---
+
+## Step 4B: Admin Editing Access from `wsl`
+
+**Objective:** Let the main `wsl` account administer all Hermes fleet user homes directly from VS Code without running VS Code as root.
+
+**Decision:** This is a single-user/admin WSL machine, so `wsl` should have full browse/edit access to every fleet user's home. Keep ownership with each gateway user, but grant `wsl` POSIX ACL access dynamically for every entry in `gatewayInstances`.
+
+**Implementation notes:**
+- `modules/core/features/hermes/fleet.nix` defines `fleetAdminUser = "wsl"`.
+- The activation script iterates over all `gatewayInstances` and runs `setfacl` for each home.
+- Existing files get `u:wsl:rwX` recursively.
+- Future files inherit the default ACL via `setfacl -R -d -m u:wsl:rwX`.
+- Adding a future gateway instance automatically grants `wsl` access to that home after `fr`.
+
+**Workflow after `fr`:**
+
+```bash
+code /home/hermes-admin
+code /home/hermes-user
+# or directly:
+code /home/hermes-admin/.hermes/.env
+code /home/hermes-user/.hermes/config.yaml
+```
+
+**Verification:**
+
+```bash
+getfacl /home/hermes-admin | grep 'user:wsl'
+getfacl /home/hermes-user | grep 'user:wsl'
+sudo -u wsl test -w /home/hermes-admin/.hermes
+sudo -u wsl test -w /home/hermes-user/.hermes
+```
+
 ---
 
 ## Step 5: Enable Autostart Once Stable
