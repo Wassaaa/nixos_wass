@@ -21,6 +21,7 @@
     # Language toolchains
     nodejs
     python314
+    uv
     python314Packages.playwright
     rustc
     cargo

@@ -1,5 +1,16 @@
 { pkgs, inputs, ... }:
 
+let
+  hermesPkg = inputs.hermes-agent.packages.${pkgs.system}.default.override {
+    # Keep local feature choices outside the Hermes upstream checkout so the
+    # base repo can update cleanly. These groups add Discord/Telegram gateway
+    # deps and ElevenLabs TTS support to the sealed Hermes Python env.
+    extraDependencyGroups = [
+      "messaging"
+      "tts-premium"
+    ];
+  };
+in
 {
   imports = [
     ./fleet.nix
@@ -10,7 +21,7 @@
   # mutable in each gateway user's HOME (~/.hermes); secrets, auth.json,
   # sessions, memory, and user-installed skills are not Nix-managed.
   environment.systemPackages = with pkgs; [
-    inputs.hermes-agent.packages.${pkgs.system}.default
+    hermesPkg
 
     # Agent/media/video generation runtime tools
     ffmpeg
@@ -26,19 +37,5 @@
 
     # JS/browser-ish tooling commonly needed by Hermes skills/plugins
     nodejs_24
-
-    # Python media stack usable from terminal/scripts without mutating Hermes'
-    # sealed Nix store venv. Hermes-internal Python deps still belong in the
-    # hermes-agent flake/package, not here.
-    (python312.withPackages (
-      ps: with ps; [
-        moviepy
-        pillow
-        numpy
-        scipy
-        imageio
-        imageio-ffmpeg
-      ]
-    ))
   ];
 }
