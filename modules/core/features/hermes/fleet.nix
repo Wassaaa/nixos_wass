@@ -25,4 +25,17 @@ in
     extraGroups = [ ];
     shell = pkgs.bashInteractive;
   }) gatewayUsers;
+
+  # Step 2: bootstrap the mutable Hermes state directories. These directories
+  # are intentionally state, not Nix-owned config: config.yaml, .env, auth.json,
+  # sessions, memory, and installed skills remain editable by each gateway user.
+  systemd.tmpfiles.rules = builtins.concatLists (
+    builtins.attrValues (
+      builtins.mapAttrs (_name: userCfg: [
+        "d ${userCfg.home}/.hermes 0700 ${_name} users - -"
+        "d ${userCfg.home}/.hermes/logs 0700 ${_name} users - -"
+        "d ${userCfg.home}/.hermes/sessions 0700 ${_name} users - -"
+      ]) gatewayUsers
+    )
+  );
 }

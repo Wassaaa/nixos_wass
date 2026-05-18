@@ -102,6 +102,8 @@ sudo -u hermes-user -H hermes status
 
 Expected: users exist and Hermes can run as each user, though gateway platforms are not configured yet.
 
+**Status:** Completed in commit `cf268fd` (`feat: add hermes fleet gateway users`).
+
 ---
 
 ## Step 2: Bootstrap Mutable Hermes Homes
@@ -125,11 +127,14 @@ Expected: users exist and Hermes can run as each user, though gateway platforms 
 **Verification:**
 
 ```bash
-sudo -u hermes-admin -H test -d ~/.hermes
-sudo -u hermes-user -H test -d ~/.hermes
+# Quote the command or use bash -lc so `~` expands as the target user, not the caller.
+sudo -u hermes-admin -H bash -lc 'test -d ~/.hermes && echo admin-ok'
+sudo -u hermes-user -H bash -lc 'test -d ~/.hermes && echo user-ok'
 sudo -u hermes-admin -H hermes config path
 sudo -u hermes-user -H hermes config path
 ```
+
+**Status:** Implemented with `systemd.tmpfiles.rules`; verified both users resolve separate Hermes config paths under their own homes.
 
 ---
 
