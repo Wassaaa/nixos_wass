@@ -215,11 +215,13 @@ Or manually edit:
 **Implemented helper:**
 
 ```bash
+hermes-fleet list
 hermes-fleet variants
 hermes-fleet apply admin dev    # apply toolset preset, do not start
 hermes-fleet start admin dev    # apply preset, then restart service
-hermes-fleet start admin full
-hermes-fleet start user full
+hermes-fleet restart admin      # restart without changing toolset preset
+hermes-fleet stop admin
+hermes-fleet logs admin -n 100
 hermes-fleet status
 ```
 
@@ -237,7 +239,7 @@ user:  full
 - Toolsets can still be changed at runtime from Discord with `/tools` or equivalent, then `/restart`/service restart for new sessions.
 - Adding a future `mom` gateway should mean adding another Unix user/service plus one or more variants in `modules/core/features/hermes/fleet.nix`.
 
-**Status:** Implemented as `/run/current-system/sw/bin/hermes-fleet` after the next `fr`; Nix build of the WSL toplevel succeeds.
+**Status:** Implemented as `/run/current-system/sw/bin/hermes-fleet` after the next `fr`; the helper is now backed by Nix-generated fleet JSON plus an external `hermes-fleet.sh` script for human-editable logic. It supports list/status/apply/start/restart/stop/logs/cat-service, and Nix build of the WSL toplevel succeeds.
 
 ---
 
