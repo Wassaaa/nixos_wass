@@ -7,8 +7,8 @@
 
   # Shared Hermes feature: install the Hermes CLI/package and host-side tools the
   # agent can call from terminal/tools/skills. Runtime state intentionally stays
-  # mutable in the invoking user's HOME (~/.hermes); this module does not manage
-  # secrets, auth.json, sessions, memory, or the gateway service.
+  # mutable in each gateway user's HOME (~/.hermes); secrets, auth.json,
+  # sessions, memory, and user-installed skills are not Nix-managed.
   environment.systemPackages = with pkgs; [
     inputs.hermes-agent.packages.${pkgs.system}.default
 

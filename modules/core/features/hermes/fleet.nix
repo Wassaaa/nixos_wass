@@ -1,14 +1,18 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 let
+  hermesPkg = inputs.hermes-agent.packages.${pkgs.system}.default;
+
   gatewayUsers = {
     hermes-admin = {
       description = "Hermes admin gateway user";
       home = "/home/hermes-admin";
+      serviceName = "hermes-gateway-admin";
     };
     hermes-user = {
       description = "Hermes restricted gateway user";
       home = "/home/hermes-user";
+      serviceName = "hermes-gateway-user";
     };
   };
 in
@@ -36,6 +40,61 @@ in
         "d ${userCfg.home}/.hermes/logs 0700 ${_name} users - -"
         "d ${userCfg.home}/.hermes/sessions 0700 ${_name} users - -"
       ]) gatewayUsers
+    )
+  );
+
+  # Step 3: define gateway system services, but do not autostart them yet.
+  # They are manually startable with `sudo systemctl start hermes-gateway-admin`
+  # after each user's ~/.hermes/.env/config.yaml has been configured.
+  systemd.services = builtins.listToAttrs (
+    builtins.attrValues (
+      builtins.mapAttrs (name: userCfg: {
+        name = userCfg.serviceName;
+        value = {
+          description = "Hermes Agent Gateway (${name})";
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
+
+          # No wantedBy yet: these services are defined declaratively but manual-start
+          # only until each bot token/env/config is ready.
+
+          path = with pkgs; [
+            hermesPkg
+            bashInteractive
+            coreutils
+            git
+            ripgrep
+            fd
+            curl
+            nodejs_24
+            ffmpeg
+            imagemagick
+            mediainfo
+            exiftool
+            sox
+          ];
+
+          environment = {
+            HOME = userCfg.home;
+            HERMES_HOME = "${userCfg.home}/.hermes";
+          };
+
+          serviceConfig = {
+            Type = "simple";
+            User = name;
+            Group = "users";
+            WorkingDirectory = userCfg.home;
+            ExecStart = "${hermesPkg}/bin/hermes gateway run --replace";
+            Restart = "always";
+            RestartSec = 5;
+            KillMode = "mixed";
+            KillSignal = "SIGTERM";
+            TimeoutStopSec = 210;
+            StandardOutput = "journal";
+            StandardError = "journal";
+          };
+        };
+      }) gatewayUsers
     )
   );
 }

@@ -158,17 +158,26 @@ sudo -u hermes-user -H hermes config path
 - Use `Restart=always`.
 - Prefer making services startable manually first before adding `wantedBy = [ "multi-user.target" ];`.
 
-**Verification:**
+**Verification after `fr`:**
 
 ```bash
 systemctl cat hermes-gateway-admin
 systemctl cat hermes-gateway-user
+systemctl is-enabled hermes-gateway-admin # expected: static or disabled; not enabled yet
+systemctl is-enabled hermes-gateway-user  # expected: static or disabled; not enabled yet
+```
+
+When env/config is ready, test one service manually:
+
+```bash
 sudo systemctl start hermes-gateway-admin
 sudo systemctl status hermes-gateway-admin --no-pager
 sudo systemctl stop hermes-gateway-admin
 ```
 
 Repeat for `hermes-user` after its config/env is ready.
+
+**Status:** Implemented in Nix as manual-start services with empty `wantedBy`, exact Hermes package `ExecStart`, per-user `HOME`/`HERMES_HOME`, and a service PATH containing Hermes/media/runtime tools. Full WSL config evaluation succeeds.
 
 ---
 
