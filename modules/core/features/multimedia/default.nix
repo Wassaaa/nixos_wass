@@ -26,6 +26,8 @@
     pavucontrol
     easyeffects
     audacity
+    portaudio
+    espeak-ng
 
     # Video editing
     # kdePackages.kdenlive

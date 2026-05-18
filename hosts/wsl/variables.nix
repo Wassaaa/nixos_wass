@@ -35,4 +35,5 @@
   enableVirtualization = false; # No nested virtualization
   enableDevelopment = true; # Keep dev tools
   enableMultimedia = false; # No media players in WSL
+  enableHermes = true; # Hermes agent package + runtime tooling, mutable state remains in ~/.hermes
 }

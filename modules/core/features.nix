@@ -1,13 +1,20 @@
 # Feature-based module loader
-{ host, lib, flakeRoot, ... }:
+{
+  host,
+  lib,
+  flakeRoot,
+  ...
+}:
 let
-  inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
+  hostVars = import "${flakeRoot}/hosts/${host}/variables.nix";
+  inherit (hostVars)
     enableGaming
     enableDesktop
     enableVirtualization
     enableDevelopment
     enableMultimedia
     ;
+  enableHermes = hostVars.enableHermes or false;
 in
 {
   imports = [
@@ -19,10 +26,10 @@ in
     ./openssh.nix
     ./services.nix
     ./sops
-    ./packages.nix  # Only core CLI utilities
-    ./nh.nix        # NixOS helper - useful everywhere
+    ./packages.nix # Only core CLI utilities
+    ./nh.nix # NixOS helper - useful everywhere
     ./syncthing.nix # File syncing - useful everywhere
-    ./starfish.nix  # Shell prompt - useful everywhere
+    ./starfish.nix # Shell prompt - useful everywhere
 
     # Conditionally import feature modules
   ]
@@ -40,5 +47,8 @@ in
   ]
   ++ lib.optionals enableMultimedia [
     ./features/multimedia
+  ]
+  ++ lib.optionals enableHermes [
+    ./features/hermes
   ];
 }

@@ -29,6 +29,12 @@
       url = "github:anomalyco/opencode";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent = {
+      # Local development checkout. Run `nix flake lock --update-input hermes-agent`
+      # (or `fu`) after pulling/changing /home/wsl/hermes-agent to advance the pin.
+      url = "path:/home/wsl/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
