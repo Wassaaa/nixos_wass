@@ -248,14 +248,15 @@ user:  full
 
 **Objective:** Let the main `wsl` account administer all Hermes fleet user homes directly from VS Code without running VS Code as root.
 
-**Decision:** This is a single-user/admin WSL machine, so `wsl` should have full browse/edit access to every fleet user's home. Keep ownership with each gateway user, but grant `wsl` POSIX ACL access dynamically for every entry in `gatewayInstances`.
+**Decision:** This is a single-admin machine pattern, so the host's primary configured user should have full browse/edit access to every fleet user's home. Keep ownership with each gateway user, but grant the primary user POSIX ACL access dynamically for every entry in `gatewayInstances`.
 
 **Implementation notes:**
-- `modules/core/features/hermes/fleet.nix` defines `fleetAdminUser = "wsl"`.
+- `modules/core/features/hermes/fleet.nix` receives the flake `username` special arg and sets `fleetAdminUser = username`.
+- On WSL this resolves to `wsl`; on other hosts it follows that host's `mkSystem { username = ...; }` value.
 - The activation script iterates over all `gatewayInstances` and runs `setfacl` for each home.
-- Existing files get `u:wsl:rwX` recursively.
-- Future files inherit the default ACL via `setfacl -R -d -m u:wsl:rwX`.
-- Adding a future gateway instance automatically grants `wsl` access to that home after `fr`.
+- Existing files get `u:<username>:rwX` recursively.
+- Future files inherit the default ACL via `setfacl -R -d -m u:<username>:rwX`.
+- Adding a future gateway instance automatically grants the host admin user access to that home after `fr`.
 
 **Workflow after `fr`:**
 
@@ -270,10 +271,10 @@ code /home/hermes-user/.hermes/config.yaml
 **Verification:**
 
 ```bash
-getfacl /home/hermes-admin | grep 'user:wsl'
-getfacl /home/hermes-user | grep 'user:wsl'
-sudo -u wsl test -w /home/hermes-admin/.hermes
-sudo -u wsl test -w /home/hermes-user/.hermes
+getfacl /home/hermes-admin | grep "user:$(whoami)"
+getfacl /home/hermes-user | grep "user:$(whoami)"
+test -w /home/hermes-admin/.hermes && echo admin-writable
+test -w /home/hermes-user/.hermes && echo user-writable
 ```
 
 ---

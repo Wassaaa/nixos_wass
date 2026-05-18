@@ -1,8 +1,13 @@
-{ pkgs, inputs, ... }:
+{
+  pkgs,
+  inputs,
+  username,
+  ...
+}:
 
 let
   hermesPkg = inputs.hermes-agent.packages.${pkgs.system}.default;
-  fleetAdminUser = "wsl";
+  fleetAdminUser = username;
 
   # Built-in/configurable toolsets managed by the fleet presets. Platform-scoped
   # or provider-specific tools can still be toggled manually from Discord later.
