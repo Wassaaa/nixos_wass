@@ -17,74 +17,10 @@ let
   };
   fleetAdminUser = username;
 
-  # Built-in/configurable toolsets managed by the fleet presets. Platform-scoped
-  # or provider-specific tools can still be toggled manually from Discord later.
-  allToolsets = [
-    "web"
-    "browser"
-    "terminal"
-    "file"
-    "code_execution"
-    "vision"
-    "video"
-    "image_gen"
-    "video_gen"
-    "x_search"
-    "moa"
-    "tts"
-    "skills"
-    "todo"
-    "memory"
-    "session_search"
-    "clarify"
-    "delegation"
-    "cronjob"
-    "messaging"
-    "homeassistant"
-    "spotify"
-    "discord"
-    "discord_admin"
-    "yuanbao"
-    "computer_use"
-  ];
-
-  fullToolsets = [
-    "web"
-    "browser"
-    "terminal"
-    "file"
-    "code_execution"
-    "vision"
-    "video"
-    "image_gen"
-    "video_gen"
-    "tts"
-    "skills"
-    "todo"
-    "memory"
-    "session_search"
-    "clarify"
-    "delegation"
-    "cronjob"
-    "messaging"
-    "computer_use"
-  ];
-
-  devToolsets = [
-    "web"
-    "browser"
-    "terminal"
-    "file"
-    "code_execution"
-    "vision"
-    "skills"
-    "todo"
-    "memory"
-    "session_search"
-    "clarify"
-    "delegation"
-    "cronjob"
-  ];
+  # Shared toolset presets for every Hermes gateway helper. Add/edit presets in
+  # toolset-presets.nix; helpers consume the resulting attrset/JSON dynamically.
+  toolsetPresets = import ./toolset-presets.nix;
+  allToolsets = toolsetPresets.all;
 
   gatewayInstances = {
     admin = {
@@ -92,10 +28,7 @@ let
       description = "Hermes admin gateway user";
       home = "/home/hermes-admin";
       serviceName = "hermes-gateway-admin";
-      variants = {
-        full = fullToolsets;
-        dev = devToolsets;
-      };
+      variants = toolsetPresets.presets;
     };
 
     user = {
@@ -103,9 +36,7 @@ let
       description = "Hermes restricted gateway user";
       home = "/home/hermes-user";
       serviceName = "hermes-gateway-user";
-      variants = {
-        full = fullToolsets;
-      };
+      variants = toolsetPresets.presets;
     };
   };
 
@@ -128,20 +59,21 @@ let
     }
   );
 
-
   gatewayWorkspaceFlake = ./templates/gateway-devshell/flake.nix;
   gatewayEnvrc = ./templates/gateway-devshell/envrc;
   gatewayHermesMd = ./templates/gateway-devshell/fleet.hermes.md;
   gatewaySkill = ./templates/gateway-devshell/SKILL.md;
 
-  gatewayRunnerForInstance = _name: cfg: pkgs.writeShellScript "${cfg.serviceName}-run" ''
-    set -euo pipefail
-    cd ${cfg.home}
-    export HOME=${cfg.home}
-    export HERMES_HOME=${cfg.home}/.hermes
-    export NIX_CONFIG="experimental-features = nix-command flakes"
-    exec ${pkgs.nix}/bin/nix develop ${cfg.home}/.hermes/devshell --command ${hermesPkg}/bin/hermes gateway run --replace
-  '';
+  gatewayRunnerForInstance =
+    _name: cfg:
+    pkgs.writeShellScript "${cfg.serviceName}-run" ''
+      set -euo pipefail
+      cd ${cfg.home}
+      export HOME=${cfg.home}
+      export HERMES_HOME=${cfg.home}/.hermes
+      export NIX_CONFIG="experimental-features = nix-command flakes"
+      exec ${pkgs.nix}/bin/nix develop ${cfg.home}/.hermes/devshell --command ${hermesPkg}/bin/hermes gateway run --replace
+    '';
 
   hermesFleet = pkgs.writeShellApplication {
     name = "hermes-fleet";
@@ -278,9 +210,8 @@ in
   # the Nix daemon must allow those non-login service users to talk to the store.
   nix.settings.allowed-users = [
     fleetAdminUser
-  ] ++ builtins.map (name: gatewayInstances.${name}.user) (
-    builtins.attrNames gatewayInstances
-  );
+  ]
+  ++ builtins.map (name: gatewayInstances.${name}.user) (builtins.attrNames gatewayInstances);
 
   # This is a single-user/admin WSL host: the normal `wsl` account is allowed to
   # browse and edit every Hermes fleet user's full home from VS Code. Ownership
