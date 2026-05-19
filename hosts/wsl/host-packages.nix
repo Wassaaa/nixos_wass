@@ -44,6 +44,8 @@
     procps
 
     # WSL integration tools
-    wslu # WSL utilities
+    # wslu was removed from nixpkgs after upstream was archived; keep basic
+    # Windows "open with default app" integration via the maintained replacement.
+    wsl-open
   ];
 }

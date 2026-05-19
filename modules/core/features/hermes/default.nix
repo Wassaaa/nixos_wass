@@ -6,7 +6,7 @@
 }:
 
 let
-  hermesPkg = inputs.hermes-agent.packages.${pkgs.system}.default.override {
+  hermesPkg = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
     # Keep local feature choices outside the Hermes upstream checkout so the
     # base repo can update cleanly. These groups add Discord/Telegram gateway
     # deps and ElevenLabs TTS support to the sealed Hermes Python env.
@@ -101,12 +101,14 @@ in
   # used by the main WSL account. Runtime state stays mutable in
   # /home/${username}/.hermes; Nix owns the service and baseline package, while
   # /home/${username}/.hermes/devshell/flake.nix owns the gateway's mutable devshell.
-  # Manual-start for now so it does not race the existing user unit that uses the
-  # same Discord bot token. After migration, add wantedBy = [ "multi-user.target" ].
+  # Autostart the main WSL gateway with the system profile. The old mutable
+  # `hermes gateway install` user unit should stay disabled so only this
+  # declarative service owns the Discord bot token.
   systemd.services.hermes-gateway-wsl = {
     description = "Hermes Agent Gateway (${username})";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
 
     path = with pkgs; [
       nix

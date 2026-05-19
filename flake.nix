@@ -25,10 +25,6 @@
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     noctalia.url = "github:noctalia-dev/noctalia-shell";
-    opencode = {
-      url = "github:anomalyco/opencode";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     hermes-agent = {
       # Use upstream Hermes directly for normal updates via `fu` / flake updates.
       # For local Hermes development, temporarily swap this to:
@@ -46,7 +42,6 @@
       nixpkgs,
       nixpkgs-stable,
       nixos-wsl,
-      opencode,
       ...
     }@inputs:
     let

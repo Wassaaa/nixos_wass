@@ -3,7 +3,6 @@
 {
   imports = [
     ./packages.nix
-    ./opencode.nix
   ];
 
   # Critical for VSCode Remote and binary compatibility

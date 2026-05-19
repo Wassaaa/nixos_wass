@@ -3,18 +3,18 @@
 {
   programs.vscode = {
     enable = true;
-    package = inputs.vscode-insiders.packages.${pkgs.system}.vscode-insider.overrideAttrs (oldAttrs: {
-      # Wrap insiders and expose it as 'code' for convenience
-      postInstall =
-        (oldAttrs.postInstall or "")
-        + ''
-          # Prefer insiders if present; otherwise wrap stable
-          if [ -x "$out/bin/code-insiders" ]; then
-            rm -f "$out/bin/code" || true
-            ln -s "$out/bin/code-insiders" "$out/bin/code"
-          fi
-        '';
-    });
+    package =
+      inputs.vscode-insiders.packages.${pkgs.stdenv.hostPlatform.system}.vscode-insider.overrideAttrs
+        (oldAttrs: {
+          # Wrap insiders and expose it as 'code' for convenience
+          postInstall = (oldAttrs.postInstall or "") + ''
+            # Prefer insiders if present; otherwise wrap stable
+            if [ -x "$out/bin/code-insiders" ]; then
+              rm -f "$out/bin/code" || true
+              ln -s "$out/bin/code-insiders" "$out/bin/code"
+            fi
+          '';
+        });
   };
 
   # Provide a base settings fragment for both VS Code and VS Code Insiders

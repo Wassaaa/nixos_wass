@@ -9,14 +9,17 @@ let
 in
 {
   nixpkgs.overlays = [
-    (final: prev:
+    (
+      final: prev:
       let
-        removeStylixDarkPatch = pkg:
+        removeStylixDarkPatch =
+          pkg:
           pkg.overrideAttrs (old: {
             patches =
               let
                 existing = old.patches or [ ];
-                keepPatch = patch:
+                keepPatch =
+                  patch:
                   let
                     patchStr = builtins.toString patch;
                   in
@@ -28,7 +31,8 @@ in
       in
       lib.optionalAttrs (prev ? gnome-shell) {
         gnome-shell = removeStylixDarkPatch prev.gnome-shell;
-      })
+      }
+    )
   ];
 
   nix = {
@@ -65,6 +69,11 @@ in
       keep-derivations = true;
     };
   };
+  # Keep direct `nh os switch` updates safe on WSL. nixpkgs now defaults to
+  # dbus-broker, but switching dbus implementations live is blocked by NixOS
+  # pre-switch checks; revisit this on a planned boot/restart migration.
+  services.dbus.implementation = "dbus";
+
   time.timeZone = "Europe/Helsinki";
   i18n.defaultLocale = "en_IE.UTF-8";
   i18n.extraLocaleSettings = {
@@ -84,7 +93,7 @@ in
   documentation = {
     enable = true;
     man.enable = true;
-    man.generateCaches = false;  # This is what makes rebuilds slow
+    man.cache.enable = false; # This is what makes rebuilds slow
   };
 
   system.stateVersion = lib.mkDefault "25.05"; # Do not change!

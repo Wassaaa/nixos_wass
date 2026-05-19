@@ -30,7 +30,7 @@
     # Development utilities
     direnv
     nixd # Nix LSP server
-    nixfmt-rfc-style # Nix Formatter
+    nixfmt # Nix Formatter
     just
     hyperfine
     tokei
