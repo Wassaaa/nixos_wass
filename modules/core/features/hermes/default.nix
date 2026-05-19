@@ -29,6 +29,58 @@ let
     export NIX_CONFIG="experimental-features = nix-command flakes"
     exec ${pkgs.nix}/bin/nix develop /home/${username}/.hermes/devshell --command ${hermesPkg}/bin/hermes gateway run --replace
   '';
+
+  wslGatewayCtl = pkgs.writeShellScriptBin "hermes-wsl-gateway" ''
+        set -euo pipefail
+
+        unit=hermes-gateway-wsl.service
+
+    usage() {
+      ${pkgs.coreutils}/bin/printf '%s\n' \
+        "Usage: hermes-wsl-gateway <command>" \
+        "" \
+        "Manage the main WSL Hermes gateway systemd service." \
+        "" \
+        "Commands:" \
+        "  status      Show service status" \
+        "  logs        Show recent logs" \
+        "  follow      Follow logs" \
+        "  start       Start the gateway" \
+        "  stop        Stop the gateway" \
+        "  restart     Restart the gateway" \
+        "  enable      Enable autostart" \
+        "  disable     Disable autostart" \
+        "  unit        Show the systemd unit" \
+        "  help        Show this help"
+    }
+
+        cmd="''${1:-status}"
+        case "$cmd" in
+          status)
+            ${pkgs.systemd}/bin/systemctl status "$unit" --no-pager
+            ;;
+          logs)
+            ${pkgs.systemd}/bin/journalctl -u "$unit" -n "''${2:-120}" --no-pager
+            ;;
+          follow|tail)
+            ${pkgs.systemd}/bin/journalctl -u "$unit" -f
+            ;;
+          start|stop|restart|enable|disable)
+            exec ${pkgs.sudo}/bin/sudo ${pkgs.systemd}/bin/systemctl "$cmd" "$unit"
+            ;;
+          unit|cat)
+            ${pkgs.systemd}/bin/systemctl cat "$unit" --no-pager
+            ;;
+          help|-h|--help)
+            usage
+            ;;
+          *)
+            echo "unknown command: $cmd" >&2
+            usage >&2
+            exit 2
+            ;;
+        esac
+  '';
 in
 {
   imports = [
@@ -41,6 +93,7 @@ in
   # sessions, memory, and user-installed skills are not Nix-managed.
   environment.systemPackages = with pkgs; [
     hermesPkg
+    wslGatewayCtl
 
     # Agent/media/video generation runtime tools
     ffmpeg
