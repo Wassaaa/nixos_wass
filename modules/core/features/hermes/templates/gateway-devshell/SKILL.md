@@ -35,7 +35,7 @@ Use this skill to decide where dependencies belong:
 
 - Do not `pip install` into the Nix store or Hermes package environment.
 - Do not use `sudo` or edit system NixOS config unless the user explicitly asks.
-- `.envrc` helps interactive shells, but the systemd gateway gets its runtime from `nix develop` and `~/.hermes/.env`.
+- `~/.hermes/devshell/.envrc` helps interactive maintenance shells, but the systemd gateway gets its runtime from `nix develop` and `~/.hermes/.env`.
 - If a package must be imported by Hermes at startup, adding it to the devshell may not be enough; add it to the shared Hermes package override instead.
 - Keep the devshell flake under `~/.hermes/devshell`, not directly at `~/flake.nix`; home-root flakes make Nix scan the entire home tree and can fail on private app data.
 

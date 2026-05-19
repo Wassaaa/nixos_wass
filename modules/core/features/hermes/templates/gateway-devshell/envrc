@@ -1,8 +1,8 @@
-use flake ./.hermes/devshell
+use flake
 
-export HERMES_GATEWAY_WORKSPACE="$PWD"
+export HERMES_GATEWAY_WORKSPACE="${HERMES_GATEWAY_WORKSPACE:-$PWD}"
 export HERMES_MUTABLE_DEVSHELL=1
 
-# Optional non-committed per-workspace env for convenience. Keep real gateway
+# Optional non-committed per-devshell env for convenience. Keep real gateway
 # secrets in ~/.hermes/.env unless this user intentionally chooses otherwise.
 dotenv_if_exists .env.local

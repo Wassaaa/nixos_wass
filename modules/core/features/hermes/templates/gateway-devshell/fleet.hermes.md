@@ -8,7 +8,7 @@ This home directory is the persistent workspace for this Hermes fleet gateway id
 - Mutable Hermes state lives in `~/.hermes` for this Unix user.
 - The gateway service starts from this home directory through `nix develop`.
 - This directory's `~/.hermes/devshell/flake.nix` controls the mutable devshell for terminal tools and helper projects.
-- This directory's `.envrc` is for interactive shells; the service enters the devshell directly with `nix develop`.
+- The devshell's `.envrc` lives at `~/.hermes/devshell/.envrc` for interactive maintenance shells; the service enters the devshell directly with `nix develop`.
 - Main WSL uses the same devshell pattern, but is also the fleet-admin account with ACL access for maintenance.
 
 ## Package policy
@@ -33,7 +33,7 @@ If a needed CLI/tool is missing:
 ## Secrets and env vars
 
 - Gateway secrets, provider keys, and platform tokens normally live in `~/.hermes/.env`.
-- Non-secret devshell env vars may live in `.envrc` or the devshell `shellHook`.
+- Non-secret devshell env vars may live in `~/.hermes/devshell/.envrc` or the devshell `shellHook`.
 - Do not commit secrets into `flake.nix`, `.envrc`, scripts, or notes.
 - If a required secret is missing, tell the user the exact env var name to add.
 

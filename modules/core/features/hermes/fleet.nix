@@ -172,7 +172,7 @@ let
     "d ${cfg.home}/.hermes/skills/devops/hermes-gateway-devshell 0700 ${cfg.user} users - -"
     "C ${cfg.home}/.hermes/skills/devops/hermes-gateway-devshell/SKILL.md 0600 ${cfg.user} users - ${gatewaySkill}"
     "C ${cfg.home}/.hermes/devshell/flake.nix 0600 ${cfg.user} users - ${gatewayWorkspaceFlake}"
-    "C ${cfg.home}/.envrc 0644 ${cfg.user} users - ${gatewayEnvrc}"
+    "C ${cfg.home}/.hermes/devshell/.envrc 0600 ${cfg.user} users - ${gatewayEnvrc}"
     "C ${cfg.home}/.hermes.md 0644 ${cfg.user} users - ${gatewayHermesMd}"
   ];
 

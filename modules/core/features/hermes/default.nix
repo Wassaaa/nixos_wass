@@ -73,7 +73,7 @@ in
     "d /home/${username}/.hermes/skills/devops/hermes-gateway-devshell 0700 ${username} users - -"
     "C /home/${username}/.hermes/skills/devops/hermes-gateway-devshell/SKILL.md 0600 ${username} users - ${gatewaySkill}"
     "C /home/${username}/.hermes/devshell/flake.nix 0600 ${username} users - ${gatewayWorkspaceFlake}"
-    "C /home/${username}/.envrc 0644 ${username} users - ${gatewayEnvrc}"
+    "C /home/${username}/.hermes/devshell/.envrc 0600 ${username} users - ${gatewayEnvrc}"
     "C /home/${username}/.hermes.md 0644 ${username} users - ${gatewayHermesMd}"
   ];
 
