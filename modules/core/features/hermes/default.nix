@@ -30,57 +30,176 @@ let
     exec ${pkgs.nix}/bin/nix develop /home/${username}/.hermes/devshell --command ${hermesPkg}/bin/hermes gateway run --replace
   '';
 
-  wslGatewayCtl = pkgs.writeShellScriptBin "hermes-wsl-gateway" ''
-        set -euo pipefail
+  allToolsets = [
+    "web"
+    "browser"
+    "terminal"
+    "file"
+    "code_execution"
+    "vision"
+    "video"
+    "image_gen"
+    "video_gen"
+    "x_search"
+    "moa"
+    "tts"
+    "skills"
+    "todo"
+    "memory"
+    "session_search"
+    "clarify"
+    "delegation"
+    "cronjob"
+    "messaging"
+    "homeassistant"
+    "spotify"
+    "discord"
+    "discord_admin"
+    "yuanbao"
+    "computer_use"
+  ];
 
-        unit=hermes-gateway-wsl.service
+  fullToolsets = [
+    "web"
+    "browser"
+    "terminal"
+    "file"
+    "code_execution"
+    "vision"
+    "video"
+    "image_gen"
+    "video_gen"
+    "tts"
+    "skills"
+    "todo"
+    "memory"
+    "session_search"
+    "clarify"
+    "delegation"
+    "cronjob"
+    "messaging"
+    "computer_use"
+  ];
 
-    usage() {
-      ${pkgs.coreutils}/bin/printf '%s\n' \
-        "Usage: hermes-wsl-gateway <command>" \
-        "" \
-        "Manage the main WSL Hermes gateway systemd service." \
-        "" \
-        "Commands:" \
-        "  status      Show service status" \
-        "  logs        Show recent logs" \
-        "  follow      Follow logs" \
-        "  start       Start the gateway" \
-        "  stop        Stop the gateway" \
-        "  restart     Restart the gateway" \
-        "  enable      Enable autostart" \
-        "  disable     Disable autostart" \
-        "  unit        Show the systemd unit" \
-        "  help        Show this help"
-    }
+  codeToolsets = [
+    "web"
+    "browser"
+    "terminal"
+    "file"
+    "code_execution"
+    "vision"
+    "skills"
+    "todo"
+    "memory"
+    "session_search"
+    "clarify"
+    "delegation"
+    "cronjob"
+  ];
 
-        cmd="''${1:-status}"
-        case "$cmd" in
-          status)
-            ${pkgs.systemd}/bin/systemctl status "$unit" --no-pager
-            ;;
-          logs)
-            ${pkgs.systemd}/bin/journalctl -u "$unit" -n "''${2:-120}" --no-pager
-            ;;
-          follow|tail)
-            ${pkgs.systemd}/bin/journalctl -u "$unit" -f
-            ;;
-          start|stop|restart|enable|disable)
-            exec ${pkgs.sudo}/bin/sudo ${pkgs.systemd}/bin/systemctl "$cmd" "$unit"
-            ;;
-          unit|cat)
-            ${pkgs.systemd}/bin/systemctl cat "$unit" --no-pager
-            ;;
-          help|-h|--help)
-            usage
-            ;;
-          *)
-            echo "unknown command: $cmd" >&2
-            usage >&2
-            exit 2
-            ;;
-        esac
-  '';
+  wslGatewayCtl = pkgs.writeShellApplication {
+    name = "hermes-wsl";
+    runtimeInputs = with pkgs; [
+      coreutils
+      systemd
+      sudo
+    ];
+    text = ''
+            set -euo pipefail
+
+            unit="hermes-gateway-wsl.service"
+            hermes=${hermesPkg}/bin/hermes
+            all_toolsets="${builtins.concatStringsSep " " allToolsets}"
+            full_toolsets="${builtins.concatStringsSep " " fullToolsets}"
+            code_toolsets="${builtins.concatStringsSep " " codeToolsets}"
+
+            usage() {
+              cat <<'EOF'
+      Usage: hermes-wsl <command>
+
+      Manage the main WSL Hermes gateway systemd service and Discord toolset preset.
+
+      Commands:
+        status          Show service status
+        logs [LINES]    Show recent logs
+        follow          Follow logs
+        start [PRESET]  Apply preset, then start the gateway
+        stop            Stop the gateway
+        restart         Restart the gateway without changing preset
+        enable          Enable autostart
+        disable         Disable autostart
+        unit            Show the systemd unit
+        variants        List available toolset presets
+        apply PRESET    Apply Discord toolset preset without restarting
+        help            Show this help
+
+      Presets:
+        full            Broad tool access for admin work
+        code            Coding/dev-focused tools
+      EOF
+            }
+
+            toolsets_for() {
+              case "$1" in
+                full) printf '%s\n' "$full_toolsets" ;;
+                code) printf '%s\n' "$code_toolsets" ;;
+                *) echo "unknown preset: $1" >&2; echo "available presets: full code" >&2; exit 2 ;;
+              esac
+            }
+
+            apply_preset() {
+              preset="$1"
+              enable_toolsets="$(toolsets_for "$preset")"
+              echo "Applying '$preset' Discord toolset preset for main WSL gateway"
+              # shellcheck disable=SC2086
+              "$hermes" tools disable --platform discord $all_toolsets >/dev/null || true
+              # shellcheck disable=SC2086
+              "$hermes" tools enable --platform discord $enable_toolsets
+              echo "Config path: $("$hermes" config path)"
+              echo "Restart the gateway, or use: hermes-wsl start $preset"
+            }
+
+            cmd="''${1:-status}"
+            shift || true
+            case "$cmd" in
+              status)
+                systemctl status "$unit" --no-pager
+                ;;
+              logs)
+                journalctl -u "$unit" -n "''${1:-120}" --no-pager
+                ;;
+              follow|tail)
+                journalctl -u "$unit" -f
+                ;;
+              start)
+                preset="''${1:-code}"
+                apply_preset "$preset"
+                exec sudo systemctl restart "$unit"
+                ;;
+              stop|restart|enable|disable)
+                exec sudo systemctl "$cmd" "$unit"
+                ;;
+              unit|cat)
+                systemctl cat "$unit" --no-pager
+                ;;
+              variants)
+                printf '%s\n' "full" "code"
+                ;;
+              apply)
+                [[ $# -eq 1 ]] || { usage >&2; exit 2; }
+                apply_preset "$1"
+                ;;
+              help|-h|--help)
+                usage
+                ;;
+              *)
+                echo "unknown command: $cmd" >&2
+                usage >&2
+                exit 2
+                ;;
+            esac
+    '';
+  };
 in
 {
   imports = [
