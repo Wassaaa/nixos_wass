@@ -36,106 +36,16 @@ let
   wslGatewayCtl = pkgs.writeShellApplication {
     name = "hermes-wsl";
     runtimeInputs = with pkgs; [
+      bash
       coreutils
       jq
       systemd
       sudo
     ];
     text = ''
-            set -euo pipefail
-
-            unit="hermes-gateway-wsl.service"
-            hermes=${hermesPkg}/bin/hermes
-            preset_config=${toolsetPresetJson}
-
-            usage() {
-              cat <<'EOF'
-      Usage: hermes-wsl <command>
-
-      Manage the main WSL Hermes gateway systemd service and Discord toolset preset.
-
-      Commands:
-        status          Show service status
-        logs [LINES]    Show recent logs
-        follow          Follow logs
-        start [PRESET]  Apply preset, then start the gateway (default: code)
-        stop            Stop the gateway
-        restart         Restart the gateway without changing preset
-        enable          Enable autostart
-        disable         Disable autostart
-        unit            Show the systemd unit
-        variants        List available toolset presets
-        apply PRESET    Apply Discord toolset preset without restarting
-        help            Show this help
-
-      Preset definitions come from modules/core/features/hermes/toolset-presets.nix.
-      EOF
-            }
-
-            variants() {
-              jq -r '.presets | keys[]' "$preset_config"
-            }
-
-            require_preset() {
-              local preset="$1"
-              if ! jq -e --arg preset "$preset" '.presets[$preset] != null' "$preset_config" >/dev/null; then
-                echo "unknown preset: $preset" >&2
-                echo "available presets: $(variants | tr '\n' ' ')" >&2
-                exit 2
-              fi
-            }
-
-            apply_preset() {
-              local preset="$1"
-              require_preset "$preset"
-              echo "Applying '$preset' Discord toolset preset for main WSL gateway"
-              mapfile -t disable_toolsets < <(jq -r '.all[]' "$preset_config")
-              mapfile -t enable_toolsets < <(jq -r --arg preset "$preset" '.presets[$preset][]' "$preset_config")
-              "$hermes" tools disable --platform discord "''${disable_toolsets[@]}" >/dev/null || true
-              "$hermes" tools enable --platform discord "''${enable_toolsets[@]}"
-              echo "Config path: $("$hermes" config path)"
-              echo "Restart the gateway, or use: hermes-wsl start $preset"
-            }
-
-            cmd="''${1:-status}"
-            shift || true
-            case "$cmd" in
-              status)
-                systemctl status "$unit" --no-pager
-                ;;
-              logs)
-                journalctl -u "$unit" -n "''${1:-120}" --no-pager
-                ;;
-              follow|tail)
-                journalctl -u "$unit" -f
-                ;;
-              start)
-                preset="''${1:-code}"
-                apply_preset "$preset"
-                exec sudo systemctl restart "$unit"
-                ;;
-              stop|restart|enable|disable)
-                exec sudo systemctl "$cmd" "$unit"
-                ;;
-              unit|cat)
-                systemctl cat "$unit" --no-pager
-                ;;
-              variants)
-                variants
-                ;;
-              apply)
-                [[ $# -eq 1 ]] || { usage >&2; exit 2; }
-                apply_preset "$1"
-                ;;
-              help|-h|--help)
-                usage
-                ;;
-              *)
-                echo "unknown command: $cmd" >&2
-                usage >&2
-                exit 2
-                ;;
-            esac
+      export HERMES_BIN="${hermesPkg}/bin/hermes"
+      export HERMES_TOOLSET_PRESETS="${toolsetPresetJson}"
+      exec ${pkgs.bash}/bin/bash ${./hermes-wsl.sh} "$@"
     '';
   };
 in
