@@ -58,6 +58,7 @@
   # in the Nix store, so provide this compatibility symlink for tools like
   # the Windows Codex CLI without changing the actual shell package source.
   systemd.tmpfiles.rules = [
+    "d /usr/bin 0755 root root - -"
     "L+ /usr/bin/bash - - - - ${pkgs.bashInteractive}/bin/bash"
   ];
 
