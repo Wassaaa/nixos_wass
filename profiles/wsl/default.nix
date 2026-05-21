@@ -3,6 +3,7 @@
   inputs,
   username,
   flakeRoot,
+  pkgs,
   ...
 }:
 {
@@ -51,6 +52,14 @@
     # Ensure proper WSL integration
     NIXOS_WSL = "1";
   };
+
+  # Some Windows-launched CLIs assume an FHS-ish shell path inside WSL and
+  # call /usr/bin/bash directly. NixOS normally exposes bash at /bin/bash and
+  # in the Nix store, so provide this compatibility symlink for tools like
+  # the Windows Codex CLI without changing the actual shell package source.
+  systemd.tmpfiles.rules = [
+    "L+ /usr/bin/bash - - - - ${pkgs.bashInteractive}/bin/bash"
+  ];
 
   # Enable essential services for WSL
   services.openssh.enable = true;

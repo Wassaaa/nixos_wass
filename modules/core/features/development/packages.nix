@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   # Development tools and packages
   environment.systemPackages = with pkgs; [
@@ -28,7 +28,9 @@
     go
 
     # Development utilities
+    inputs.codex-cli-nix.packages.${pkgs.system}.default
     direnv
+    devenv
     nixd # Nix LSP server
     nixfmt # Nix Formatter
     just

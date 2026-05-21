@@ -1,11 +1,13 @@
 { pkgs, ... }:
-
 {
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
     enableBashIntegration = true;
     nix-direnv.enable = true;
+    stdlib = ''
+      source <(${pkgs.devenv}/bin/devenv direnvrc)
+    '';
   };
 
   programs.zsh.initContent = ''
