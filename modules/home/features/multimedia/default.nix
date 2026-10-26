@@ -2,9 +2,6 @@
 { ... }:
 {
   imports = [
-    # Audio visualization and controls
-    ../desktop/cava.nix # Audio visualizer
-
     # Media-related utilities
     ../core/emoji.nix # Emoji picker (desktop dependent)
     ../desktop/transmission.nix # Torrent client (CLI)
