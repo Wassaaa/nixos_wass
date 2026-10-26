@@ -16,7 +16,8 @@
   # hyprctl monitors, the Monitor with LOWER ID, needs to have the lower set of workspaces for hyprsome to work
   monitors = [
     {
-      name = "DP-3";
+      # Left monitor: 2560x1440 @ 144 Hz
+      name = "DP-2";
       enabled = true;
       width = 2560;
       height = 1440;
@@ -24,19 +25,9 @@
       primary = true;
       x = 0;
       y = 0;
-      workspace = [
-        "11"
-        "12"
-        "13"
-        "14"
-        "15"
-        "16"
-        "17"
-        "18"
-        "19"
-      ];
     }
     {
+      # Right monitor: 1920x1080 @ 60 Hz
       name = "HDMI-A-1";
       enabled = true;
       width = 1920;
@@ -44,19 +35,7 @@
       refreshRate = 60;
       primary = false;
       x = 2560;
-      y = 120;
-      workspace = [
-        "1"
-        "2"
-        "3"
-        "4"
-        "5"
-        "6"
-        "7"
-        "8"
-        "9"
-        "10"
-      ];
+      y = 240;
     }
   ];
 

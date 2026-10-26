@@ -1016,6 +1016,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "noctalia": "noctalia",
         "sops-nix": "sops-nix",
+        "split-monitor-workspaces": "split-monitor-workspaces",
         "stylix": "stylix",
         "vscode-insiders": "vscode-insiders"
       }
@@ -1037,6 +1038,22 @@
       "original": {
         "owner": "mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "split-monitor-workspaces": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790431438,
+        "narHash": "sha256-D0pKfzVlRz8VnLIZVaPtr2d+LHYspICllgIz+oQlw98=",
+        "owner": "zjeffer",
+        "repo": "split-monitor-workspaces",
+        "rev": "f26d624c2638d0661f3e0352a634650bfd08296d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zjeffer",
+        "repo": "split-monitor-workspaces",
         "type": "github"
       }
     },
