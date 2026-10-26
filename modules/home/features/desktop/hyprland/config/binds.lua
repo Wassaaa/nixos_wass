@@ -1,3 +1,11 @@
+package.path = package.path .. ";./?.lua;./?/init.lua"
+
+local smw = require("plugins.split-monitor-workspaces")
+
+smw.setup({
+  workspace_count = 10,
+})
+
 local mod = "SUPER"
 
 -- Launcher and terminal
@@ -46,15 +54,22 @@ hl.bind(mod .. " + SHIFT + j", hl.dsp.window.move({ direction = "down" }))
 hl.bind(mod .. " + SHIFT + k", hl.dsp.window.move({ direction = "up" }))
 hl.bind(mod .. " + SHIFT + l", hl.dsp.window.move({ direction = "right" }))
 
--- Native workspaces
--- TODO: replace with split-monitor-workspaces for 10 workspaces per monitor.
-for i = 1, 9 do
-  hl.bind(mod .. " + " .. i, hl.dsp.focus({ workspace = tostring(i) }))
-  hl.bind(mod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = tostring(i) }))
-end
+-- Per-monitor workspaces
+-- On the left monitor, Super+1..9/0 selects workspaces 1..10 there.
+-- On the right monitor, the same keys select that monitor's own 1..10.
+for i = 1, smw.get_amount_of_workspaces() do
+  local key = tostring(i)
 
-hl.bind(mod .. " + 0", hl.dsp.focus({ workspace = "10" }))
-hl.bind(mod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = "10" }))
+  if key == "10" then
+    key = "0"
+  end
+
+  hl.bind(mod .. " + " .. key, smw.workspace(key))
+  hl.bind(
+    mod .. " + SHIFT + " .. key,
+    smw.move_to_workspace_silent(key)
+  )
+end
 
 hl.bind(mod .. " + SHIFT + SPACE", hl.dsp.window.move({ workspace = "special" }))
 hl.bind(mod .. " + SPACE", hl.dsp.workspace.toggle_special())

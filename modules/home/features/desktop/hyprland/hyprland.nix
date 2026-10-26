@@ -21,7 +21,6 @@
     wl-clipboard
   ];
 
-  # Export environment variables for systemd user services
   systemd.user.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     XDG_CURRENT_DESKTOP = "Hyprland";
@@ -46,14 +45,7 @@
 
     xwayland = {
       enable = true;
-      # hidpi = true;
     };
-
-    # plugins = [
-    #   inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
-    # ];
-
-    # enableNvidiaPatches = false;
 
     systemd = {
       enable = true;
@@ -72,8 +64,10 @@
     '';
   };
 
-  # Live-editable Hyprland Lua configuration.
-  # These files stay in the repository and are symlinked into ~/.config/hypr.
+  # split-monitor-workspaces Lua library
+  xdg.configFile."hypr/plugins/split-monitor-workspaces".source =
+    inputs.split-monitor-workspaces;
+
   xdg.configFile."hypr/settings.lua".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/settings.lua";
 
@@ -86,7 +80,6 @@
   xdg.configFile."hypr/rules.lua".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/rules.lua";
 
-  # Place Files Inside Home Directory
   home.file = {
     "Pictures/Wallpapers" = {
       source = "${flakeRoot}/wallpapers";

@@ -14,10 +14,10 @@
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
-    # split-monitor-workspaces = {
-    #   url = "github:zjeffer/split-monitor-workspaces";
-    #   flake = false;
-    # };
+    split-monitor-workspaces = {
+      url = "github:zjeffer/split-monitor-workspaces";
+      flake = false;
+    };
     vscode-insiders = {
       url = "github:Wassaaa/code-insiders-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,12 +30,6 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     noctalia.url = "github:noctalia-dev/noctalia-shell";
     hermes-agent = {
-      # Use upstream Hermes directly for normal updates via `fu` / flake updates.
-      # For local Hermes development, temporarily swap this to:
-      # url = "path:/home/wsl/hermes-agent";
-      # When using the path input, manage Hermes source updates manually.
-      # Local feature choices like gateway/TTS dependency groups live in this
-      # NixOS repo as package overrides.
       url = "github:nousresearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -76,7 +70,6 @@
               host
               profile
               ;
-            # Make stable packages globally available with proper dependencies
             stable = import nixpkgs-stable {
               localSystem = "x86_64-linux";
               config.allowUnfree = true;
@@ -86,21 +79,18 @@
     in
     {
       nixosConfigurations = {
-        # Main desktop system with NVIDIA GPU
         wassaa = mkSystem {
           username = "wassaa";
           host = "wassaa";
           profile = "nvidia";
         };
 
-        # ThinkPad laptop with Intel integrated graphics
         tpad = mkSystem {
           username = "allar";
           host = "tpad";
           profile = "intel";
         };
 
-        # WSL configuration
         wsl = mkSystem {
           username = "wsl";
           host = "wsl";
