@@ -5,6 +5,13 @@
     systemd.enable = false;
 
     settings = {
+      general.apps = {
+        terminal = [ "foot" ];
+        audio = [ "pwvucontrol" ];
+        playback = [ "mpv" ];
+        explorer = [ "thunar" ];
+      };
+
       bar = {
         workspaces = {
           perMonitor = true;

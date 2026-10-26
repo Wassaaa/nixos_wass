@@ -7,6 +7,9 @@
     ./vicinae.nix
     ./utilities.nix
     ./foot.nix
+    ./thunar.nix
+    ./mpv.nix
+    ./brave.nix
     ./xdg.nix
     ./vscode.nix
     ./chrome.nix

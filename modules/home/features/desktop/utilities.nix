@@ -14,11 +14,7 @@ let
 in {
   home.packages = with pkgs; [
     grimblast grim slurp wl-clipboard libnotify
-    playerctl wireplumber brightnessctl swww ocr
+    playerctl wireplumber brightnessctl ocr
   ];
   home.sessionVariables.SCREENSHOT_DIR = "$HOME/Pictures/Screenshots";
-  xdg.userDirs = {
-    enable = true;
-    createDirectories = true;
-  };
 }
