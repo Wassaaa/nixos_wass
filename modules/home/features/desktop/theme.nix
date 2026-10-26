@@ -1,9 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 let
   hyprctl = "${inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland}/bin/hyprctl";
   apply = pkgs.writeShellApplication {
     name = "desktop-theme-apply";
-    runtimeInputs = with pkgs; [ coreutils procps dconf glib ];
+    runtimeInputs = with pkgs; [
+      coreutils
+      procps
+      dconf
+      glib
+    ];
     text = ''
       mode="''${1:-dark}"
       case "$mode" in dark|light) ;; *) echo "Expected dark or light" >&2; exit 2 ;; esac
@@ -19,13 +30,16 @@ let
       gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3$variant"
       pkill -"$signal" -x foot || true
       if [ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
-        ${hyprctl} eval "require('theme').apply('$mode')" || true
+        "${hyprctl}" eval "require('theme').apply('$mode')" || true
       fi
     '';
   };
   switch = pkgs.writeShellApplication {
     name = "desktop-theme";
-    runtimeInputs = [ pkgs.coreutils pkgs.darkman ];
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.darkman
+    ];
     text = ''
       state="''${XDG_STATE_HOME:-$HOME/.local/state}/wass-desktop/theme"
       current=dark
@@ -42,7 +56,8 @@ let
       exec ${apply}/bin/desktop-theme-apply "$mode"
     '';
   };
-in {
+in
+{
   home.packages = [ switch ];
   services.darkman = {
     enable = true;
@@ -53,7 +68,10 @@ in {
   systemd.user.services.desktop-theme-sync = {
     Unit = {
       Description = "Initialize the coordinated desktop theme";
-      After = [ "darkman.service" "foot.service" ];
+      After = [
+        "darkman.service"
+        "foot.service"
+      ];
       Requires = [ "darkman.service" ];
       PartOf = [ "hyprland-session.target" ];
     };
@@ -64,8 +82,7 @@ in {
     Install.WantedBy = [ "hyprland-session.target" ];
   };
   xdg.configFile."hypr/theme.lua".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/theme.lua";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/theme.lua";
   wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
     require("theme")
   '';

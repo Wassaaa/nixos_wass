@@ -1,13 +1,15 @@
-{ pkgs, config, lib, inputs, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  inputs,
+  ...
+}:
 let
-  # Match the compiler runtime of this nixpkgs' Qt applications. These argument
-  # names were checked against the repository's locked nixpkgs revision.
-  hyprutils = pkgs.hyprutils.override { gcc15Stdenv = pkgs.stdenv; };
-  hyprlang = pkgs.hyprlang.override {
-    gcc15Stdenv = pkgs.stdenv;
-    inherit hyprutils;
-  };
-  engine = pkgs.stdenv.mkDerivation {
+  # Keep the libraries' nixpkgs toolchain and use GCC 15 for the engine too.
+  inherit (pkgs) hyprutils hyprlang;
+
+  engine = pkgs.gcc15Stdenv.mkDerivation {
     pname = "wass-hyprqt6engine";
     version = "0-unstable-2026-08-11";
     src = pkgs.fetchFromGitHub {
@@ -19,11 +21,19 @@ let
     patches = [
       "${inputs.fufexan-dotfiles}/.tack/patches/hyprqt6engine/hyprqt6engine-portal-follow.patch"
     ];
-    nativeBuildInputs = with pkgs; [ cmake pkg-config kdePackages.extra-cmake-modules ];
+    nativeBuildInputs = with pkgs; [
+      cmake
+      pkg-config
+      kdePackages.extra-cmake-modules
+    ];
     buildInputs = [
-      hyprutils hyprlang pkgs.qt6Packages.qtbase
-      pkgs.kdePackages.kconfig pkgs.kdePackages.kcolorscheme
-      pkgs.kdePackages.kiconthemes pkgs.kdePackages.qtdeclarative
+      hyprutils
+      hyprlang
+      pkgs.qt6Packages.qtbase
+      pkgs.kdePackages.kconfig
+      pkgs.kdePackages.kcolorscheme
+      pkgs.kdePackages.kiconthemes
+      pkgs.kdePackages.qtdeclarative
     ];
     dontWrapQtApps = true;
     cmakeFlags = [ "-DPLUGINDIR=${placeholder "out"}/lib/qt-6" ];
@@ -34,10 +44,14 @@ let
     QT_PLUGIN_PATH = "${engine}/lib/qt-6";
   };
   colorSchemes = "${pkgs.kdePackages.breeze}/share/color-schemes";
-in {
+in
+{
   # Do not install a second Qt platform-theme provider through HM's qt module.
   qt.enable = lib.mkForce false;
-  home.packages = [ engine pkgs.kdePackages.breeze ];
+  home.packages = [
+    engine
+    pkgs.kdePackages.breeze
+  ];
   home.sessionVariables = environment;
   systemd.user.sessionVariables = environment;
   # This session uses HM's Hyprland integration, not upstream's UWSM launcher.
