@@ -1,4 +1,6 @@
 {
+  config,
+  lib,
   pkgs,
   inputs,
   username,
@@ -7,11 +9,18 @@
 }:
 {
   home.packages = with pkgs; [
+    waybar
+    rofi-wayland
+    hyprsome
+    hyprsomescroll
+    pyprland
     swww
     grim
     slurp
     swappy
     ydotool
+    cliphist
+    wl-clipboard
   ];
 
   # Export environment variables for systemd user services
@@ -30,22 +39,54 @@
   systemd.user.targets.hyprland-session.Unit.Wants = [
     "xdg-desktop-autostart.target"
   ];
+
   wayland.windowManager.hyprland = {
     enable = true;
+    configType = "lua";
+
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+
     xwayland = {
       enable = true;
       # hidpi = true;
     };
+
     # plugins = [
     #   inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
     # ];
+
     # enableNvidiaPatches = false;
+
     systemd = {
       enable = true;
       variables = [ "--all" ];
     };
+
+    settings = { };
+
+    extraConfig = ''
+      require("variables")
+      require("settings")
+      require("animations")
+      require("binds")
+      require("rules")
+      require("monitors")
+    '';
   };
+
+  # Live-editable Hyprland Lua configuration.
+  # These files stay in the repository and are symlinked into ~/.config/hypr.
+  xdg.configFile."hypr/settings.lua".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/settings.lua";
+
+  xdg.configFile."hypr/animations.lua".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/animations.lua";
+
+  xdg.configFile."hypr/binds.lua".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/binds.lua";
+
+  xdg.configFile."hypr/rules.lua".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/rules.lua";
 
   # Place Files Inside Home Directory
   home.file = {
@@ -53,8 +94,10 @@
       source = "${flakeRoot}/wallpapers";
       recursive = true;
     };
+
     ".face.icon".source = ./face.jpg;
     ".config/face.jpg".source = ./face.jpg;
+
     ".config/swappy/config".text = ''
       [Default]
       save_dir=/home/${username}/Pictures/Screenshots

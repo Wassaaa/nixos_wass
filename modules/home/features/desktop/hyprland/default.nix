@@ -1,8 +1,10 @@
-{...}: {
+{ ... }:
+{
   imports = [
-    ./binds.nix
+    # ./binds.nix
+    #./config.nix
+    ./host-vars.nix
     ./monitors.nix
-    ./config.nix
     ./hypridle.nix
     ./hyprland.nix
     ./hyprlock.nix
