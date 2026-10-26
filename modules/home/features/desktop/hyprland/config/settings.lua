@@ -7,7 +7,7 @@ hl.env("GRIMBLAST_NO_CURSOR", "0")
 hl.on("hyprland.start", function()
   hl.exec_cmd("lxqt-policykit-agent")
   hl.exec_cmd("nm-applet --indicator")
-  hl.exec_cmd('swww-daemon & sleep 1; swww img "$HOME/Pictures/Wallpapers/20.png"')
+  hl.exec_cmd("caelestia shell")
 end)
 hl.config({
   input = {
@@ -21,7 +21,6 @@ hl.config({
   general = {
     layout = "dwindle", gaps_in = 4, gaps_out = 8, border_size = 1,
     resize_on_border = true,
-    col = { active_border = "rgba(88888888)", inactive_border = "rgba(00000088)" },
   },
   decoration = {
     rounding = 10, rounding_power = 2.5, dim_inactive = true, dim_strength = 0.1,

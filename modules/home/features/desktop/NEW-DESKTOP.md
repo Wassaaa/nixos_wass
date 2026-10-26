@@ -1,44 +1,31 @@
-# Quickshell desktop experiment
+# Caelestia desktop experiment
 
-The shared Home Manager desktop module replaces the old Niri/Rofi/Waybar/SwayNC/Pypr desktop configuration for every host importing it. System-level alternative sessions remain installed.
+Replaces the fufexan shell and custom theme coordination while retaining the live-editable Hyprland Lua architecture, Foot, Vicinae, screenshots, OCR, monitor layout, and monitor-local workspace bindings.
 
-## Shell and tools
+## Ownership
 
-Fufexan's Quickshell bar, notification overlay/server, OSD and sidebar come from the pinned fufexan-dotfiles source. Its primary-screen assumption is adapted to host monitor settings. Vicinae handles launcher and clipboard history; grimblast handles screenshots; wl-ocr recognizes English screen text.
+Caelestia owns the shell UI and selected theme integrations. Hyprland remains configured through the repository's out-of-store Lua files. Caelestia's Home Manager module writes shell/CLI JSON only; it does not manage this repository's Hyprland Lua files. Caelestia is started from Hyprland with `caelestia shell`, with its own systemd startup disabled.
 
-## Coordinated styling
+## Theme system
 
-Foot is now the desktop terminal. Its actual pinned upstream module supplies both palettes, 90% opacity, blur request, padding, beam cursor and notifications. JetBrains Mono Nerd Font is installed explicitly. The generated Hyprland terminal variable overrides the older host terminal choice when Foot is enabled; Kitty remains installed by the core profile.
+Caelestia's CLI generates Material You-derived colours and applies terminal escape sequences, Hyprland Lua, GTK CSS/dconf settings, and Qt engine configuration. The first trial enables terminal, Hyprland, GTK, and Qt integrations only; Discord, Spicetify, Chromium, editor, terminal-tool and other integrations remain disabled.
 
-GTK uses Inter, Adwaita icons and adw-gtk3. Qt6 uses Fusion, Breeze light/dark schemes and a locally built hyprqt6engine. The engine source revision/hash and portal-follow patch match the pinned upstream configuration, but the source is fetched and patched normally: no references to upstream's private /nix/store tree. Its libraries are rebuilt with this package set's default compiler runtime. Qt5 and applications supplying their own themes may not follow the Qt6 engine.
+Hyprland's `theme.lua` consumes Caelestia's generated `~/.config/hypr/scheme/current.lua` and applies a conservative fallback if that file is absent. It intentionally applies only border colours; it does not recreate the removed custom group-bar palette. Foot receives ANSI escape sequences rather than a Nix-managed colour file.
 
-Darkman coordinates changes with explicit application actions. Each fresh Hyprland session initializes dark mode. Run:
+Foot retains JetBrains Mono Nerd Font, 12x12 padding, a beam cursor and a persistent server. Caelestia's own default uses 25x25 padding; that was reduced for readability. Vicinae remains installed as a secondary launcher and clipboard-history tool; Caelestia's launcher is bound to Super+R for the trial, while Vicinae remains on Super+Shift+R. Its clipboard history remains on Super+V.
 
-```sh
-desktop-theme light
-desktop-theme dark
-desktop-theme toggle
-desktop-theme refresh
-```
+## Removed
 
-The current choice is recorded under the XDG state directory. Hyprland's editable theme.lua reapplies that palette after a configuration reload. Quickshell watches the dconf color preference; the Qt patch follows the Settings portal. GTK3 updates through gsettings; applications that cache their GTK theme may need restarting. No GeoClue or new geographic schedule is configured. A previously cached Darkman location may need clearing before expecting strictly manual switching. Vicinae retains its own theme selection; extensions/custom launcher palettes are not configured here.
+The fufexan-dotfiles shell source/service/configuration, custom Darkman coordination, custom desktop-theme command, custom patched hyprqt6engine build, forced GTK theme, and custom Hyprland palette loader are no longer active. The prior custom theme files remain as references until cleanup is deliberate.
 
-New logins receive Qt variables through Home Manager's session environment and Hyprland, with HM's systemd/DBus environment integration, not an assumed UWSM launch. Open applications need restarting to load the new platform plugin. Quickshell remains sourced from the pinned input, not vendored editable QML.
+## Compatibility and status
 
-## Key bindings
+Caelestia's bar is configured for per-monitor display with ten workspaces, but compatibility with split-monitor-workspaces numbering is unverified and must be tested on both physical monitors. The shell launcher command is a trial integration and may require adjustment to Caelestia's current CLI/interface. Qt integration uses Caelestia's expected qtengine configuration; whether every Qt application follows it must be tested after a fresh login.
 
-Super+R launcher; Super+V clipboard; Super+Space special workspace; Super+Shift+Space send window there; Super+1..0 monitor-local workspace; Super+Shift+1..0 send window; Super+Return footclient; Super+L lock; Super+O OCR; Print or Super+Shift+R region screenshot; Ctrl+Print or Super+Shift+Ctrl+R output screenshot; Super+Shift+C immediate exit. Window and media bindings remain in config/binds.
-
-## Status and deferred features
-
-The initial shell commit built successfully according to the user. This follow-up is not Nix-evaluated, built or graphically tested by the assistant. It does not update flake.lock or unrelated inputs. The gcc15Stdenv overrides in qt.nix were checked against the repository's locked nixpkgs; revisit those arguments if updating nixpkgs to a different compiler generation.
-
-Still deferred: Hyprexpo, additional dialog/authentication rules, recording UI, Vicinae extensions, geographic scheduling and DDC/CI integration for external monitor brightness. Legacy unused files/host styling variables remain references, not active Stylix dependencies.
-
-Before activation, reconcile local edits, pull, and build:
+This commit is not Nix-evaluated, built or graphically tested by the assistant. It does not update flake.lock. After pulling, reconcile local edits, run `nix flake lock`, then build:
 
 ```sh
 nix build .#nixosConfigurations.wassaa.config.system.build.toplevel --no-link
 ```
 
-After switching, start a fresh Hyprland session. Verify footclient, both monitors' workspace switching, desktop-theme toggle, Qt applications, notifications, screenshots and OCR. Check hyprctl configerrors and the user services quickshell, foot, darkman, desktop-theme-sync and vicinae. Inspect clipboard secret exclusions before copying sensitive values. Use the previous NixOS generation if rollback is needed.
+After switching, start a fresh Hyprland session. Select a wallpaper and scheme through Caelestia, then test light/dark switching, Foot palette updates, both monitors' workspaces, notifications, OSD, launcher, screenshots and OCR. Check `hyprctl configerrors`, `systemctl --user --failed`, and `journalctl --user` for Caelestia. Inspect clipboard secret exclusions before copying sensitive values. Use the previous NixOS generation for rollback.

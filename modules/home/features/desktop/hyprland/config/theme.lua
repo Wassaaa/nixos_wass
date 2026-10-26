@@ -1,38 +1,32 @@
--- Explicit palettes inspired by the pinned fufexan configuration.
+-- Caelestia writes the selected palette to ~/.config/hypr/scheme/current.lua.
+-- This module consumes it and provides a reload-safe fallback.
 local M = {}
-local palettes = {
-  dark = {
-    active = "rgba(88888888)", inactive = "rgba(00000088)",
-    text = "rgb(000000)", text_inactive = "rgba(ffffff66)",
-    group_active = "rgba(ffffff66)", group_inactive = "rgba(00000066)",
-  },
-  light = {
-    active = "rgb(000000)", inactive = "rgba(00000000)",
-    text = "rgb(ffffff)", text_inactive = "rgba(00000066)",
-    group_active = "rgba(00000066)", group_inactive = "rgba(ffffff66)",
-  },
-}
-function M.apply(mode)
-  local p = palettes[mode] or palettes.dark
+local ok, scheme = pcall(require, "scheme.current")
+if not ok or type(scheme) ~= "table" then
+  scheme = {
+    primary = "e06c75",
+    onPrimary = "ffffff",
+    surface = "1e2127",
+    onSurface = "abb2bf",
+    surfaceContainer = "1e2127",
+    onSurfaceVariant = "abb2bf",
+    outline = "5c6370",
+  }
+end
+local function colour(value, fallback)
+  if type(value) == "string" and #value > 0 then
+    return "rgb(" .. value .. ")"
+  end
+  return fallback
+end
+function M.apply()
+  local active = colour(scheme.primary, "rgba(88888888)")
+  local inactive = colour(scheme.outline, "rgba(00000088)")
   hl.config({
-    general = { col = { active_border = p.active, inactive_border = p.inactive } },
-    group = {
-      col = { border_active = p.active, border_inactive = p.inactive },
-      groupbar = {
-        font_size = 12, font_weight_active = "bold", gradients = false,
-        height = 20, indicator_height = 20, rounding = 10, rounding_power = 2.5,
-        text_color = p.text, text_color_inactive = p.text_inactive, text_offset = -20,
-        col = { active = p.group_active, inactive = p.group_inactive },
-      },
+    general = {
+      col = { active_border = active, inactive_border = inactive },
     },
   })
 end
-local stateHome = os.getenv("XDG_STATE_HOME") or ((os.getenv("HOME") or "") .. "/.local/state")
-local state = io.open(stateHome .. "/wass-desktop/theme", "r")
-local mode = "dark"
-if state then
-  mode = state:read("*l") or mode
-  state:close()
-end
-M.apply(mode)
+M.apply()
 return M

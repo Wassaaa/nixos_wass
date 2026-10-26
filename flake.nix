@@ -3,9 +3,14 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    fufexan-dotfiles = {
-      url = "github:fufexan/dotfiles/ffc567f8f3530ccc877c52fb26fa4a577f1794f2";
-      flake = false;
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    caelestia-cli = {
+      url = "github:caelestia-dots/cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.caelestia-shell.follows = "caelestia-shell";
     };
     home-manager = {
       url = "github:nix-community/home-manager/master";

@@ -1,16 +1,8 @@
-{ pkgs, config, ... }: {
-  gtk = {
-    enable = true;
-    font = {
-      name = "Inter";
-      package = pkgs.google-fonts.override { fonts = [ "Inter" ]; };
-      size = 9;
-    };
-    gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
-    gtk4.theme = null;
-    iconTheme = { name = "Adwaita"; package = pkgs.adwaita-icon-theme; };
-    theme = { name = "adw-gtk3-dark"; package = pkgs.adw-gtk3; };
-  };
+{ pkgs, ... }: {
+  # Caelestia owns the live GTK colour preference, CSS and icon-theme selection.
+  home.packages = with pkgs; [
+    adw-gtk3 adwaita-icon-theme papirus-icon-theme
+  ];
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Classic";
@@ -18,6 +10,5 @@
     gtk.enable = true;
     x11.enable = true;
   };
-  # theme.nix owns the live dconf preference, not a forced activation value.
   fonts.fontconfig.enable = true;
 }

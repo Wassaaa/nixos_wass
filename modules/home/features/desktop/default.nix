@@ -1,14 +1,12 @@
-# Desktop shell and explicit application themes; no Stylix.
+# Caelestia owns the desktop shell and theme integrations.
+# Hyprland remains configured through live-editable Lua in ./hyprland/config.
 { ... }: {
   imports = [
     ./hyprland
-    ./quickshell.nix
+    ./caelestia.nix
     ./vicinae.nix
     ./utilities.nix
     ./foot.nix
-    ./theme.nix
-    ./gtk.nix
-    ./qt.nix
     ./xdg.nix
     ./vscode.nix
     ./chrome.nix
