@@ -1,21 +1,12 @@
-{
-  host,
-  flakeRoot,
-  ...
-}:
+{ host, config, flakeRoot, ... }:
 let
-  inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
-    browser
-    terminal
-    keyboardLayout
-    ;
-in
-{
+  variables = import "${flakeRoot}/hosts/${host}/variables.nix";
+  terminal = if config.programs.foot.enable then "footclient" else variables.terminal;
+in {
   xdg.configFile."hypr/variables.lua".text = ''
-    -- Generated from hosts/${host}/variables.nix
-
-    browser = "${browser}"
-    terminal = "${terminal}"
-    keyboardLayout = "${keyboardLayout}"
+    -- Host settings with the desktop terminal selected by Home Manager.
+    browser = ${builtins.toJSON variables.browser}
+    terminal = ${builtins.toJSON terminal}
+    keyboardLayout = ${builtins.toJSON variables.keyboardLayout}
   '';
 }

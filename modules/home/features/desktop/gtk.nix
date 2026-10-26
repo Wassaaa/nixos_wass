@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }: {
+{ pkgs, config, ... }: {
   gtk = {
     enable = true;
     font = {
@@ -18,6 +18,6 @@
     gtk.enable = true;
     x11.enable = true;
   };
-  dconf.settings."org/gnome/desktop/interface".color-scheme = lib.mkForce "prefer-dark";
+  # theme.nix owns the live dconf preference, not a forced activation value.
   fonts.fontconfig.enable = true;
 }

@@ -1,10 +1,12 @@
-# Desktop replacement: legacy Niri/Rofi/Waybar/SwayNC/Pypr/Styling imports are inactive.
+# Desktop shell and explicit application themes; no Stylix.
 { ... }: {
   imports = [
     ./hyprland
     ./quickshell.nix
     ./vicinae.nix
     ./utilities.nix
+    ./foot.nix
+    ./theme.nix
     ./gtk.nix
     ./qt.nix
     ./xdg.nix

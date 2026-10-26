@@ -1,34 +1,44 @@
 # Quickshell desktop experiment
 
-Replaces the Home Manager desktop stack for all hosts importing this desktop module. System-level GNOME/Niri sessions remain installed, but the old Home Manager Niri configuration is no longer imported.
+The shared Home Manager desktop module replaces the old Niri/Rofi/Waybar/SwayNC/Pypr desktop configuration for every host importing it. System-level alternative sessions remain installed.
 
-## Adopted
+## Shell and tools
 
-- Actual fufexan Quickshell bar, notification server/overlay, OSD and sidebar, from revision ffc567f8f3530ccc877c52fb26fa4a577f1794f2. The upstream license remains in the source input.
-- Primary-monitor override replaces the upstream eDP-1 assumption, with a connected-screen fallback.
-- Vicinae service, launcher and clipboard history.
-- grimblast region/output screenshots and English OCR using grim/slurp/Tesseract.
-- Upstream-inspired GTK styling, borders, shadows and spring animations.
-- Existing host-generated keyboard/monitor settings and ten monitor-local workspace slots.
+Fufexan's Quickshell bar, notification overlay/server, OSD and sidebar come from the pinned fufexan-dotfiles source. Its primary-screen assumption is adapted to host monitor settings. Vicinae handles launcher and clipboard history; grimblast handles screenshots; wl-ocr recognizes English screen text.
 
-## Bindings
+## Coordinated styling
 
-Super+R launcher; Super+V clipboard; Super+Space special workspace; Super+Shift+Space send window there; Super+1..0 monitor-local workspace; Super+Shift+1..0 send window; Super+Return terminal; Super+L lock; Super+O OCR; Print or Super+Shift+R area screenshot; Ctrl+Print or Super+Shift+Ctrl+R output screenshot; Super+Shift+C exits Hyprland immediately (save work first). Super+Q close; Super+F fullscreen; Super+T floating; Super+P pseudo; Super+Shift+I split; Super+arrows focus; Super+Shift+arrows move.
+Foot is now the desktop terminal. Its actual pinned upstream module supplies both palettes, 90% opacity, blur request, padding, beam cursor and notifications. JetBrains Mono Nerd Font is installed explicitly. The generated Hyprland terminal variable overrides the older host terminal choice when Foot is enabled; Kitty remains installed by the core profile.
 
-## Removed from active configuration
+GTK uses Inter, Adwaita icons and adw-gtk3. Qt6 uses Fusion, Breeze light/dark schemes and a locally built hyprqt6engine. The engine source revision/hash and portal-follow patch match the pinned upstream configuration, but the source is fetched and patched normally: no references to upstream's private /nix/store tree. Its libraries are rebuilt with this package set's default compiler runtime. Qt5 and applications supplying their own themes may not follow the Qt6 engine.
 
-Stylix input/module imports, Rofi, Waybar, SwayNC, cliphist watchers, Pypr scratchpads, old desktop scripts, wlogout, Noctalia and Catppuccin desktop imports. Unused old files and old host styling variables remain as references, not active dependencies. The old Stylix-named GNOME patch-filter helper in core/system.nix remains inert with respect to Stylix itself. Legacy alternative configs must be modernized before re-enabling them.
+Darkman coordinates changes with explicit application actions. Each fresh Hyprland session initializes dark mode. Run:
 
-## Deliberate differences and deferred work
+```sh
+desktop-theme light
+desktop-theme dark
+desktop-theme toggle
+desktop-theme refresh
+```
 
-Qt retains the known adwaita-dark/gtk3 baseline rather than copying upstream's custom patched hyprqt6engine toolchain. Dark mode is fixed initially. No Hyprexpo, new 1Password/dialog rules, recording UI, automatic dark/light scheduling or Vicinae extensions are added. Quickshell comes from a pinned source input rather than a local editable copy. Adjust the adapter or vendor the QML for further customization. Desktop monitor brightness may require DDC/CI integration; the upstream backlight widget is primarily laptop-oriented.
+The current choice is recorded under the XDG state directory. Hyprland's editable theme.lua reapplies that palette after a configuration reload. Quickshell watches the dconf color preference; the Qt patch follows the Settings portal. GTK3 updates through gsettings; applications that cache their GTK theme may need restarting. No GeoClue or new geographic schedule is configured. A previously cached Darkman location may need clearing before expecting strictly manual switching. Vicinae retains its own theme selection; extensions/custom launcher palettes are not configured here.
 
-## Build status and first activation
+New logins receive Qt variables through Home Manager's session environment and Hyprland, with HM's systemd/DBus environment integration, not an assumed UWSM launch. Open applications need restarting to load the new platform plugin. Quickshell remains sourced from the pinned input, not vendored editable QML.
 
-Not Nix-evaluated, built or graphically tested by the authoring assistant. flake.lock is intentionally not fabricated: after pulling, run `nix flake lock` to lock the added source and prune unused Stylix nodes, then review and commit the resulting lock file. Existing unrelated flake inputs are retained.
+## Key bindings
 
-Run `nix build .#nixosConfigurations.wassaa.config.system.build.toplevel --no-link` before switching. Local uncommitted configuration edits must be reconciled before pulling. After a successful switch, log out and into a fresh Hyprland session; the old session may still have manually spawned Waybar/Pypr/cliphist processes.
+Super+R launcher; Super+V clipboard; Super+Space special workspace; Super+Shift+Space send window there; Super+1..0 monitor-local workspace; Super+Shift+1..0 send window; Super+Return footclient; Super+L lock; Super+O OCR; Print or Super+Shift+R region screenshot; Ctrl+Print or Super+Shift+Ctrl+R output screenshot; Super+Shift+C immediate exit. Window and media bindings remain in config/binds.
 
-Check `hyprctl configerrors`, `systemctl --user status quickshell`, `systemctl --user status vicinae`, and `journalctl --user -u quickshell -b`. Verify icon fonts, both monitors' workspace switching, screenshots, notification actions and volume OSD. Inspect Vicinae clipboard exclusions/password handling before using it with sensitive copied values.
+## Status and deferred features
 
-Rollback: use the previous NixOS generation and revert this commit if needed. Do not assume an untested configuration is a known-good boot environment.
+The initial shell commit built successfully according to the user. This follow-up is not Nix-evaluated, built or graphically tested by the assistant. It does not update flake.lock or unrelated inputs. The gcc15Stdenv overrides in qt.nix were checked against the repository's locked nixpkgs; revisit those arguments if updating nixpkgs to a different compiler generation.
+
+Still deferred: Hyprexpo, additional dialog/authentication rules, recording UI, Vicinae extensions, geographic scheduling and DDC/CI integration for external monitor brightness. Legacy unused files/host styling variables remain references, not active Stylix dependencies.
+
+Before activation, reconcile local edits, pull, and build:
+
+```sh
+nix build .#nixosConfigurations.wassaa.config.system.build.toplevel --no-link
+```
+
+After switching, start a fresh Hyprland session. Verify footclient, both monitors' workspace switching, desktop-theme toggle, Qt applications, notifications, screenshots and OCR. Check hyprctl configerrors and the user services quickshell, foot, darkman, desktop-theme-sync and vicinae. Inspect clipboard secret exclusions before copying sensitive values. Use the previous NixOS generation if rollback is needed.
