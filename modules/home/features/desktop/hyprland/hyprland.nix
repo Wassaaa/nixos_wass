@@ -12,7 +12,7 @@
     waybar
     rofi
     hyprsome
-    hyprsomescroll
+    # hyprsomescroll
     pyprland
     swww
     grim

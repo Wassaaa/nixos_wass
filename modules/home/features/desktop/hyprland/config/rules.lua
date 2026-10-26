@@ -1,23 +1,31 @@
--- Floating utility windows
-hl.windowrule({ match = { class = "pavucontrol" }, float = true, center = true })
-hl.windowrule({ match = { class = "nm-connection-editor" }, float = true })
-hl.windowrule({ match = { class = "blueman-manager" }, float = true })
-hl.windowrule({ match = { class = "org.gnome.Nautilus" }, tag = "file-manager" })
-hl.windowrule({ match = { class = "kitty" }, tag = "terminal" })
-hl.windowrule({ match = { class = "Brave-browser" }, tag = "browser" })
+hl.window_rule({
+  name = "float-pavucontrol",
+  match = { class = "pavucontrol" },
+  float = true,
+})
 
--- Picture-in-picture
-hl.windowrule({
+hl.window_rule({
+  name = "float-nm-connection-editor",
+  match = { class = "nm-connection-editor" },
+  float = true,
+})
+
+hl.window_rule({
+  name = "float-blueman",
+  match = { class = "blueman-manager" },
+  float = true,
+})
+
+hl.window_rule({
+  name = "float-polkit",
+  match = { class = "lxqt-policykit-agent" },
+  float = true,
+})
+
+hl.window_rule({
+  name = "picture-in-picture",
   match = { title = "Picture-in-Picture" },
   float = true,
   pin = true,
   move = "72% 7%",
-})
-
--- Polkit prompts
-hl.windowrule({
-  match = { class = "lxqt-policykit-agent" },
-  float = true,
-  center = true,
-  size = "30% 25%",
 })

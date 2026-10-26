@@ -23,7 +23,7 @@ end)
 hl.config({
   input = {
     kb_layout = keyboardLayout,
-    kb_options = { "grp:alt_caps_toggle" },
+    kb_options = "grp:alt_caps_toggle",
     numlock_by_default = true,
     repeat_delay = 300,
     follow_mouse = 1,
@@ -51,7 +51,6 @@ hl.config({
   },
 
   dwindle = {
-    pseudotile = true,
     preserve_split = true,
   },
 
@@ -68,7 +67,7 @@ hl.config({
       enabled = true,
       range = 4,
       render_power = 3,
-      color = "rgba(1a1a1aee)",
+      color = 0xee1a1a1a,
     },
   },
 })
