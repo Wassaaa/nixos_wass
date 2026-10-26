@@ -46,11 +46,15 @@ hl.bind(mod .. " + SHIFT + j", hl.dsp.window.move({ direction = "down" }))
 hl.bind(mod .. " + SHIFT + k", hl.dsp.window.move({ direction = "up" }))
 hl.bind(mod .. " + SHIFT + l", hl.dsp.window.move({ direction = "right" }))
 
--- Workspaces
+-- Native workspaces
+-- TODO: replace with split-monitor-workspaces for 10 workspaces per monitor.
 for i = 1, 9 do
-  hl.bind(mod .. " + " .. i, hl.dsp.exec_cmd("hyprsome workspace " .. i))
-  hl.bind(mod .. " + SHIFT + " .. i, hl.dsp.exec_cmd("hyprsome move " .. i))
+  hl.bind(mod .. " + " .. i, hl.dsp.focus({ workspace = tostring(i) }))
+  hl.bind(mod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = tostring(i) }))
 end
+
+hl.bind(mod .. " + 0", hl.dsp.focus({ workspace = "10" }))
+hl.bind(mod .. " + SHIFT + 0", hl.dsp.window.move({ workspace = "10" }))
 
 hl.bind(mod .. " + SHIFT + SPACE", hl.dsp.window.move({ workspace = "special" }))
 hl.bind(mod .. " + SPACE", hl.dsp.workspace.toggle_special())
@@ -62,10 +66,8 @@ hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Media and hardware keys
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"),
-  { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
-  { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), { locked = true, repeating = true })
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })

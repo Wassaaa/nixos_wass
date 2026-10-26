@@ -11,8 +11,6 @@
   home.packages = with pkgs; [
     waybar
     rofi
-    hyprsome
-    # hyprsomescroll
     pyprland
     swww
     grim

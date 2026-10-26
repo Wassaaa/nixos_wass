@@ -14,6 +14,10 @@
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+    # split-monitor-workspaces = {
+    #   url = "github:zjeffer/split-monitor-workspaces";
+    #   flake = false;
+    # };
     vscode-insiders = {
       url = "github:Wassaaa/code-insiders-flake";
       inputs.nixpkgs.follows = "nixpkgs";
