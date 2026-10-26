@@ -6,9 +6,34 @@
     package =
       inputs.vscode-insiders.packages.${pkgs.stdenv.hostPlatform.system}.vscode-insider.overrideAttrs
         (oldAttrs: {
-          # Wrap insiders and expose it as 'code' for convenience
+          postPatch = ''
+            # Disable update checks
+            tmpProductJson="$(mktemp)"
+            jq 'del(.updateUrl, .backupUpdateUrl)' resources/app/product.json > "$tmpProductJson"
+            mv "$tmpProductJson" resources/app/product.json
+
+            # Fix "save as root" functionality
+            packed="resources/app/node_modules.asar"
+            unpacked="resources/app/node_modules"
+            asar extract "$packed" "$unpacked"
+            substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
+              --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
+              --replace-fail "/bin/bash" "${pkgs.bash}/bin/bash"
+
+            rm -rf "$packed"
+
+            # Keep the unpacked node_modules reachable
+            ln -rs "$unpacked" "$packed"
+
+            # Replace the bundled ripgrep with Nixpkgs ripgrep,
+            # creating the directory if newer Insiders archives omit it.
+            rgPath="resources/app/node_modules/@vscode/ripgrep-universal/bin/linux-x64/rg"
+            mkdir -p "$(dirname "$rgPath")"
+            rm -f "$rgPath"
+            ln -s ${pkgs.ripgrep}/bin/rg "$rgPath"
+          '';
+
           postInstall = (oldAttrs.postInstall or "") + ''
-            # Prefer insiders if present; otherwise wrap stable
             if [ -x "$out/bin/code-insiders" ]; then
               rm -f "$out/bin/code" || true
               ln -s "$out/bin/code-insiders" "$out/bin/code"

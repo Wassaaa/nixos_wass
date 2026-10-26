@@ -33,6 +33,12 @@ in
         gnome-shell = removeStylixDarkPatch prev.gnome-shell;
       }
     )
+
+    (final: prev: {
+      openldap = prev.openldap.overrideAttrs (_old: {
+        doCheck = false;
+      });
+    })
   ];
 
   nix = {

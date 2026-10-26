@@ -37,9 +37,9 @@
       enable = true;
       # hidpi = true;
     };
-    plugins = [
-      inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
-    ];
+    # plugins = [
+    #   inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
+    # ];
     # enableNvidiaPatches = false;
     systemd = {
       enable = true;

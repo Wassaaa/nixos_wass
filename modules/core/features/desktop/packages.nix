@@ -5,12 +5,12 @@
     firefox.enable = false;
     dconf.enable = true;
     seahorse.enable = true;
-    adb.enable = true;
   };
 
   # Desktop GUI applications
   environment.systemPackages = with pkgs; [
     appimage-run
+    android-tools
     brave # Browser
     brightnessctl
     file-roller # Archive manager GUI
