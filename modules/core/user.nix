@@ -30,7 +30,10 @@ in
         ;
     };
     users.${username} = {
-      imports = [ "${flakeRoot}/modules/home" ];
+      imports = [
+        "${flakeRoot}/modules/home"
+        inputs.caelestia-shell.homeManagerModules.default
+      ];
       home = {
         username = "${username}";
         homeDirectory = "/home/${username}";
