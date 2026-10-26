@@ -10,7 +10,7 @@
 {
   home.packages = with pkgs; [
     waybar
-    rofi-wayland
+    rofi
     hyprsome
     hyprsomescroll
     pyprland
