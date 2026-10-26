@@ -1,16 +1,23 @@
-{ pkgs, ... }:
-
-{
+{ pkgs, config, lib, ... }: {
   gtk = {
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
+    enable = true;
+    font = {
+      name = "Inter";
+      package = pkgs.google-fonts.override { fonts = [ "Inter" ]; };
+      size = 9;
     };
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
+    gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
+    gtk4.theme = null;
+    iconTheme = { name = "Adwaita"; package = pkgs.adwaita-icon-theme; };
+    theme = { name = "adw-gtk3-dark"; package = pkgs.adw-gtk3; };
   };
+  home.pointerCursor = {
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 16;
+    gtk.enable = true;
+    x11.enable = true;
+  };
+  dconf.settings."org/gnome/desktop/interface".color-scheme = lib.mkForce "prefer-dark";
+  fonts.fontconfig.enable = true;
 }

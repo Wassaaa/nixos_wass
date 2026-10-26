@@ -1,10 +1,12 @@
 {
   description = "WassOS";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    stylix.url = "github:danth/stylix";
+    fufexan-dotfiles = {
+      url = "github:fufexan/dotfiles/ffc567f8f3530ccc877c52fb26fa4a577f1794f2";
+      flake = false;
+    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,63 +40,29 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
-  outputs =
-    {
-      nixpkgs,
-      nixpkgs-stable,
-      nixos-wsl,
-      ...
-    }@inputs:
+  outputs = { nixpkgs, nixpkgs-stable, nixos-wsl, ... }@inputs:
     let
       flakeRoot = ./.;
-
-      mkSystem =
-        {
-          username,
-          host,
-          profile,
-          extraModules ? [ ],
-        }:
+      mkSystem = { username, host, profile, extraModules ? [ ] }:
         nixpkgs.lib.nixosSystem {
           modules = [
             { nixpkgs.hostPlatform = "x86_64-linux"; }
             ./profiles/${profile}
-          ]
-          ++ extraModules;
+          ] ++ extraModules;
           specialArgs = {
-            inherit
-              inputs
-              flakeRoot
-              username
-              host
-              profile
-              ;
+            inherit inputs flakeRoot username host profile;
             stable = import nixpkgs-stable {
               localSystem = "x86_64-linux";
               config.allowUnfree = true;
             };
           };
         };
-    in
-    {
+    in {
       nixosConfigurations = {
-        wassaa = mkSystem {
-          username = "wassaa";
-          host = "wassaa";
-          profile = "nvidia";
-        };
-
-        tpad = mkSystem {
-          username = "allar";
-          host = "tpad";
-          profile = "intel";
-        };
-
+        wassaa = mkSystem { username = "wassaa"; host = "wassaa"; profile = "nvidia"; };
+        tpad = mkSystem { username = "allar"; host = "tpad"; profile = "intel"; };
         wsl = mkSystem {
-          username = "wsl";
-          host = "wsl";
-          profile = "wsl";
+          username = "wsl"; host = "wsl"; profile = "wsl";
           extraModules = [ nixos-wsl.nixosModules.default ];
         };
       };

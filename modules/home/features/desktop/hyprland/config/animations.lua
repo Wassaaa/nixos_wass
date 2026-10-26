@@ -1,45 +1,11 @@
-hl.config({
-  animations = {
-    enabled = true,
-  },
-})
-
-hl.curve("wind", {
-  type = "bezier",
-  points = {
-    { 0.05, 0.9 },
-    { 0.1,  1.05 },
-  },
-})
-
-hl.curve("winIn", {
-  type = "bezier",
-  points = {
-    { 0.1, 1.1 },
-    { 0.1, 1.1 },
-  },
-})
-
-hl.curve("winOut", {
-  type = "bezier",
-  points = {
-    { 0.3, -0.3 },
-    { 0.0, 1.0 },
-  },
-})
-
-hl.curve("liner", {
-  type = "bezier",
-  points = {
-    { 0.0, 0.0 },
-    { 1.0, 1.0 },
-  },
-})
-
-hl.animation({ leaf = "windows", enabled = true, speed = 6, bezier = "wind", style = "slide" })
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 6, bezier = "winIn", style = "slide" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 5, bezier = "winOut", style = "slide" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 5, bezier = "wind", style = "slide" })
-hl.animation({ leaf = "border", enabled = true, speed = 1, bezier = "liner" })
-hl.animation({ leaf = "fade", enabled = true, speed = 10, bezier = "quick" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "wind" })
+-- Adapted from fufexan/dotfiles (MIT), pinned by the fufexan-dotfiles input.
+hl.curve("slight_bounce", { type = "spring", mass = 1, stiffness = 350, dampening = 30 })
+hl.curve("winIn", { type = "spring", mass = 1, stiffness = 350, dampening = 35 })
+hl.curve("winOut", { type = "spring", mass = 1, stiffness = 320, dampening = 32 })
+hl.curve("winMove", { type = "spring", mass = 1, stiffness = 300, dampening = 30 })
+hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "default" })
+hl.animation({ leaf = "fade", enabled = true, speed = 4, bezier = "default" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "slight_bounce" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, spring = "winIn", style = "popin 85%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, spring = "winOut", style = "popin 85%" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 3, spring = "winMove", style = "slide" })
