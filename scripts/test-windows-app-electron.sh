@@ -5,7 +5,8 @@ version="${1:-}"
 backend="${2:-default}"
 sandbox="${3:-sandboxed}"
 platform="${4:-as-packaged}"
-usage='Usage: bash scripts/test-windows-app-electron.sh 42|43 [default|nvidia-gbm] [sandboxed|gpu-unsandboxed] [as-packaged|native-wayland]'
+vulkan="${5:-default}"
+usage='Usage: bash scripts/test-windows-app-electron.sh 42|43 [default|nvidia-gbm] [sandboxed|gpu-unsandboxed] [as-packaged|native-wayland] [default|disable-vulkan]'
 case "$version" in
   42|43) ;;
   *)
@@ -48,6 +49,14 @@ NIX
     exit 2
     ;;
 esac
+case "$vulkan" in
+  default) ;;
+  disable-vulkan) extra_flags+=("--disable-features=Vulkan") ;;
+  *)
+    printf '%s\n' "$usage" >&2
+    exit 2
+    ;;
+esac
 
 cd "$(dirname "$0")/.."
 expression="
@@ -69,6 +78,7 @@ printf 'Temporary profile: %s\n' "$test_dir"
 printf 'GBM backend: %s\n' "$backend"
 printf 'GPU sandbox: %s\n' "$sandbox"
 printf 'Platform: %s\n' "$platform"
+printf 'Vulkan: %s\n' "$vulkan"
 printf 'Do not sign in; close the app after checking whether its window appears.\n'
 
 exec env \
