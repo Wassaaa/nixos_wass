@@ -1,6 +1,6 @@
 local exec = hl.dsp.exec_cmd
 -- Caelestia launcher is the primary trial launcher.
-hl.bind("SUPER + R", exec("caelestia shell launcher"))
+hl.bind("SUPER + R", hl.dsp.global("caelestia:launcher"))
 -- Keep Vicinae available as the secondary launcher/clipboard tool.
 hl.bind("SUPER + SHIFT + R", exec("vicinae vicinae://toggle"))
 hl.bind("SUPER + V", exec("vicinae 'vicinae://launch/clipboard/history?toggle=true'"))
