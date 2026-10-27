@@ -49,6 +49,25 @@ This is a modified version of ZaneyOS. To get it working, please look through th
 - Easy to understand file structure and simple, but encompassing,
   configuratiion.
 
+#### Gaming
+
+The `enableGaming` host feature installs Steam and Gamescope. Steam's built-in
+Proton versions handle Windows games; Gamescope is optional per game. To run a
+game in fullscreen Gamescope, set its Steam launch options to:
+
+```text
+gamescope -f -- %command%
+```
+
+Steam Remote Play firewall ports are not opened by default.
+
+#### NVIDIA on wassaa
+
+The RTX 2080 uses NVIDIA's open kernel modules and the stable driver from the
+locked Nixpkgs revision. After changing the driver or kernel module flavor,
+build with `nh os boot` and reboot to load it. Keep a working boot generation
+available in case the new configuration needs to be rolled back.
+
 #### 🙋 Having Issues / Questions?
 
 - look at [Original ZaneyOS](https://gitlab.com/Zaney/zaneyos/-/tree/main?ref_type=heads) maybe some hints.

@@ -15,27 +15,6 @@ in
     lxqt.lxqt-policykit
     networkmanagerapplet
   ];
-  systemd.user.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-
-    XDG_CURRENT_DESKTOP = "Hyprland";
-    XDG_SESSION_TYPE = "wayland";
-    XDG_SESSION_DESKTOP = "Hyprland";
-
-    MOZ_ENABLE_WAYLAND = "1";
-
-    GDK_BACKEND = "wayland,x11";
-    QT_QPA_PLATFORM = "wayland;xcb";
-    QT_QPA_PLATFORMTHEME = "qtengine";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-
-    SDL_VIDEODRIVER = "wayland,x11,windows";
-    CLUTTER_BACKEND = "wayland";
-    ELECTRON_OZONE_PLATFORM_HINT = "auto";
-
-    _JAVA_AWT_WM_NONREPARENTING = "1";
-  };
   systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
   wayland.windowManager.hyprland = {
     enable = true;
@@ -44,10 +23,32 @@ in
     xwayland.enable = true;
     systemd = {
       enable = true;
-      variables = [ "--all" ];
+      variables = [
+        "DISPLAY"
+        "HYPRLAND_INSTANCE_SIGNATURE"
+        "WAYLAND_DISPLAY"
+        "XDG_CURRENT_DESKTOP"
+        "XDG_SESSION_TYPE"
+        "XDG_SESSION_DESKTOP"
+      ];
     };
     settings = { };
     extraConfig = ''
+      hl.env("NIXOS_OZONE_WL", "1")
+      hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+      hl.env("XDG_SESSION_TYPE", "wayland")
+      hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+      hl.env("MOZ_ENABLE_WAYLAND", "1")
+      hl.env("GDK_BACKEND", "wayland,x11")
+      hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+      hl.env("QT_QPA_PLATFORMTHEME", "qtengine")
+      hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
+      hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+      hl.env("SDL_VIDEODRIVER", "wayland,x11,windows")
+      hl.env("CLUTTER_BACKEND", "wayland")
+      hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+      hl.env("_JAVA_AWT_WM_NONREPARENTING", "1")
+
       require("variables")
       require("settings")
       require("animations")

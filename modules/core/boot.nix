@@ -21,7 +21,6 @@ in
       "quiet" # Cleaner boot messages
       "mitigations=off" # Disable CPU vulnerability mitigations for better performance
       "amd_pstate=active" # Enable AMD P-State drivr efor better CPU power management
-      "nvidia-drm.modeset=1" # Enable NVIDIA DRM kernel mode setting (required for Wayland)
     ];
 
     # Basic loader configuration for non-desktop, non-WSL systems

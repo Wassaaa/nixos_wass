@@ -7,7 +7,6 @@
 }:
 let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
-    enableGaming
     enableDesktop
     enableDevelopment
     enableMultimedia
@@ -33,9 +32,6 @@ in
   ]
   ++ lib.optionals enableMultimedia [
     ./features/multimedia
-  ]
-  ++ lib.optionals enableGaming [
-    ./features/gaming
   ]
   ++ lib.optionals hasHostHome [
     ../../hosts/${host}/home
