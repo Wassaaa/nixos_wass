@@ -3,10 +3,10 @@
   # Thunar and Tumbler are installed through Home Manager packages because
   # programs.thunar/services.tumbler are NixOS module options, not HM options.
   home.packages = with pkgs; [
-    xfce.thunar
-    xfce.thunar-archive-plugin
-    xfce.thunar-volman
-    xfce.tumbler
+    thunar
+    thunar-archive-plugin
+    thunar-volman
+    tumbler
     p7zip
   ];
 
