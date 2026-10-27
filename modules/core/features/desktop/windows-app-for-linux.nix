@@ -1,40 +1,68 @@
 {
   lib,
-  fetchurl,
-  appimage-run,
+  buildNpmPackage,
+  copyDesktopItems,
+  electron,
+  importNpmLock,
   makeDesktopItem,
-  symlinkJoin,
-  writeShellScriptBin
+  makeWrapper,
+  windowsAppSrc,
 }:
 let
-  version = "0.1.0";
-  appimage = fetchurl {
-    url = "https://github.com/mariuszkopowski/windows-app-for-linux/releases/download/v${version}/Windows.App-${version}.AppImage";
-    hash = "sha256-8N1dGz0hWTcOlITDt0DjWSGVju55ExZP2shCs6MrcZM=";
-  };
-  icon = fetchurl {
-    name = "windows-app-for-linux.svg";
-    url = "https://raw.githubusercontent.com/mariuszkopowski/windows-app-for-linux/721e8d87edfc137d4ce2beeeaafef3009d7c8bb5/assets/icons/icon.svg";
-    hash = "sha256-AaU+1XNXqqkCIlrNoCk+3MEiOGdzq+fFXfj1vD0z/nI=";
-  };
-  launcher = writeShellScriptBin "windows-app-for-linux" ''
-    exec ${appimage-run}/bin/appimage-run ${appimage} "$@"
-  '';
-  desktopItem = makeDesktopItem {
-    name = "windows-app-for-linux";
-    desktopName = "Windows App";
-    comment = "Unofficial Windows App web client";
-    exec = "${launcher}/bin/windows-app-for-linux";
-    icon = "${icon}";
-    categories = [ "Network" "Office" ];
+  package = builtins.fromJSON (builtins.readFile "${windowsAppSrc}/package.json");
+  packageLock = builtins.fromJSON (builtins.readFile "${windowsAppSrc}/package-lock.json");
+  productionPackage = builtins.removeAttrs package [ "devDependencies" ];
+  productionLock = packageLock // {
+    packages =
+      lib.filterAttrs (_: dependency: !(dependency.dev or false)) packageLock.packages
+      // {
+        "" = builtins.removeAttrs packageLock.packages."" [ "devDependencies" ];
+      };
   };
 in
-symlinkJoin {
-  name = "windows-app-for-linux-${version}";
-  paths = [ launcher desktopItem ];
+buildNpmPackage {
+  pname = "windows-app-for-linux";
+  version = package.version;
+  src = windowsAppSrc;
+
+  npmDeps = importNpmLock {
+    package = productionPackage;
+    packageLock = productionLock;
+  };
+  npmConfigHook = importNpmLock.npmConfigHook;
+  npmFlags = [ "--omit=dev" "--ignore-scripts" ];
+  dontNpmBuild = true;
+
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "windows-app-for-linux";
+      desktopName = "Windows App";
+      comment = "Unofficial Windows App web client";
+      exec = "windows-app-for-linux";
+      icon = "windows-app-for-linux";
+      categories = [ "Network" "Office" ];
+    })
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -d "$out/share/windows-app-for-linux"
+    cp -r app assets node_modules package.json "$out/share/windows-app-for-linux/"
+    install -Dm644 assets/icons/icon.svg "$out/share/icons/hicolor/scalable/apps/windows-app-for-linux.svg"
+    install -Dm644 LICENSE "$out/share/licenses/windows-app-for-linux/LICENSE"
+    makeWrapper ${electron}/bin/electron "$out/bin/windows-app-for-linux" \
+      --add-flags "$out/share/windows-app-for-linux"
+
+    runHook postInstall
+  '';
+
   meta = {
     description = "Unofficial Windows App web client for Linux";
     homepage = "https://github.com/mariuszkopowski/windows-app-for-linux";
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     mainProgram = "windows-app-for-linux";
   };

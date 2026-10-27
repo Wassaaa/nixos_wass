@@ -64,10 +64,19 @@ The command-to-desktop-file mappings live in
 the application before selecting another command. Applications that ignore
 these defaults may require their own configuration.
 
-Desktop hosts also install the unofficial Windows App web client, pinned to an
-upstream AppImage release. Launch **Windows App** from the application menu or
-run `windows-app-for-linux`. Its settings and session data remain in the
-user's home directory.
+Desktop hosts also install the unofficial Windows App web client from pinned
+upstream source, using Nixpkgs Electron. Launch **Windows App** from the
+application menu or run `windows-app-for-linux`. It can also be built separately:
+
+```bash
+nix build .#windows-app-for-linux
+```
+
+The source input is pinned in `flake.nix` and must be recorded in `flake.lock`
+with `nix flake lock` when first introduced. Nixpkgs Electron may differ from
+upstream's version; verify login and remote sessions before relying on it.
+Upstream stores its settings in the user's configuration directory; check
+whether existing session data is retained when changing Electron versions.
 
 ## Gaming and NVIDIA
 

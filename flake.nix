@@ -35,6 +35,10 @@
       url = "github:sadjow/codex-cli-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    windows-app-for-linux-src = {
+      url = "github:mariuszkopowski/windows-app-for-linux/721e8d87edfc137d4ce2beeeaafef3009d7c8bb5";
+      flake = false;
+    };
   };
   outputs = { nixpkgs, nixpkgs-stable, nixos-wsl, ... }@inputs:
     let
@@ -54,6 +58,14 @@
           };
         };
     in {
+      packages.x86_64-linux.windows-app-for-linux =
+        let
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
+        in
+        pkgs.callPackage ./modules/core/features/desktop/windows-app-for-linux.nix {
+          windowsAppSrc = inputs.windows-app-for-linux-src;
+        };
+
       nixosConfigurations = {
         wassaa = mkSystem { username = "wassaa"; host = "wassaa"; profile = "nvidia"; };
         tpad = mkSystem { username = "allar"; host = "tpad"; profile = "intel"; };

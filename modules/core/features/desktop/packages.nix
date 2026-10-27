@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   # Desktop-specific programs
   programs = {
@@ -9,7 +9,9 @@
 
   # Desktop GUI applications
   environment.systemPackages = with pkgs; [
-    (callPackage ./windows-app-for-linux.nix { })
+    (callPackage ./windows-app-for-linux.nix {
+      windowsAppSrc = inputs.windows-app-for-linux-src;
+    })
     appimage-run
     audacity
     brightnessctl
