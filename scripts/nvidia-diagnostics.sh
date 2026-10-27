@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -o pipefail
+
 failures=0
 
 run() {
@@ -15,12 +17,32 @@ run() {
   fi
 }
 
+check_file_readable() {
+  head -c 1 "$1" > /dev/null && printf 'File is readable by the current user.\n'
+}
+
+windows_app_windows() {
+  hyprctl clients -j | jq '[
+    .[] | select(
+      [ .class, .initialClass, .title, .initialTitle ]
+      | map(. // "")
+      | any(test("windows.?app"; "i"))
+    ) | { class, initialClass, mapped, hidden, workspace, monitor, at, size, floating, xwayland }
+  ]'
+}
+
+run id
 run nvidia-smi
-run cat /sys/module/nvidia_drm/parameters/modeset
-run cat /sys/module/nvidia_drm/parameters/fbdev
+run ls -l /sys/module/nvidia_drm/parameters/modeset /sys/module/nvidia_drm/parameters/fbdev
+run sudo cat /sys/module/nvidia_drm/parameters/modeset
+run sudo cat /sys/module/nvidia_drm/parameters/fbdev
 run ls -l /run/opengl-driver/lib/gbm
 run namei -l /run/opengl-driver/lib/gbm/dri_gbm.so
+run check_file_readable /run/opengl-driver/lib/gbm/dri_gbm.so
+run namei -l /run/opengl-driver/lib/gbm/nvidia-drm_gbm.so
+run check_file_readable /run/opengl-driver/lib/gbm/nvidia-drm_gbm.so
 run ls -l /dev/dri
+run windows_app_windows
 
 if (( failures > 0 )); then
   printf '\n%s command(s) failed; include their messages in the diagnostic output.\n' "$failures" >&2
