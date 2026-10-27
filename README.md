@@ -135,8 +135,11 @@ systemd-resolved. Its Nixpkgs package does not support Meshnet or NordWhisper.
 The host uses loose reverse-path filtering as recommended by Nixpkgs. After a
 first switch from the old custom service, check login, DNS, VPN connectivity
 and any kill-switch settings; a new login session may be needed for group
-membership. Keep local access and a working generation available during the
-migration.
+membership. The host sets the existing NordVPN data directory's permissions for
+the unprivileged daemon. An incompatible legacy configuration may still require
+a separately backed-up reset and login; the system configuration does not reset
+it automatically. Keep local access and a working generation available during
+the migration.
 CPU vulnerability mitigations use the kernel defaults; changes to boot
 parameters require a reboot.
 
