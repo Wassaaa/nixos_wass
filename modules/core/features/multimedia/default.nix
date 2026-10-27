@@ -16,7 +16,7 @@
     # Webcam tools
     v4l-utils
     android-tools
-    adb-sync
+    better-adb-sync
 
     # Media codecs and formats
     ffmpeg
