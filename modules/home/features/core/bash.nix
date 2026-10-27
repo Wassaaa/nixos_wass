@@ -1,6 +1,6 @@
-{ host, flakeRoot, ... }:
+{ host, flakeRoot, lib, ... }:
 let
-  aliases = import ./shell-aliases.nix { inherit host flakeRoot; };
+  aliases = import ./shell-aliases.nix { inherit host flakeRoot lib; };
 in
 {
   programs.bash = {

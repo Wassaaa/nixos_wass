@@ -1,10 +1,10 @@
-{ host, flakeRoot, ... }:
+{ host, flakeRoot, lib, ... }:
 let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") flakeDir;
 in
 {
   # Common shell aliases shared across fish, zsh, and bash
-  # Import this in each shell config via: shellAliases = (import ./shell-aliases.nix { inherit host flakeRoot; }).shellAliases;
+  # Import this in each shell config via: shellAliases = (import ./shell-aliases.nix { inherit host flakeRoot lib; }).shellAliases;
 
   shellAliases = {
     # Clear screen
@@ -15,7 +15,7 @@ in
     frb = "nh os boot";
     fu = "nh os switch --update";
     fb = "nh os build";
-    fbd = "nh os build --dry";
+    fbd = "nix build ${lib.escapeShellArg "${flakeDir}#nixosConfigurations.${host}.config.system.build.toplevel"} --dry-run --no-link";
 
     # Garbage collection
     ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
@@ -32,7 +32,6 @@ in
 
     # Custom flake updates
     code-update = "nix flake update vscode-insiders --flake ${flakeDir} && fr -q";
-    nordvpn-update = "update-nordvpn";
 
     # Antigravity
     antikit = "npx @vudovn/ag-kit init";

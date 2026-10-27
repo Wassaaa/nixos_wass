@@ -1,9 +1,5 @@
-{ pkgs, config, flakeRoot, ... }:
+{ pkgs, config, ... }:
 {
-  imports = [
-    "${flakeRoot}/modules/core/nordvpn"
-  ];
-
   boot.kernelModules = [ "v4l2loopback" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
@@ -15,11 +11,8 @@
     })
   ];
 
-  services.nordvpn = {
-    enable = true;
-    enableGui = true;
-    users = [ "wassaa" ];
-  };
-
+  services.nordvpn.enable = true;
+  users.users.wassaa.extraGroups = [ "nordvpn" ];
+  networking.firewall.checkReversePath = "loose";
   services.tailscale.enable = true;
 }

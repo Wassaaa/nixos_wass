@@ -48,22 +48,7 @@ in
     enable = true;
     package =
       inputs.vscode-insiders.packages.${pkgs.stdenv.hostPlatform.system}.vscode-insider.overrideAttrs
-        (oldAttrs:
-          let
-            oldRipgrep = "resources/app/node_modules/@vscode/ripgrep/bin/rg";
-            newRipgrep = "resources/app/node_modules/@vscode/ripgrep-universal/bin/linux-x64/rg";
-          in {
-          postPatch =
-            assert lib.assertMsg (
-              lib.hasInfix "rm ${oldRipgrep}" oldAttrs.postPatch
-              && lib.hasInfix "ln -s ${pkgs.ripgrep}/bin/rg ${oldRipgrep}" oldAttrs.postPatch
-            )
-              "The Nixpkgs VS Code ripgrep patch changed; review the Insiders compatibility override.";
-            lib.replaceStrings
-              [ "rm ${oldRipgrep}" oldRipgrep ]
-              [ "mkdir -p \"$(dirname ${newRipgrep})\"\nrm -f ${newRipgrep}" newRipgrep ]
-              oldAttrs.postPatch;
-
+        (oldAttrs: {
           postInstall = (oldAttrs.postInstall or "") + ''
             if [ ! -x "$out/bin/code-insiders" ]; then
               echo "Expected the code-insiders executable in $out/bin" >&2

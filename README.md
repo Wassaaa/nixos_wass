@@ -43,6 +43,10 @@ To build a specific host without switching:
 nix build .#nixosConfigurations.wassaa.config.system.build.toplevel --no-link
 ```
 
+`fbd` evaluates the configured host and shows the planned build without
+building or switching. Evaluation can fetch flake inputs and may stop at the
+first error.
+
 For a Git-backed flake, add new files to the Git index before building; Nix
 otherwise omits untracked files. Review changes with `git status` first. Use a
 previous NixOS generation to roll back if a switch causes problems.
@@ -109,6 +113,13 @@ sops hosts/wassaa/secrets.yaml
 The firewall is enabled without general project-port exceptions. OpenSSH opens
 its configured port; other services may manage their own firewall rules.
 NordVPN client connections do not need a general inbound OpenVPN port.
+On `wassaa`, the NixOS NordVPN service provides the CLI and GUI and enables
+systemd-resolved. Its Nixpkgs package does not support Meshnet or NordWhisper.
+The host uses loose reverse-path filtering as recommended by Nixpkgs. After a
+first switch from the old custom service, check login, DNS, VPN connectivity
+and any kill-switch settings; a new login session may be needed for group
+membership. Keep local access and a working generation available during the
+migration.
 CPU vulnerability mitigations use the kernel defaults; changes to boot
 parameters require a reboot.
 
@@ -122,5 +133,5 @@ notification even without a new editor build. Check its log with
 `journalctl --user -u vscode-insiders-update-check` if it fails.
 
 The Insiders fork snapshots Microsoft's build every 12 hours when it changes.
-`nordvpn-update` runs the NordVPN update helper. Review lockfile and package
+NordVPN is updated with Nixpkgs through the flake lockfile. Review lockfile
 changes before applying them.

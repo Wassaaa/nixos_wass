@@ -96,12 +96,8 @@ sops hosts/wassaa/secrets.yaml
 ### Updating Custom Flake Inputs
 
 ```bash
-# VSCode Insiders (auto-updated via GitHub Actions every 3h)
+# VSCode Insiders (checked via GitHub Actions every 12h)
 code-update  # Updates vscode-insiders flake input and rebuilds
-
-# NordVPN (custom update script)
-update-nordvpn  # or nordvpn-update (fish alias)
-# Script in modules/core/nordvpn/update-nordvpn.sh auto-updates version + sha256
 ```
 
 ## Project Conventions
@@ -157,7 +153,7 @@ These are always available in modules (set in `flake.nix`):
 
 - **Default shell**: Fish (set per-host in `variables.nix` via `myshell`)
 - Common aliases are shared by Fish, Zsh, and Bash via `modules/home/features/core/shell-aliases.nix`
-- Current useful aliases: `fr` (switch), `frb` (boot), `fb` (build), `fu` (switch + update), `code-update`, `nordvpn-update`
+- Current useful aliases: `fr` (switch), `frb` (boot), `fb` (build), `fbd` (dry run), `fu` (switch + update), `code-update`
 
 ## Common Pitfalls
 
@@ -195,6 +191,6 @@ These are always available in modules (set in `flake.nix`):
 - `modules/core/user.nix` - Home Manager integration and user creation
 - `modules/core/sops/sops.nix` - Full SOPS setup guide in comments
 - `hosts/wassaa/variables.nix` - Example of all available host variables
-- `modules/core/nordvpn/` - Example of custom package + service module
+- `hosts/wassaa/host-packages.nix` - Host-specific NordVPN and Tailscale services
 - `modules/home/features/desktop/vscode.nix` - Custom flake input usage + settings merging pattern
 - `modules/home/features/desktop/hyprland/` - Modular Hyprland configuration (primary DE)
