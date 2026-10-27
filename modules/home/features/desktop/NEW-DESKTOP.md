@@ -8,7 +8,11 @@ Caelestia owns the shell UI and selected theme integrations. Hyprland remains co
 
 ## Theme system
 
-Caelestia's CLI generates Material You-derived colours and applies terminal escape sequences, Hyprland Lua, GTK CSS/dconf settings, and Qt engine configuration. The first trial enables terminal, Hyprland, GTK, and Qt integrations only; Discord, Spicetify, Chromium, editor, terminal-tool and other integrations remain disabled.
+Caelestia's CLI generates Material You-derived colours and applies terminal escape sequences, Hyprland Lua, GTK CSS/dconf settings, and Qt engine configuration. The integration enables terminal, Hyprland, GTK, and Qt integrations only; Discord, Spicetify, Chromium, editor, terminal-tool and other integrations remain disabled.
+
+The editable Hyprland `config/theme.lua` reads Caelestia's generated `~/.config/hypr/scheme/current.lua` and applies its active and inactive border colours. A Caelestia theme post-hook reloads Hyprland after scheme or wallpaper changes; before the first generated scheme, the borders use Caelestia's default colours. Edit `config/theme.lua` to customize this mapping without rebuilding.
+
+Qt applications use the Qt 6 `qtengine` platform theme and Darkly style in Hyprland. Caelestia generates their colour configuration at runtime. The Nixpkgs packages used here are Qt 6-only; Qt 5 applications may not follow this theme. A fresh Hyprland session is needed after changing the plugin setup.
 
 Foot receives ANSI escape sequences rather than a Nix-managed colour file. Hyprlock uses a blurred screenshot of the current desktop rather than a fixed wallpaper; blurred content may still be recognizable.
 
@@ -16,11 +20,11 @@ Foot retains JetBrains Mono Nerd Font, 12x12 padding, a beam cursor and a persis
 
 ## Removed
 
-The fufexan-dotfiles shell source/service/configuration, custom Darkman coordination, custom desktop-theme command, custom patched hyprqt6engine build, forced GTK theme, and unused custom Hyprland palette loader have been removed.
+The fufexan-dotfiles shell source/service/configuration, custom Darkman coordination, custom desktop-theme command, custom patched hyprqt6engine build, and forced GTK theme have been removed.
 
 ## Compatibility and status
 
-Caelestia's bar is configured for per-monitor display with ten workspaces, but compatibility with split-monitor-workspaces numbering is unverified and must be tested on both physical monitors. The shell launcher command is a trial integration and may require adjustment to Caelestia's current CLI/interface. Qt integration uses Caelestia's expected qtengine configuration; whether every Qt application follows it must be tested after a fresh login.
+Caelestia's bar is configured for per-monitor display with ten workspaces; the split-monitor-workspaces setup works on both monitors. Qt application theming should be checked after a fresh login.
 
 After making desktop changes, evaluate and build the affected host:
 
@@ -28,4 +32,4 @@ After making desktop changes, evaluate and build the affected host:
 nix build .#nixosConfigurations.wassaa.config.system.build.toplevel --no-link
 ```
 
-After switching, start a fresh Hyprland session. Select a wallpaper and scheme through Caelestia, then test light/dark switching, Foot palette updates, the audio control, lock and unlock, both monitors' workspaces, notifications, OSD, launcher, screenshots and OCR. Check `hyprctl configerrors`, `systemctl --user --failed`, and `journalctl --user` for Caelestia. Confirm GNOME still starts independently. Inspect clipboard secret exclusions before copying sensitive values. Use the previous NixOS generation for rollback.
+After switching, start a fresh Hyprland session. Select a wallpaper and scheme through Caelestia, then test light/dark switching, Hyprland border colours, Foot palette updates, a Qt 6 application's appearance, the audio control, lock and unlock, notifications, OSD, launcher, screenshots and OCR. Check `hyprctl configerrors`, `systemctl --user --failed`, and `journalctl --user` for Caelestia. Confirm GNOME still starts independently. Inspect clipboard secret exclusions before copying sensitive values. Use the previous NixOS generation for rollback.

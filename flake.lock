@@ -33,29 +33,6 @@
         "type": "github"
       }
     },
-    "caelestia-cli": {
-      "inputs": {
-        "caelestia-shell": [
-          "caelestia-shell"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1792988199,
-        "narHash": "sha256-PO3MBtadQMXlaGZCswnIEfBVNFb99c7IuYwB/vFrZLk=",
-        "owner": "caelestia-dots",
-        "repo": "cli",
-        "rev": "5e804b10c146c9f3278b2da37c8e4b5d8e9708d9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "caelestia-dots",
-        "repo": "cli",
-        "type": "github"
-      }
-    },
     "caelestia-cli_2": {
       "inputs": {
         "caelestia-shell": [
@@ -646,7 +623,6 @@
     },
     "root": {
       "inputs": {
-        "caelestia-cli": "caelestia-cli",
         "caelestia-shell": "caelestia-shell",
         "codex-cli-nix": "codex-cli-nix",
         "home-manager": "home-manager",

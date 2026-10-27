@@ -42,6 +42,16 @@ in
       hl.env("GDK_BACKEND", "wayland,x11")
       hl.env("QT_QPA_PLATFORM", "wayland;xcb")
       hl.env("QT_QPA_PLATFORMTHEME", "qtengine")
+      local qtPluginPath = os.getenv("QT_PLUGIN_PATH")
+      local caelestiaQtPlugins = "${pkgs.qtengine}/${pkgs.qt6.qtbase.qtPluginPrefix}:${pkgs.darkly}/${pkgs.qt6.qtbase.qtPluginPrefix}"
+      if qtPluginPath and qtPluginPath ~= "" then
+        if qtPluginPath == caelestiaQtPlugins or qtPluginPath:sub(1, #caelestiaQtPlugins + 1) == caelestiaQtPlugins .. ":" then
+          caelestiaQtPlugins = qtPluginPath
+        else
+          caelestiaQtPlugins = caelestiaQtPlugins .. ":" .. qtPluginPath
+        end
+      end
+      hl.env("QT_PLUGIN_PATH", caelestiaQtPlugins)
       hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
       hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
       hl.env("SDL_VIDEODRIVER", "wayland,x11,windows")
@@ -51,6 +61,7 @@ in
 
       require("variables")
       require("settings")
+      require("theme")
       require("animations")
       require("binds")
       require("rules")
@@ -61,6 +72,7 @@ in
   xdg.configFile = {
     "hypr/plugins/split-monitor-workspaces".source = inputs.split-monitor-workspaces;
     "hypr/settings.lua".source = editable "settings.lua";
+    "hypr/theme.lua".source = editable "theme.lua";
     "hypr/animations.lua".source = editable "animations.lua";
     "hypr/binds.lua".source = editable "binds.lua";
     "hypr/binds".source = editable "binds";
@@ -73,6 +85,7 @@ in
       recursive = true;
     };
     ".face.icon".source = ./face.jpg;
+    ".face".source = ./face.jpg;
     ".config/face.jpg".source = ./face.jpg;
   };
 }
