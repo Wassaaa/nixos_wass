@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
 from contextlib import closing
 from itertools import islice
 import os
@@ -58,7 +58,7 @@ def main() -> int:
         print("Run this script with sudo to access the private snapshot.", file=sys.stderr)
         return 1
     if len(sys.argv) != 2:
-        print("Usage: sudo python3 scripts/nix-store-db-test-reindex.py /root/nix-store-db-backups/nix-db-....sqlite", file=sys.stderr)
+        print("Usage: sudo uv run --script scripts/nix-store-db-test-reindex.py /root/nix-store-db-backups/nix-db-....sqlite", file=sys.stderr)
         return 1
     try:
         backup_dir = Path("/root/nix-store-db-backups").resolve(strict=True)

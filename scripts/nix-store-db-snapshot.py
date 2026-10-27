@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
 from contextlib import closing
 import os
 from pathlib import Path
