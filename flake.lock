@@ -707,7 +707,8 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "sops-nix": "sops-nix",
         "split-monitor-workspaces": "split-monitor-workspaces",
-        "vscode-insiders": "vscode-insiders"
+        "vscode-insiders": "vscode-insiders",
+        "windows-app-for-linux-src": "windows-app-for-linux-src"
       }
     },
     "sops-nix": {
@@ -793,6 +794,23 @@
       "original": {
         "owner": "Wassaaa",
         "repo": "code-insiders-flake",
+        "type": "github"
+      }
+    },
+    "windows-app-for-linux-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784232767,
+        "narHash": "sha256-onJiu4IabSXpj+uBWXowkXIgv7rdnkv9/OEaLRDn3tk=",
+        "owner": "mariuszkopowski",
+        "repo": "windows-app-for-linux",
+        "rev": "721e8d87edfc137d4ce2beeeaafef3009d7c8bb5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mariuszkopowski",
+        "repo": "windows-app-for-linux",
+        "rev": "721e8d87edfc137d4ce2beeeaafef3009d7c8bb5",
         "type": "github"
       }
     },
