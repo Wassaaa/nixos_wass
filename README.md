@@ -47,6 +47,15 @@ nix build .#nixosConfigurations.wassaa.config.system.build.toplevel --no-link
 building or switching. Evaluation can fetch flake inputs and may stop at the
 first error.
 
+`ncg` runs `nh clean all` with the same retention policy as the weekly cleanup:
+keep at least five generations and those from the last seven days, and leave
+GC roots, including nix-direnv roots, alone. Cleanup still deletes older
+generations and collects unreferenced store paths. Neither cleanup refreshes the
+boot menu; the next system switch or boot rebuild does. Preview profile deletions
+with `ncg --dry`. In particular,
+review the preview after a rollback: the pinned `nh` version does not explicitly
+protect a current generation that falls outside both retention criteria.
+
 For a Git-backed flake, add new files to the Git index before building; Nix
 otherwise omits untracked files. Review changes with `git status` first. Use a
 previous NixOS generation to roll back if a switch causes problems.

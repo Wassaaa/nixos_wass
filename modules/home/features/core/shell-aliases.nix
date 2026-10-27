@@ -1,6 +1,7 @@
 { host, flakeRoot, lib, ... }:
 let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") flakeDir;
+  cleanArgs = import ../../../core/nh-clean-policy.nix;
 in
 {
   # Common shell aliases shared across fish, zsh, and bash
@@ -18,7 +19,7 @@ in
     fbd = "nix build ${lib.escapeShellArg "${flakeDir}#nixosConfigurations.${host}.config.system.build.toplevel"} --dry-run --no-link";
 
     # Garbage collection
-    ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
+    ncg = "nh clean all ${cleanArgs}";
 
     # Better defaults
     # cat = "bat";
@@ -31,10 +32,7 @@ in
     tree = "eza --icons --tree --group-directories-first";
 
     # Custom flake updates
-    code-update = "nix flake update vscode-insiders --flake ${flakeDir} && fr -q";
-
-    # Antigravity
-    antikit = "npx @vudovn/ag-kit init";
+    code-update = "nix flake update vscode-insiders --flake ${lib.escapeShellArg flakeDir} && fr -q";
 
     # Disk usage
     usage = "ncdu -xt 12";

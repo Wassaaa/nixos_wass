@@ -11,7 +11,7 @@ in
     enable = true;
     clean = {
       enable = true;
-      extraArgs = "--keep-since 7d --keep 5";
+      extraArgs = import ./nh-clean-policy.nix;
     };
     flake = flakeDir;
   };
