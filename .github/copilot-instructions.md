@@ -62,11 +62,22 @@ modules/
 nh os switch              # Apply changes (auto-detects flake location)
 nh os test                # Test changes (doesn't set bootloader)
 nh os boot                # Build and set bootloader (apply on next boot)
-nh clean --keep 5         # Keep 5 generations, clean rest (already configured)
+ncg                       # Run the configured cleanup policy
 
 # Direct nixos-rebuild (if nh unavailable)
 sudo nixos-rebuild switch --flake /home/wassaa/nixos_wass#wassaa
 ```
+
+### NixOS command transport
+
+When the user needs to run a task on NixOS, update the `x` entry point and
+publish it so they can run `git pull --ff-only` followed by `uv run x` from the
+repository root. State the current task and side effects before execution.
+Prefer read-only diagnostics; obtain approval and require interactive
+confirmation for consequential changes. Use sudo only when required. Keep
+secrets and diagnostic output out of commits, and ask the user to review output
+for sensitive data before sharing it. Replace one-off tasks when finished; Git
+history preserves earlier versions.
 
 ### Adding a New Host
 

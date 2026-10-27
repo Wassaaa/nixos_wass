@@ -60,6 +60,11 @@ For a Git-backed flake, add new files to the Git index before building; Nix
 otherwise omits untracked files. Review changes with `git status` first. Use a
 previous NixOS generation to roll back if a switch causes problems.
 
+For one-off commands supplied through this repository, pull the latest commit
+and run `uv run x` from the repository root. The current task and any side
+effects are shown before execution; the task changes between troubleshooting
+sessions. Actions requiring changes ask for confirmation.
+
 ## Desktop
 
 Desktop hosts use Hyprland with Caelestia, Foot and Vicinae. GDM and GNOME
