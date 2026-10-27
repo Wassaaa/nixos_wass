@@ -1,6 +1,11 @@
-{ host, flakeRoot, inputs, pkgs, ... }:
+{ config, host, flakeRoot, inputs, pkgs, ... }:
 let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") terminal;
+  startCheck = pkgs.writeShellApplication {
+    name = "caelestia-start-check";
+    runtimeInputs = [ config.programs.caelestia.package pkgs.jq pkgs.libnotify ];
+    text = builtins.readFile ./caelestia-start-check.sh;
+  };
   reloadHyprlandTheme = pkgs.writeShellScript "reload-caelestia-hyprland-theme" ''
     if [ -n "''${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
       if ! ${inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland}/bin/hyprctl reload; then
@@ -11,10 +16,14 @@ let
     fi
   '';
 in {
+  systemd.user.services.caelestia.Service.ExecCondition = "${startCheck}/bin/caelestia-start-check";
+
   programs.caelestia = {
     enable = true;
-    # Start from Hyprland's Lua startup, preserving the live-editable workflow.
-    systemd.enable = false;
+    systemd = {
+      enable = true;
+      target = "hyprland-session.target";
+    };
 
     settings = {
       general.apps = {
@@ -23,6 +32,16 @@ in {
         playback = [ "mpv" ];
         explorer = [ "thunar" ];
       };
+
+      general.idle = {
+        inhibitWhenAudio = false;
+        timeouts = [
+          { timeout = 900; idleAction = "lock"; }
+          { timeout = 1200; idleAction = "dpms off"; returnAction = "dpms on"; }
+        ];
+      };
+
+      launcher.useFuzzy.apps = true;
 
       bar = {
         workspaces = {

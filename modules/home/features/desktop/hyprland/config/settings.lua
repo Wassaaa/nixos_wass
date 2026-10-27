@@ -1,7 +1,6 @@
 hl.on("hyprland.start", function()
   hl.exec_cmd("lxqt-policykit-agent")
   hl.exec_cmd("nm-applet --indicator")
-  hl.exec_cmd("caelestia shell -d")
   hl.exec_cmd("systemctl --user start --no-block vscode-insiders-update-check.service")
 end)
 hl.config({

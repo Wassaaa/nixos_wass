@@ -68,10 +68,9 @@ sessions. Actions requiring changes ask for confirmation.
 ## Desktop
 
 Desktop hosts use Hyprland with Caelestia, Foot and Vicinae. GDM and GNOME
-remain available as an alternative session. Hyprlock uses a blurred screenshot
-of the current desktop rather than a fixed wallpaper. Blurred content may still
-be recognizable. See the [desktop notes](./modules/home/features/desktop/NEW-DESKTOP.md)
-for integration and runtime checks.
+remain available as an alternative session. Caelestia handles locking and
+idle in Hyprland. See the [desktop notes](./modules/home/features/desktop/NEW-DESKTOP.md)
+for shortcuts, integration and runtime checks.
 
 Set `browser` and `terminal` in each desktop host's variables, for example
 [wassaa's](./hosts/wassaa/variables.nix). The browser choice controls

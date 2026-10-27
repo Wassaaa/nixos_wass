@@ -1,4 +1,4 @@
-{ host, flakeRoot, lib, ... }:
+{ config, host, flakeRoot, lib, ... }:
 let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") browser terminal;
   browserDesktopFiles = {
@@ -15,6 +15,10 @@ let
   terminalDesktopFile =
     terminalDesktopFiles.${terminal}
       or (throw "Unsupported desktop terminal '${terminal}'; add its desktop file to terminalDesktopFiles.");
+  picturesDir =
+    if config.xdg.userDirs.pictures == null
+    then "${config.home.homeDirectory}/Pictures"
+    else config.xdg.userDirs.pictures;
 in
 {
   home.sessionVariables = {
@@ -27,6 +31,7 @@ in
       enable = true;
       createDirectories = true;
       setSessionVariables = true;
+      extraConfig.SCREENSHOTS = "${picturesDir}/Screenshots";
     };
 
     mimeApps = {
