@@ -7,7 +7,6 @@
     ./de-hyprland.nix
     ./de-gnome.nix
     ./portals.nix
-    ./flatpak.nix
     ./boot-theme.nix
     ./hardware.nix
     ./printing.nix

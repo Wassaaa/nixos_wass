@@ -8,39 +8,6 @@ let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") consoleKeyMap;
 in
 {
-  nixpkgs.overlays = [
-    (
-      final: prev:
-      let
-        removeStylixDarkPatch =
-          pkg:
-          pkg.overrideAttrs (old: {
-            patches =
-              let
-                existing = old.patches or [ ];
-                keepPatch =
-                  patch:
-                  let
-                    patchStr = builtins.toString patch;
-                  in
-                  builtins.match ".*shell_remove_dark_mode.*" patchStr == null;
-              in
-              builtins.filter keepPatch existing;
-          });
-
-      in
-      lib.optionalAttrs (prev ? gnome-shell) {
-        gnome-shell = removeStylixDarkPatch prev.gnome-shell;
-      }
-    )
-
-    (final: prev: {
-      openldap = prev.openldap.overrideAttrs (_old: {
-        doCheck = false;
-      });
-    })
-  ];
-
   nix = {
     settings = {
       download-buffer-size = 250000000;

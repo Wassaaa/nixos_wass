@@ -10,15 +10,12 @@
   # WSL-specific packages
   environment.systemPackages = with pkgs; [
     # Essential CLI tools
-    wget
     curl
     git
     vim
     nano
-    htop
     btop
     tree
-    unzip
     zip
     rsync
 
@@ -34,10 +31,8 @@
 
     # File management
     fd
-    ripgrep
     fzf
     bat
-    eza
 
     # System tools
     systemd

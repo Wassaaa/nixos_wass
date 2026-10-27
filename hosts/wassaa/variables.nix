@@ -56,6 +56,9 @@
   # System Features
   enableGaming = true; # Steam, gamescope, etc.
   enableDesktop = true; # Full desktop environment
+  enableAudio = true; # PipeWire audio
+  enableBluetooth = false;
+  enableSyncthing = false;
   enableVirtualization = true; # Docker, VMs, etc.
   enableDevelopment = true; # Dev tools, languages
   enableMultimedia = true; # Media codecs, players

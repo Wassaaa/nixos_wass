@@ -17,11 +17,12 @@ has hardware and host-specific package configuration. Hardware presets live in
 [`profiles/`](./profiles); shared system and user configuration live in
 [`modules/core/`](./modules/core) and [`modules/home/`](./modules/home).
 
-The host variables `enableDesktop`, `enableGaming`, `enableDevelopment`,
-`enableVirtualization` and `enableMultimedia` control feature imports.
-Multimedia remains independent of the desktop: it configures PipeWire,
-graphics, codecs and command-line media tools, while desktop applications are
-installed by the desktop feature.
+Host variables control features independently: `enableDesktop`, `enableAudio`,
+`enableBluetooth`, `enableSyncthing`, `enableGaming`, `enableDevelopment`,
+`enableVirtualization` and `enableMultimedia`. Audio enables PipeWire, including
+ALSA, PulseAudio and JACK compatibility. Multimedia provides graphics, codecs
+and command-line media tools; desktop applications belong to the desktop feature.
+Bluetooth is enabled on `tpad`; Syncthing is available but disabled on all hosts.
 
 ## Building and applying
 
@@ -113,6 +114,13 @@ parameters require a reboot.
 
 ## Updating inputs
 
-The `code-update` shell alias updates the VS Code Insiders flake input and
-rebuilds. `nordvpn-update` runs the NordVPN update helper. Review lockfile and
-package changes before applying them.
+At Hyprland startup, a background check notifies you if the VS Code Insiders
+flake has a newer revision. It does not update or rebuild anything. Run
+`code-update` to update the flake input and switch the system; restart VS Code
+afterward. The check compares Git revisions, so a flake change can trigger a
+notification even without a new editor build. Check its log with
+`journalctl --user -u vscode-insiders-update-check` if it fails.
+
+The Insiders fork snapshots Microsoft's build every 12 hours when it changes.
+`nordvpn-update` runs the NordVPN update helper. Review lockfile and package
+changes before applying them.

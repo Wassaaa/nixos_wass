@@ -1,6 +1,11 @@
 {profile, host, lib, flakeRoot, ...}: let
-  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableDesktop;
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableBluetooth enableDesktop;
 in {
+  hardware.bluetooth = {
+    enable = enableBluetooth;
+    powerOnBoot = enableBluetooth;
+  };
+
   # Services to start
   services = {
     # Always enabled services
@@ -20,16 +25,10 @@ in {
     # Desktop-only services
     libinput.enable = true; # Input Handling
     gvfs.enable = true; # For Mounting USB & More
-    blueman.enable = true; # Bluetooth Support
+    blueman.enable = enableBluetooth;
     tumbler.enable = true; # Image/video preview
     gnome.gnome-keyring.enable = true;
 
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
   };
 
   # Disable orca screen reader (auto-enabled by GNOME services but not needed)

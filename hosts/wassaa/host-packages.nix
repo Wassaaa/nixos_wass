@@ -8,7 +8,6 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
 
   environment.systemPackages = with pkgs; [
-    nodejs
     obs-studio
     (discord.override {
       # withOpenASAR = true;

@@ -30,6 +30,9 @@
   # System Features (minimal for WSL)
   enableGaming = false; # No Steam/gaming in WSL
   enableDesktop = false; # No GUI in WSL
+  enableAudio = false;
+  enableBluetooth = false;
+  enableSyncthing = false;
   enableVirtualization = false; # No nested virtualization
   enableDevelopment = true; # Keep dev tools
   enableMultimedia = false; # No media players in WSL

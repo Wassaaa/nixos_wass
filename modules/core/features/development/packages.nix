@@ -44,9 +44,7 @@
     ltrace
 
     # Additional tools
-    wget
     curl
-    unzip
     zip
     ffmpeg # Terminal video/audio editing
   ];

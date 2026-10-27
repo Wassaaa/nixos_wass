@@ -152,7 +152,6 @@ These are always available in modules (set in `flake.nix`):
 - `inputs` - flake inputs (nixpkgs, home-manager, Caelestia, etc.)
 - `username`, `host`, `profile` - current host info
 - `flakeRoot` - path to repo root (`./.`)
-- `stable` - stable nixpkgs instance for fallback packages
 
 ### Shell Configuration & Aliases
 
@@ -174,7 +173,7 @@ These are always available in modules (set in `flake.nix`):
 ### VSCode Insiders Auto-Update Pattern
 
 - **Custom flake**: `inputs.vscode-insiders` (from `github:Wassaaa/code-insiders-flake`)
-- **GitHub Actions**: Auto-updates `meta.json` (version, sha256, url) every 3 hours
+- **GitHub Actions**: Checks for snapshots every 12 hours; publishes assets before updating `meta.json`
 - **Usage**: `code-update` alias runs `nix flake update vscode-insiders` and rebuilds
 - **Pattern structure**:
   ```nix

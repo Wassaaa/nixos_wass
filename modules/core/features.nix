@@ -10,6 +10,8 @@ let
   inherit (hostVars)
     enableGaming
     enableDesktop
+    enableAudio
+    enableSyncthing
     enableVirtualization
     enableDevelopment
     enableMultimedia
@@ -27,13 +29,18 @@ in
     ./sops
     ./packages.nix # Only core CLI utilities
     ./nh.nix # NixOS helper - useful everywhere
-    ./syncthing.nix # File syncing - useful everywhere
     ./starfish.nix # Shell prompt - useful everywhere
 
     # Conditionally import feature modules
   ]
   ++ lib.optionals enableDesktop [
     ./features/desktop
+  ]
+  ++ lib.optionals enableAudio [
+    ./features/audio
+  ]
+  ++ lib.optionals enableSyncthing [
+    ./syncthing.nix
   ]
   ++ lib.optionals enableGaming [
     ./features/gaming

@@ -6,7 +6,6 @@
   host,
   profile,
   flakeRoot,
-  stable,
   ...
 }:
 let
@@ -26,7 +25,6 @@ in
         host
         profile
         flakeRoot
-        stable
         ;
     };
     users.${username} = {
@@ -52,7 +50,6 @@ in
       "libvirtd"
       "lp"
       "networkmanager"
-      "scanner"
       "wheel"
     ];
     shell = pkgs.${myshell};

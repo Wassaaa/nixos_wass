@@ -4,6 +4,9 @@
 
   # Feature flags for modular system
   enableDesktop = true;
+  enableAudio = true;
+  enableBluetooth = true;
+  enableSyncthing = false;
   enableGaming = false;
   enableDevelopment = true;
   enableVirtualization = true;

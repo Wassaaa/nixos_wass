@@ -19,7 +19,6 @@
     file-roller # Archive manager GUI
     gedit # Text editor GUI
     gimp # Photo editor
-    tuigreet # Display manager
     hyprpicker # Color picker
     eog # Image viewer
     inkscape

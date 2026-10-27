@@ -1,45 +1,88 @@
-{ pkgs, inputs, ... }:
+{ host, flakeRoot, lib, pkgs, inputs, ... }:
+let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") flakeDir;
+  updateCheck = pkgs.writeShellApplication {
+    name = "check-vscode-insiders-update";
+    runtimeInputs = with pkgs; [ coreutils git jq libnotify ];
+    text = ''
+      fail() {
+        printf '%s\n' "$1" >&2
+        if ! notify-send --app-name="VS Code Insiders" "Update check failed" "$1"; then
+          printf '%s\n' "Could not display the update-check notification" >&2
+        fi
+        exit 1
+      }
 
+      lock=${lib.escapeShellArg "${flakeDir}/flake.lock"}
+      if ! info=$(jq -er '
+        .nodes as $nodes
+        | $nodes[$nodes.root.inputs["vscode-insiders"]].locked
+        | select(.type == "github" and (.owner | type == "string")
+            and (.repo | type == "string") and (.rev | type == "string"))
+        | [.owner, .repo, .rev] | @tsv
+      ' "$lock"); then
+        fail "Could not read the pinned Insiders revision from $lock."
+      fi
+      IFS=$'\t' read -r owner repo pinned <<< "$info"
+      if [[ ! "$owner" =~ ^[a-zA-Z0-9._-]+$ || ! "$repo" =~ ^[a-zA-Z0-9._-]+$ || ! "$pinned" =~ ^[a-f0-9]{40}$ ]]; then
+        fail "The pinned Insiders source in $lock is invalid."
+      fi
+
+      export GIT_TERMINAL_PROMPT=0
+      if ! remote=$(timeout 20 git ls-remote --exit-code "https://github.com/$owner/$repo.git" HEAD); then
+        fail "Could not check the Insiders source on GitHub."
+      fi
+      read -r latest ref <<< "$remote"
+      if [[ ! "$latest" =~ ^[a-f0-9]{40}$ || "$ref" != HEAD ]]; then
+        fail "GitHub returned an invalid Insiders revision."
+      fi
+      if [[ "$latest" != "$pinned" ]]; then
+        notify-send --app-name="VS Code Insiders" "Insiders update available" \
+          "The Insiders flake has changed. Run code-update to apply it."
+      fi
+    '';
+  };
+in
 {
   programs.vscode = {
     enable = true;
     package =
       inputs.vscode-insiders.packages.${pkgs.stdenv.hostPlatform.system}.vscode-insider.overrideAttrs
-        (oldAttrs: {
-          postPatch = ''
-            # Disable update checks
-            tmpProductJson="$(mktemp)"
-            jq 'del(.updateUrl, .backupUpdateUrl)' resources/app/product.json > "$tmpProductJson"
-            mv "$tmpProductJson" resources/app/product.json
-
-            # Fix "save as root" functionality
-            packed="resources/app/node_modules.asar"
-            unpacked="resources/app/node_modules"
-            asar extract "$packed" "$unpacked"
-            substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
-              --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
-              --replace-fail "/bin/bash" "${pkgs.bash}/bin/bash"
-
-            rm -rf "$packed"
-
-            # Keep the unpacked node_modules reachable
-            ln -rs "$unpacked" "$packed"
-
-            # Replace the bundled ripgrep with Nixpkgs ripgrep,
-            # creating the directory if newer Insiders archives omit it.
-            rgPath="resources/app/node_modules/@vscode/ripgrep-universal/bin/linux-x64/rg"
-            mkdir -p "$(dirname "$rgPath")"
-            rm -f "$rgPath"
-            ln -s ${pkgs.ripgrep}/bin/rg "$rgPath"
-          '';
+        (oldAttrs:
+          let
+            oldRipgrep = "resources/app/node_modules/@vscode/ripgrep/bin/rg";
+            newRipgrep = "resources/app/node_modules/@vscode/ripgrep-universal/bin/linux-x64/rg";
+          in {
+          postPatch =
+            assert lib.assertMsg (
+              lib.hasInfix "rm ${oldRipgrep}" oldAttrs.postPatch
+              && lib.hasInfix "ln -s ${pkgs.ripgrep}/bin/rg ${oldRipgrep}" oldAttrs.postPatch
+            )
+              "The Nixpkgs VS Code ripgrep patch changed; review the Insiders compatibility override.";
+            lib.replaceStrings
+              [ "rm ${oldRipgrep}" oldRipgrep ]
+              [ "mkdir -p \"$(dirname ${newRipgrep})\"\nrm -f ${newRipgrep}" newRipgrep ]
+              oldAttrs.postPatch;
 
           postInstall = (oldAttrs.postInstall or "") + ''
-            if [ -x "$out/bin/code-insiders" ]; then
-              rm -f "$out/bin/code" || true
-              ln -s "$out/bin/code-insiders" "$out/bin/code"
+            if [ ! -x "$out/bin/code-insiders" ]; then
+              echo "Expected the code-insiders executable in $out/bin" >&2
+              exit 1
             fi
+            ln -sf "$out/bin/code-insiders" "$out/bin/code"
           '';
         });
+  };
+
+  systemd.user.services.vscode-insiders-update-check = {
+    Unit = {
+      Description = "Check for VS Code Insiders flake updates";
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${updateCheck}/bin/check-vscode-insiders-update";
+    };
   };
 
   # Provide a base settings fragment for both VS Code and VS Code Insiders
