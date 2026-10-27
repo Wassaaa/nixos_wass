@@ -23,12 +23,15 @@ check_file_readable() {
 
 windows_app_windows() {
   hyprctl clients -j | jq '[
-    .[] | select(
-      [ .class, .initialClass, .title, .initialTitle ]
-      | map(. // "")
-      | any(test("windows.?app"; "i"))
-    ) | { class, initialClass, mapped, hidden, workspace, monitor, at, size, floating, xwayland }
+    .[] | { pid, class, initialClass, mapped, hidden, workspace, monitor, at, size, floating, xwayland }
   ]'
+}
+
+windows_app_processes() {
+  ps -u "$(id -u)" -o pid=,ppid=,comm=,args= | awk '
+    /[w]indows-app-for-linux/ { print "pid=" $1, "ppid=" $2, "command=" $3; found = 1 }
+    END { if (!found) print "No matching processes found." }
+  '
 }
 
 run id
@@ -42,6 +45,7 @@ run check_file_readable /run/opengl-driver/lib/gbm/dri_gbm.so
 run namei -l /run/opengl-driver/lib/gbm/nvidia-drm_gbm.so
 run check_file_readable /run/opengl-driver/lib/gbm/nvidia-drm_gbm.so
 run ls -l /dev/dri
+run windows_app_processes
 run windows_app_windows
 
 if (( failures > 0 )); then
