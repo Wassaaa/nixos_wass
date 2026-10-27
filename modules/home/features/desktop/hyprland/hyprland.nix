@@ -1,18 +1,40 @@
-{ config, pkgs, inputs, flakeRoot, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  flakeRoot,
+  ...
+}:
 let
-  editable = name: config.lib.file.mkOutOfStoreSymlink
-    "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/${name}";
-in {
-  home.packages = with pkgs; [ lxqt.lxqt-policykit networkmanagerapplet ];
+  editable =
+    name:
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/${name}";
+in
+{
+  home.packages = with pkgs; [
+    lxqt.lxqt-policykit
+    networkmanagerapplet
+  ];
   systemd.user.sessionVariables = {
     NIXOS_OZONE_WL = "1";
+
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_TYPE = "wayland";
     XDG_SESSION_DESKTOP = "Hyprland";
+
     MOZ_ENABLE_WAYLAND = "1";
-    QT_QPA_PLATFORM = "wayland;xcb";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+
     GDK_BACKEND = "wayland,x11";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_QPA_PLATFORMTHEME = "qtengine";
+    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+
+    SDL_VIDEODRIVER = "wayland,x11,windows";
+    CLUTTER_BACKEND = "wayland";
+    ELECTRON_OZONE_PLATFORM_HINT = "auto";
+
+    _JAVA_AWT_WM_NONREPARENTING = "1";
   };
   systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
   wayland.windowManager.hyprland = {
@@ -20,7 +42,10 @@ in {
     configType = "lua";
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     xwayland.enable = true;
-    systemd = { enable = true; variables = [ "--all" ]; };
+    systemd = {
+      enable = true;
+      variables = [ "--all" ];
+    };
     settings = { };
     extraConfig = ''
       require("variables")
@@ -42,7 +67,10 @@ in {
     "hypr/rules".source = editable "rules";
   };
   home.file = {
-    "Pictures/Wallpapers" = { source = "${flakeRoot}/wallpapers"; recursive = true; };
+    "Pictures/Wallpapers" = {
+      source = "${flakeRoot}/wallpapers";
+      recursive = true;
+    };
     ".face.icon".source = ./face.jpg;
     ".config/face.jpg".source = ./face.jpg;
   };

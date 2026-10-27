@@ -1,15 +1,8 @@
-hl.env("NIXOS_OZONE_WL", "1")
-hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
-hl.env("XDG_SESSION_TYPE", "wayland")
-hl.env("XDG_SESSION_DESKTOP", "Hyprland")
-hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
-hl.env("GRIMBLAST_NO_CURSOR", "0")
-hl.env("XCURSOR_THEME", "Bibata-Modern-Classic")
-hl.env("XCURSOR_SIZE", "24")
 hl.on("hyprland.start", function()
   hl.exec_cmd("lxqt-policykit-agent")
   hl.exec_cmd("nm-applet --indicator")
-  hl.exec_cmd("caelestia shell")
+  hl.exec_cmd("foot --server")
+  hl.exec_cmd("caelestia shell -d")
 end)
 hl.config({
   input = {
