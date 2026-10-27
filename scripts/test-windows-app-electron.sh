@@ -3,10 +3,12 @@ set -euo pipefail
 
 version="${1:-}"
 backend="${2:-default}"
+sandbox="${3:-sandboxed}"
+usage='Usage: bash scripts/test-windows-app-electron.sh 42|43 [default|nvidia-gbm] [sandboxed|gpu-unsandboxed]'
 case "$version" in
   42|43) ;;
   *)
-    printf 'Usage: bash scripts/test-windows-app-electron.sh 42|43 [default|nvidia-gbm]\n' >&2
+    printf '%s\n' "$usage" >&2
     exit 2
     ;;
 esac
@@ -14,7 +16,15 @@ case "$backend" in
   default) extra_env=() ;;
   nvidia-gbm) extra_env=("GBM_BACKEND=nvidia-drm") ;;
   *)
-    printf 'Usage: bash scripts/test-windows-app-electron.sh 42|43 [default|nvidia-gbm]\n' >&2
+    printf '%s\n' "$usage" >&2
+    exit 2
+    ;;
+esac
+case "$sandbox" in
+  sandboxed) extra_flags=() ;;
+  gpu-unsandboxed) extra_flags=("--disable-gpu-sandbox") ;;
+  *)
+    printf '%s\n' "$usage" >&2
     exit 2
     ;;
 esac
@@ -37,6 +47,7 @@ test_dir="$(mktemp -d "${TMPDIR:-/tmp}/windows-app-electron-test.XXXXXXXX")"
 mkdir -p "$test_dir/config" "$test_dir/cache" "$test_dir/data"
 printf 'Temporary profile: %s\n' "$test_dir"
 printf 'GBM backend: %s\n' "$backend"
+printf 'GPU sandbox: %s\n' "$sandbox"
 printf 'Do not sign in; close the app after checking whether its window appears.\n'
 
 exec env \
@@ -44,4 +55,4 @@ exec env \
   XDG_CACHE_HOME="$test_dir/cache" \
   XDG_DATA_HOME="$test_dir/data" \
   "${extra_env[@]}" \
-  "$app/bin/windows-app-for-linux"
+  "$app/bin/windows-app-for-linux" "${extra_flags[@]}"
