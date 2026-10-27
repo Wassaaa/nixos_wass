@@ -14,6 +14,7 @@
 
   # Program Options (minimal for WSL)
   browser = ""; # No browser needed for WSL - will use Windows default
+  windowsAppNativeWaylandOnNvidia = false;
   terminal = "bash";
   myshell = "fish"; # or zsh/bash
 

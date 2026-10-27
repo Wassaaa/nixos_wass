@@ -74,8 +74,16 @@ upstream source, using Nixpkgs Electron. Launch **Windows App** from the
 application menu or run `windows-app-for-linux`. It can also be built separately:
 
 ```bash
-nix build .#windows-app-for-linux
+nix build .#windows-app-for-linux-wassaa
 ```
+
+The standalone `windows-app-for-linux` package retains upstream defaults.
+On `wassaa`, `windowsAppNativeWaylandOnNvidia` makes the app use native
+Wayland instead of XWayland on NVIDIA; X11 sessions retain upstream behavior.
+Other hosts keep the upstream NVIDIA workaround unless they opt in through
+their host variables. Chromium may still log a Wayland/Vulkan compatibility
+warning even when the window opens; verify remote sessions and acceleration
+before relying on the app.
 
 The source input is pinned in `flake.nix` and must be recorded in `flake.lock`
 with `nix flake lock` when first introduced. Nixpkgs Electron may differ from

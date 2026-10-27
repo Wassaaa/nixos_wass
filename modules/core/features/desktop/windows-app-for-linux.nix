@@ -7,6 +7,7 @@
   makeDesktopItem,
   makeWrapper,
   windowsAppSrc,
+  forceNativeWaylandOnNvidia ? false,
 }:
 let
   package = builtins.fromJSON (builtins.readFile "${windowsAppSrc}/package.json");
@@ -32,6 +33,12 @@ buildNpmPackage {
   npmConfigHook = importNpmLock.npmConfigHook;
   npmFlags = [ "--omit=dev" "--ignore-scripts" ];
   dontNpmBuild = true;
+
+  postPatch = lib.optionalString forceNativeWaylandOnNvidia ''
+    substituteInPlace app/index.js \
+      --replace-fail "app.commandLine.appendSwitch('ozone-platform', 'x11');" \
+        "app.commandLine.appendSwitch('ozone-platform', 'wayland');"
+  '';
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 

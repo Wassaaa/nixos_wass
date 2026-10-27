@@ -50,6 +50,7 @@
 
   # Program Options
   browser = "brave";
+  windowsAppNativeWaylandOnNvidia = false;
   terminal = "footclient";
   myshell = "fish"; # or zsh/bash
   keyboardLayout = "us,ee";

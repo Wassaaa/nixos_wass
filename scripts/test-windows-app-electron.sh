@@ -31,19 +31,8 @@ case "$sandbox" in
     ;;
 esac
 case "$platform" in
-  as-packaged) patch_expr="" ;;
-  native-wayland)
-    patch_expr="$(cat <<'NIX'
-      .overrideAttrs (old: {
-        postPatch = (old.postPatch or "") + ''
-          substituteInPlace app/index.js \
-            --replace-fail "app.commandLine.appendSwitch('ozone-platform', 'x11');" \
-              "app.commandLine.appendSwitch('ozone-platform', 'wayland');"
-        '';
-      })
-NIX
-)"
-    ;;
+  as-packaged) native_wayland=false ;;
+  native-wayland) native_wayland=true ;;
   *)
     printf '%s\n' "$usage" >&2
     exit 2
@@ -64,9 +53,10 @@ expression="
     flake = builtins.getFlake (toString ./.);
     pkgs = import flake.inputs.nixpkgs { system = \"x86_64-linux\"; };
   in
-    (flake.packages.x86_64-linux.windows-app-for-linux.override {
+    flake.packages.x86_64-linux.windows-app-for-linux.override {
       electron = pkgs.electron_${version}-bin;
-    })${patch_expr}
+      forceNativeWaylandOnNvidia = ${native_wayland};
+    }
 "
 
 printf 'Building Windows App with Electron %s; this may download dependencies.\n' "$version" >&2

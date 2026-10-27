@@ -1,4 +1,7 @@
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, host, flakeRoot, ... }:
+let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") windowsAppNativeWaylandOnNvidia;
+in
 {
   # Desktop-specific programs
   programs = {
@@ -11,6 +14,7 @@
   environment.systemPackages = with pkgs; [
     (callPackage ./windows-app-for-linux.nix {
       windowsAppSrc = inputs.windows-app-for-linux-src;
+      forceNativeWaylandOnNvidia = windowsAppNativeWaylandOnNvidia;
     })
     appimage-run
     audacity

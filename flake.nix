@@ -60,6 +60,14 @@
           windowsAppSrc = inputs.windows-app-for-linux-src;
         };
 
+      packages.x86_64-linux.windows-app-for-linux-wassaa =
+        let
+          inherit (import ./hosts/wassaa/variables.nix) windowsAppNativeWaylandOnNvidia;
+        in
+        inputs.self.packages.x86_64-linux.windows-app-for-linux.override {
+          forceNativeWaylandOnNvidia = windowsAppNativeWaylandOnNvidia;
+        };
+
       nixosConfigurations = {
         wassaa = mkSystem { username = "wassaa"; host = "wassaa"; profile = "nvidia"; };
         tpad = mkSystem { username = "allar"; host = "tpad"; profile = "intel"; };
