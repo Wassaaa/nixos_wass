@@ -39,38 +39,9 @@
     }
   ];
 
-  # Waybar Settings
-  clock24h = true;
-
-  # Wallpaper & Styling
-  stylixImage = "wallpapers/20.png"; # Relative to flakeRoot
-  stylixEnable = true;
-
-  # Bar/Shell Choice
-  # Options: "waybar" or "noctalia"
-  # waybar - Traditional status bar (requires waybarChoice below)
-  # noctalia - Complete desktop shell (bar, dock, control center, etc.)
-  barChoice = "waybar";
-
-  # Waybar Style Choice (only used when barChoice = "waybar")
-  # Available options:
-  # waybar-wassaa.nix (your original with niri support)
-  # waybar-dwm.nix (default with niri/hyprland workspaces)
-  # waybar-simple.nix
-  # waybar-curved.nix
-  # waybar-tony.nix
-  # waybarChoice = ../../modules/home/features/desktop/waybar/waybar-wassaa.nix;
-  #waybarChoice = ../../modules/home/features/desktop/waybar/Jerry-waybars.nix;
-  waybarChoice = ../../modules/home/features/desktop/waybar/waybar-jak-catppuccin.nix;
-  #waybarChoice = ../../modules/home/features/desktop/waybar/waybar-simple.nix;
-  #waybarChoice = ../../modules/home/features/desktop/waybar/waybar-curved.nix;
-  #waybarChoice = ../../modules/home/features/desktop/waybar/waybar-nekodyke.nix;
-  #waybarChoice = ../../modules/home/features/desktop/waybar/waybar-jerry.nix;
-  #waybarChoice = ../../modules/home/features/desktop/waybar/waybar-ddubs.nix;
-
   # Program Options
-  browser = "google-chrome-stable";
-  terminal = "kitty";
+  browser = "brave";
+  terminal = "footclient";
   myshell = "fish"; # or zsh/bash
   keyboardLayout = "us,ee";
   consoleKeyMap = "us";
@@ -78,9 +49,6 @@
   # For Nvidia Prime support
   intelID = "PCI:1:0:0";
   nvidiaID = "PCI:0:2:0";
-
-  # Enable NFS
-  enableNFS = true;
 
   # Enable Printing Support
   printEnable = false;

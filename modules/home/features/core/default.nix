@@ -12,8 +12,6 @@
     ./starship.nix # Cross-shell prompt
     ./zsh.nix # Zsh shell config
     ./fish.nix # Fish shell config
-    ./emoji.nix # Emoji support
-    ./kitty.nix # Terminal emulator (works everywhere, even without GUI)
     ./fastfetch # System info
   ]
   # Profile-specific configurations

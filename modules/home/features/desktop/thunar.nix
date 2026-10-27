@@ -8,7 +8,6 @@
     xfce.thunar-volman
     xfce.tumbler
     p7zip
-    unzip
   ];
 
   xdg.mimeApps.defaultApplications = {

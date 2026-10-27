@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, ... }: {
   # Caelestia's CLI supplies the palette at runtime through terminal escape
   # sequences; this module owns stable Foot preferences and transparency.
   programs.foot = {
@@ -24,5 +24,4 @@
   };
 
   home.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
-  home.sessionVariables.TERMINAL = "footclient";
 }

@@ -19,28 +19,14 @@
 
   # Multimedia packages
   environment.systemPackages = with pkgs; [
-    # Media players
-    vlc
-
     # Audio tools
-    pavucontrol
-    easyeffects
-    audacity
     portaudio
     espeak-ng
-
-    # Video editing
-    # kdePackages.kdenlive
-    # kdePackages.breeze-icons
 
     # Webcam tools
     v4l-utils
     android-tools
     adb-sync
-
-    # Image editing
-    gimp
-    inkscape
 
     # Media codecs and formats
     ffmpeg
@@ -50,9 +36,5 @@
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
-
-    # Screen capture
-    grim
-    slurp
   ];
 }

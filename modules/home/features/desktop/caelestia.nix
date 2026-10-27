@@ -1,4 +1,7 @@
-{ ... }: {
+{ host, flakeRoot, ... }:
+let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") terminal;
+in {
   programs.caelestia = {
     enable = true;
     # Start from Hyprland's Lua startup, preserving the live-editable workflow.
@@ -6,8 +9,8 @@
 
     settings = {
       general.apps = {
-        terminal = [ "foot" ];
-        audio = [ "pwvucontrol" ];
+        terminal = [ terminal ];
+        audio = [ "pavucontrol" ];
         playback = [ "mpv" ];
         explorer = [ "thunar" ];
       };

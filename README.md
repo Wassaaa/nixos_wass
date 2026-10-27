@@ -1,59 +1,79 @@
-<div align="center">
+# WassOS
 
-## Based on ZaneyOS 🟰 Best ❄️ NixOS Configs
+Personal NixOS and NixOS-WSL configurations, originally based on ZaneyOS.
+The flake uses per-host settings, hardware profiles and feature-gated NixOS
+and Home Manager modules.
 
-ZaneyOS is a simple way of reproducing my configuration on any NixOS system.
-This includes the wallpaper, scripts, applications, config files, and more.
+## Hosts
 
-<img align="center" width="80%" src="https://gitlab.com/Zaney/zaneyos/-/raw/main/demo.png" />
+| Flake host | Profile | Purpose |
+| --- | --- | --- |
+| `wassaa` | NVIDIA | Main desktop, gaming, NordVPN and Tailscale |
+| `tpad` | Intel | Laptop desktop |
+| `wsl` | WSL | Development environment without the desktop feature |
 
-**Inspiration for the Waybar config
-[here](https://github.com/justinlime/dotfiles).**
+Host settings live in [`hosts/<host>/variables.nix`](./hosts). Each host also
+has hardware and host-specific package configuration. Hardware presets live in
+[`profiles/`](./profiles); shared system and user configuration live in
+[`modules/core/`](./modules/core) and [`modules/home/`](./modules/home).
 
-</div>
+The host variables `enableDesktop`, `enableGaming`, `enableDevelopment`,
+`enableVirtualization` and `enableMultimedia` control feature imports.
+Multimedia remains independent of the desktop: it configures PipeWire,
+graphics, codecs and command-line media tools, while desktop applications are
+installed by the desktop feature.
 
-> **This project has a [Wiki (Modified so not everything applies)](https://zaney.org/wiki/zaneyos-2.3/). Find out how
-> to use ZaneyOS here!** **I have put a lot of effort into the
-> [documentation (Modified so not everything applies)](https://zaney.org/wiki/zaneyos-2.3/) so it should be accurate.
-> However, please if you notice that something is wrong with it create an issue
-> or reach out to me on Discord.**
+## Building and applying
 
-### ⚠️ Modified Version
+Run these commands on the target NixOS host from the checkout:
 
-This is a modified version of ZaneyOS. To get it working, please look through the files and figure it out.
+```sh
+nh os test             # Apply temporarily, without changing the boot default
+nh os switch           # Build and switch
+nh os boot             # Build for the next boot
+```
 
-#### 🍖 Requirements
+`nh` uses the `flakeDir` configured for the host. The Hyprland live-editable
+configuration also expects the checkout at `~/nixos_wass`.
 
-- You must be running on NixOS.
-- The zaneyos folder (this repo) is expected to be in your home directory.
-- Manually editing your host specific files. The host is the specific computer
-  your installing on.
+To build a specific host without switching:
 
-#### 🎹 Pipewire & Notification Menu Controls
+```sh
+nix build .#nixosConfigurations.wassaa.config.system.build.toplevel --no-link
+```
 
-- We are using the latest and greatest audio solution for Linux. Not to mention
-  you will have media and volume controls in the notification center available
-  in the top bar.
+For a Git-backed flake, add new files to the Git index before building; Nix
+otherwise omits untracked files. Review changes with `git status` first. Use a
+previous NixOS generation to roll back if a switch causes problems.
 
-#### 🏇 Optimized Workflow & Simple Yet Elegant Neovim
+## Desktop
 
-- Using Hyprland for increased elegance, functionality, and effeciency.
-- No massive Neovim project here. This is my simple, easy to understand, yet
-  incredible Neovim setup.
+Desktop hosts use Hyprland with Caelestia, Foot and Vicinae. GDM and GNOME
+remain available as an alternative session. Hyprlock uses a blurred screenshot
+of the current desktop rather than a fixed wallpaper. Blurred content may still
+be recognizable. See the [desktop notes](./modules/home/features/desktop/NEW-DESKTOP.md)
+for integration and runtime checks.
 
-#### 🖥️ Multi Host & User Configuration
+Set `browser` and `terminal` in each desktop host's variables, for example
+[wassaa's](./hosts/wassaa/variables.nix). The browser choice controls
+`BROWSER` and browser MIME associations; the terminal choice controls
+`TERMINAL`, Hyprland, Caelestia and XDG terminal selection. Current defaults
+are `brave` and `footclient`; Chrome remains installed as an alternative.
+The command-to-desktop-file mappings live in
+[xdg.nix](./modules/home/features/desktop/xdg.nix). Add a mapping and install
+the application before selecting another command. Applications that ignore
+these defaults may require their own configuration.
 
-- You can define separate settings for different host machines and users.
-- Easily specify extra packages for your users in the modules/core/user.nix
-  file.
-- Easy to understand file structure and simple, but encompassing,
-  configuratiion.
+Desktop hosts also install the unofficial Windows App web client, pinned to an
+upstream AppImage release. Launch **Windows App** from the application menu or
+run `windows-app-for-linux`. Its settings and session data remain in the
+user's home directory.
 
-#### Gaming
+## Gaming and NVIDIA
 
-The `enableGaming` host feature installs Steam and Gamescope. Steam's built-in
-Proton versions handle Windows games; Gamescope is optional per game. To run a
-game in fullscreen Gamescope, set its Steam launch options to:
+`enableGaming` installs Steam and Gamescope. Steam's built-in Proton versions
+handle Windows games; Gamescope is optional per game. For fullscreen Gamescope,
+set the game's Steam launch options to:
 
 ```text
 gamescope -f -- %command%
@@ -61,13 +81,29 @@ gamescope -f -- %command%
 
 Steam Remote Play firewall ports are not opened by default.
 
-#### NVIDIA on wassaa
+The RTX 2080 on `wassaa` uses NVIDIA's open kernel modules and the stable
+driver from the locked Nixpkgs revision. After changing the driver or kernel
+module flavor, build with `nh os boot` and reboot. Keep a working boot
+generation available for rollback.
 
-The RTX 2080 uses NVIDIA's open kernel modules and the stable driver from the
-locked Nixpkgs revision. After changing the driver or kernel module flavor,
-build with `nh os boot` and reboot to load it. Keep a working boot generation
-available in case the new configuration needs to be rolled back.
+## Secrets and networking
 
-#### 🙋 Having Issues / Questions?
+Host secrets are encrypted with SOPS and age. See
+[the SOPS setup guide](./modules/core/sops/sops.nix) and [recipients](./.sops.yaml).
+Edit an existing host's secrets with:
 
-- look at [Original ZaneyOS](https://gitlab.com/Zaney/zaneyos/-/tree/main?ref_type=heads) maybe some hints.
+```sh
+sops hosts/wassaa/secrets.yaml
+```
+
+The firewall is enabled without general project-port exceptions. OpenSSH opens
+its configured port; other services may manage their own firewall rules.
+NordVPN client connections do not need a general inbound OpenVPN port.
+CPU vulnerability mitigations use the kernel defaults; changes to boot
+parameters require a reboot.
+
+## Updating inputs
+
+The `code-update` shell alias updates the VS Code Insiders flake input and
+rebuilds. `nordvpn-update` runs the NordVPN update helper. Review lockfile and
+package changes before applying them.

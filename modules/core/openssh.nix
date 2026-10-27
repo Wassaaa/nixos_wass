@@ -16,6 +16,7 @@ let
 in {
   services.openssh = {
     enable = true;
+    openFirewall = true;
     settings = {
       # Harden
       PasswordAuthentication = false;

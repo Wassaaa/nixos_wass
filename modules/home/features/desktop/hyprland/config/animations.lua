@@ -1,4 +1,4 @@
--- Adapted from fufexan/dotfiles (MIT), pinned by the fufexan-dotfiles input.
+-- Adapted from fufexan/dotfiles (MIT).
 hl.curve("slight_bounce", {
   type = "spring",
   mass = 1,

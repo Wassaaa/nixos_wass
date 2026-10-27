@@ -9,12 +9,11 @@ let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     enableDesktop
     enableDevelopment
-    enableMultimedia
     ;
 
   # Check if host has host-specific home configs
   hostHomeDir = "${flakeRoot}/hosts/${host}/home";
-  hasHostHome = builtins.pathExists hostHomeDir;
+  hasHostHome = builtins.pathExists "${hostHomeDir}/default.nix";
 in
 {
   imports = [
@@ -29,9 +28,6 @@ in
   ]
   ++ lib.optionals enableDevelopment [
     ./features/development
-  ]
-  ++ lib.optionals enableMultimedia [
-    ./features/multimedia
   ]
   ++ lib.optionals hasHostHome [
     ../../hosts/${host}/home

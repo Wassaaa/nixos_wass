@@ -17,10 +17,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland.url = "github:hyprwm/Hyprland";
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
     split-monitor-workspaces = {
       url = "github:zjeffer/split-monitor-workspaces";
       flake = false;
@@ -35,11 +31,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-    noctalia.url = "github:noctalia-dev/noctalia-shell";
-    hermes-agent = {
-      url = "github:nousresearch/hermes-agent";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     codex-cli-nix = {
       url = "github:sadjow/codex-cli-nix";
       inputs.nixpkgs.follows = "nixpkgs";

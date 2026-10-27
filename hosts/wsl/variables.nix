@@ -19,14 +19,12 @@
 
   # Hyprland Settings (not used in WSL)
   monitors = [ ];
-  clock24h = true;
 
   # GPU/Prime Settings (not applicable to WSL)
   intelID = "";
   nvidiaID = "";
 
   # Services (disabled for WSL)
-  enableNFS = false;
   printEnable = false;
 
   # System Features (minimal for WSL)
@@ -35,5 +33,4 @@
   enableVirtualization = false; # No nested virtualization
   enableDevelopment = true; # Keep dev tools
   enableMultimedia = false; # No media players in WSL
-  enableHermes = true; # Hermes agent package + runtime tooling, mutable state remains in ~/.hermes
 }

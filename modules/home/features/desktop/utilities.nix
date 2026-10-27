@@ -13,8 +13,8 @@ let
   };
 in {
   home.packages = with pkgs; [
-    grimblast grim slurp wl-clipboard libnotify
-    playerctl wireplumber brightnessctl ocr
+    grimblast grim slurp wl-clipboard
+    wireplumber ocr
   ];
   home.sessionVariables.SCREENSHOT_DIR = "$HOME/Pictures/Screenshots";
 }

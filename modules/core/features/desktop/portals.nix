@@ -4,11 +4,10 @@
     enable = true;
 
     # Backends to provide:
-    # - Hyprland portal for Hyprland-specific features
+    # - The Hyprland module supplies its portal
     # - GNOME portal for GNOME sessions
     # - GTK portal as fallback for OpenURI and other interfaces
     extraPortals = [
-      pkgs.xdg-desktop-portal-hyprland
       pkgs.xdg-desktop-portal-gnome
       pkgs.xdg-desktop-portal-gtk
     ];
@@ -25,13 +24,6 @@
       hyprland = {
         default = [
           "hyprland"
-          "gtk"
-        ];
-        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-      };
-      niri = {
-        default = [
-          "gnome"
           "gtk"
         ];
         "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];

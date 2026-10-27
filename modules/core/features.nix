@@ -14,7 +14,6 @@ let
     enableDevelopment
     enableMultimedia
     ;
-  enableHermes = hostVars.enableHermes or false;
 in
 {
   imports = [
@@ -47,8 +46,5 @@ in
   ]
   ++ lib.optionals enableMultimedia [
     ./features/multimedia
-  ]
-  ++ lib.optionals enableHermes [
-    ./features/hermes
   ];
 }

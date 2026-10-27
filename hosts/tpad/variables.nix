@@ -45,18 +45,12 @@
     }
   ];
 
-  # Waybar Settings
-  clock24h = true;
-
   # Program Options
-  browser = "google-chrome-stable"; # Set Default Browser (google-chrome-stable for google-chrome)
-  terminal = "kitty"; # Set Default System Terminal
+  browser = "brave";
+  terminal = "footclient";
   myshell = "fish"; # or zsh/bash
-  keyboardLayout = "us ee";
+  keyboardLayout = "us,ee";
   consoleKeyMap = "us";
-
-  # Enable NFS
-  enableNFS = true;
 
   # Enable Printing Support
   printEnable = false;

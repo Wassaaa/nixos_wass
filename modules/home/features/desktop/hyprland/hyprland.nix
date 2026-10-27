@@ -12,7 +12,6 @@ let
 in
 {
   home.packages = with pkgs; [
-    lxqt.lxqt-policykit
     networkmanagerapplet
   ];
   systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
@@ -20,6 +19,7 @@ in
     enable = true;
     configType = "lua";
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage = null;
     xwayland.enable = true;
     systemd = {
       enable = true;

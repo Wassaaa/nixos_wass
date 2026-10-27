@@ -18,7 +18,5 @@
     ./virtmanager.nix
     ./1password.nix
     ./qbittorrent.nix
-    ./obs.nix
-    ./transmission.nix
   ];
 }

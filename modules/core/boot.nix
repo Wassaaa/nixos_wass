@@ -19,7 +19,6 @@ in
     # Kernel parameters for performance and hardware optimization
     kernelParams = [
       "quiet" # Cleaner boot messages
-      "mitigations=off" # Disable CPU vulnerability mitigations for better performance
       "amd_pstate=active" # Enable AMD P-State drivr efor better CPU power management
     ];
 

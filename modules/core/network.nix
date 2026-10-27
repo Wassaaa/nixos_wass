@@ -14,23 +14,7 @@
       "127.0.0.1" = [ "tool-tracker.local" ];
     };
 
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        22
-        80
-        443
-        1194 # NordVPN OpenVPN TCP
-        59010
-        59011
-        8080
-      ];
-      allowedUDPPorts = [
-        1194 # NordVPN OpenVPN UDP
-        59010
-        59011
-      ];
-    };
+    firewall.enable = true;
   };
 
   environment.systemPackages = with pkgs; lib.optionals (host != "wsl") [ networkmanagerapplet ];

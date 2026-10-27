@@ -13,7 +13,7 @@
 
       logo = {
         source = ./nixos.png;
-        type = "kitty-direct";
+        type = "chafa";
         height = 10;
         width = 20;
         padding = {
@@ -128,4 +128,3 @@
     };
   };
 }
-

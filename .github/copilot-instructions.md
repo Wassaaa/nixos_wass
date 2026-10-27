@@ -49,7 +49,7 @@ modules/
   │  ├─ features/       # Optional feature groups (desktop, gaming, etc.)
   │  └─ sops/           # Secrets management
   ├─ home/              # User-level (Home Manager) modules
-  │  └─ features/       # User feature groups (core always loaded, desktop/gaming conditional)
+  │  └─ features/       # User feature groups (core always loaded, others conditional)
   └─ drivers/           # Hardware driver modules with enable options
 ```
 
@@ -110,7 +110,8 @@ update-nordvpn  # or nordvpn-update (fish alias)
 
 - **Primary DE**: Hyprland (`modules/home/features/desktop/hyprland/`)
 - **Keep alternatives working**: GNOME/other DEs should remain functional even if not actively used
-- Hyprland is split into modular files: `binds.nix`, `monitors.nix`, `config.nix`, `hypridle.nix`, `hyprlock.nix`, `pyprland.nix`
+- Hyprland uses Home Manager modules plus live-editable Lua under `hyprland/config/`
+- Caelestia owns the shell and selected theme integrations; Vicinae provides clipboard history and an alternate launcher
 
 ### When Adding Packages/Features
 
@@ -148,7 +149,7 @@ in {
 
 These are always available in modules (set in `flake.nix`):
 
-- `inputs` - flake inputs (nixpkgs, home-manager, stylix, etc.)
+- `inputs` - flake inputs (nixpkgs, home-manager, Caelestia, etc.)
 - `username`, `host`, `profile` - current host info
 - `flakeRoot` - path to repo root (`./.`)
 - `stable` - stable nixpkgs instance for fallback packages
@@ -156,9 +157,8 @@ These are always available in modules (set in `flake.nix`):
 ### Shell Configuration & Aliases
 
 - **Default shell**: Fish (set per-host in `variables.nix` via `myshell`)
-- **Alias duplication**: Shell aliases are currently duplicated across `fish.nix`, `zsh.nix`, and `bash.nix`
-- **TODO**: Consider extracting common aliases to single source of truth (e.g., `modules/home/features/core/shell-aliases.nix`)
-- Current useful aliases: `fr` (rebuild switch), `fb` (rebuild boot), `fu` (rebuild + update), `code-update`, `nordvpn-update`
+- Common aliases are shared by Fish, Zsh, and Bash via `modules/home/features/core/shell-aliases.nix`
+- Current useful aliases: `fr` (switch), `frb` (boot), `fb` (build), `fu` (switch + update), `code-update`, `nordvpn-update`
 
 ## Common Pitfalls
 
@@ -167,7 +167,7 @@ These are always available in modules (set in `flake.nix`):
 3. **Secrets** - Always use `config.sops.secrets.{NAME}.path`, never plaintext in `.nix` files
 4. **Profile vs Host** - Profile sets drivers (`profiles/nvidia/`), host sets everything else (`hosts/wassaa/`)
 5. **Module imports** - System modules go in `modules/core/`, user configs in `modules/home/`
-6. **Stylix theming** - Global theme controlled by Stylix (imported in `modules/core/default.nix`)
+6. **Desktop theming** - Caelestia owns the shell and selected theme integrations
 
 ## Custom Flake Patterns
 
