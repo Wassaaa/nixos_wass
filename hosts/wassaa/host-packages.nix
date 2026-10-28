@@ -1,10 +1,6 @@
-{ pkgs, config, ... }:
+{ pkgs, ... }:
 {
-  boot.kernelModules = [ "v4l2loopback" ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
-
   environment.systemPackages = with pkgs; [
-    obs-studio
     (discord.override {
       # withOpenASAR = true;
       withVencord = true;

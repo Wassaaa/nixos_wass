@@ -1,6 +1,11 @@
 # Multimedia Features
-{ pkgs, ... }:
+{ pkgs, lib, host, flakeRoot, ... }:
+let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") enableMediaRouting;
+in
 {
+  imports = lib.optionals enableMediaRouting [ ./media-routing.nix ];
+
   # Video and graphics
   hardware.graphics = {
     enable = true;

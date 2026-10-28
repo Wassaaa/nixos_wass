@@ -63,4 +63,5 @@
   enableVirtualization = true; # Docker, VMs, etc.
   enableDevelopment = true; # Dev tools, languages
   enableMultimedia = true; # Media codecs, players
+  enableMediaRouting = true; # Virtual audio devices and camera
 }

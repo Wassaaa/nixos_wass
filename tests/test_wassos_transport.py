@@ -1,70 +1,54 @@
 import contextlib
 import io
-import json
-import os
-from pathlib import Path
-import tempfile
 import unittest
 from unittest import mock
 
-from wassos_transport import EXTENSION_ID, UPDATE_URL, main
+from wassos_transport import main
 
 
-class BraveDiagnosticTests(unittest.TestCase):
-    def run_diagnostic(self, config_home: Path) -> str:
-        output = io.StringIO()
+class DeploymentTests(unittest.TestCase):
+    def run_task(self, *, confirmation="apply", host="wassaa", interactive=True, root=True, exit_code=0):
         with (
-            mock.patch.dict(os.environ, {"XDG_CONFIG_HOME": str(config_home)}),
             mock.patch("sys.argv", ["x"]),
-            contextlib.redirect_stdout(output),
+            mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.socket.gethostname", return_value=host),
+            mock.patch("wassos_transport.Path.is_file", return_value=root),
+            mock.patch("sys.stdin.isatty", return_value=interactive),
+            mock.patch("builtins.input", return_value=confirmation),
+            mock.patch("wassos_transport.subprocess.run") as rebuild,
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()),
         ):
-            self.assertEqual(main(), 0)
-        return output.getvalue()
+            rebuild.return_value.returncode = exit_code
+            result = main()
+        return result, rebuild
 
-    def test_missing_registration_and_profiles(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            output = self.run_diagnostic(Path(directory))
+    def test_confirmed_deployment(self):
+        result, rebuild = self.run_task()
+        self.assertEqual(result, 0)
+        rebuild.assert_called_once_with(
+            ["sudo", "nixos-rebuild", "switch", "--flake", ".#wassaa"],
+            check=False,
+        )
 
-        self.assertIn("Extension registration: missing", output)
-        self.assertIn("Profiles inspected: 0", output)
-        self.assertIn("Profiles recording 1Password: 0", output)
-        self.assertIn("Profiles with installation metadata: 0", output)
-        self.assertIn("Profiles remembering an external uninstall: 0", output)
+    def test_cancel_does_not_deploy(self):
+        result, rebuild = self.run_task(confirmation="")
+        self.assertEqual(result, 0)
+        rebuild.assert_not_called()
 
-    def test_valid_registration_and_profile_record(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            config_home = Path(directory)
-            browser_dir = config_home / "BraveSoftware" / "Brave-Browser"
-            registration_dir = browser_dir / "External Extensions"
-            registration_dir.mkdir(parents=True)
-            (registration_dir / f"{EXTENSION_ID}.json").write_text(
-                json.dumps({"external_update_url": UPDATE_URL}), encoding="utf-8"
-            )
-            profile = browser_dir / "Default"
-            profile.mkdir()
-            (profile / "Extensions" / EXTENSION_ID).mkdir(parents=True)
-            (profile / "Preferences").write_text(
-                json.dumps({"extensions": {"settings": {EXTENSION_ID: {"location": 1, "path": "secret"}}}}),
-                encoding="utf-8",
-            )
-            (profile / "Secure Preferences").write_text(
-                json.dumps({"extensions": {
-                    "settings": {EXTENSION_ID: {"disable_reasons": [8192]}},
-                    "external_uninstalls": [EXTENSION_ID],
-                }}),
-                encoding="utf-8",
-            )
-            output = self.run_diagnostic(config_home)
+    def test_rejects_wrong_host_noninteractive_or_wrong_directory(self):
+        cases = (
+            self.run_task(host="tpad"),
+            self.run_task(interactive=False),
+            self.run_task(root=False),
+        )
+        for result, rebuild in cases:
+            self.assertEqual(result, 1)
+            rebuild.assert_not_called()
 
-        self.assertIn("Extension registration: valid", output)
-        self.assertIn("Profiles inspected: 1", output)
-        self.assertIn("Profiles recording 1Password: 1", output)
-        self.assertIn("Profiles with installation metadata: 1", output)
-        self.assertIn("Profiles with extension files: 1", output)
-        self.assertIn("Profiles remembering an external uninstall: 1", output)
-        self.assertIn("Profiles with recorded disable reasons: 1", output)
-        self.assertIn("Disable reason codes: [8192]", output)
-        self.assertNotIn("secret", output)
+    def test_rebuild_failure_is_returned(self):
+        result, _ = self.run_task(exit_code=3)
+        self.assertEqual(result, 3)
 
 
 if __name__ == "__main__":

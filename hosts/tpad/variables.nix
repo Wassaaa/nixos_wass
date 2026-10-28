@@ -11,6 +11,7 @@
   enableDevelopment = true;
   enableVirtualization = true;
   enableMultimedia = true;
+  enableMediaRouting = false;
 
   # Git Configuration ( For Pulling Software Repos )
   gitUsername = "Allar Klein";

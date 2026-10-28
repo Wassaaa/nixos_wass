@@ -37,4 +37,5 @@
   enableVirtualization = false; # No nested virtualization
   enableDevelopment = true; # Keep dev tools
   enableMultimedia = false; # No media players in WSL
+  enableMediaRouting = false;
 }
