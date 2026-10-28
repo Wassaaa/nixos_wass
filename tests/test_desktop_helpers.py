@@ -166,6 +166,87 @@ notify-send() { printf '%s\\n' "$*" >> "$TEST_ROOT/notifications"; }
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Could not copy", (self.root / "notifications").read_text())
 
+    def test_profile_picture_initialization_preserves_later_changes(self):
+        default = self.root / "default.jpg"
+        default.write_bytes(b"default image")
+        self.env["HOME"] = shell_path(self.root)
+        mocks = """
+run() { "$@"; }
+ln() {
+  printf '%s\\n' "$*" >> "$TEST_ROOT/links"
+  printf 'existing alias' > "${@: -1}"
+}
+"""
+        script = "modules/home/features/desktop/hyprland/initialize-profile-picture.sh"
+        result = self.run_script(script, mocks, shell_path(default))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.root / ".face").read_bytes(), b"default image")
+        links = (self.root / "links").read_text().splitlines()
+        self.assertEqual(
+            links,
+            [
+                f"-sT -- {shell_path(self.root)}/.face {shell_path(self.root)}/.face.icon",
+                f"-sT -- {shell_path(self.root)}/.face {shell_path(self.root)}/.config/face.jpg",
+            ],
+        )
+
+        (self.root / ".face").write_bytes(b"chosen image")
+        result = self.run_script(script, mocks, shell_path(default))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.root / ".face").read_bytes(), b"chosen image")
+        self.assertEqual((self.root / "links").read_text().splitlines(), links)
+        self.assertEqual((self.root / ".face.icon").read_text(), "existing alias")
+        self.assertEqual((self.root / ".config" / "face.jpg").read_text(), "existing alias")
+
+    def test_profile_picture_preserves_existing_files(self):
+        default = self.root / "default.jpg"
+        default.write_bytes(b"default image")
+        self.env["HOME"] = shell_path(self.root)
+        (self.root / ".face").write_bytes(b"chosen image")
+        (self.root / ".face.icon").write_bytes(b"custom icon")
+        (self.root / ".config").mkdir()
+        (self.root / ".config" / "face.jpg").write_bytes(b"custom config image")
+        result = self.run_script(
+            "modules/home/features/desktop/hyprland/initialize-profile-picture.sh",
+            'run() { "$@"; }\nln() { echo "unexpected link" >&2; return 1; }',
+            shell_path(default),
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.root / ".face").read_bytes(), b"chosen image")
+        self.assertEqual((self.root / ".face.icon").read_bytes(), b"custom icon")
+        self.assertEqual((self.root / ".config" / "face.jpg").read_bytes(), b"custom config image")
+
+    @unittest.skipIf(os.name == "nt", "Requires POSIX symbolic-link semantics")
+    def test_profile_picture_links_follow_replaced_image(self):
+        default = self.root / "default.jpg"
+        default.write_bytes(b"default image")
+        self.env["HOME"] = shell_path(self.root)
+        script = "modules/home/features/desktop/hyprland/initialize-profile-picture.sh"
+        result = self.run_script(script, 'run() { "$@"; }', shell_path(default))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        aliases = (self.root / ".face.icon", self.root / ".config" / "face.jpg")
+        for alias in aliases:
+            self.assertTrue(alias.is_symlink())
+            self.assertEqual(alias.read_bytes(), b"default image")
+
+        (self.root / ".face").unlink()
+        (self.root / ".face").write_bytes(b"chosen image")
+        result = self.run_script(script, 'run() { "$@"; }', shell_path(default))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for alias in aliases:
+            self.assertEqual(alias.read_bytes(), b"chosen image")
+
+    def test_profile_picture_rejects_directory(self):
+        self.env["HOME"] = shell_path(self.root)
+        (self.root / ".face").mkdir()
+        result = self.run_script(
+            "modules/home/features/desktop/hyprland/initialize-profile-picture.sh",
+            'run() { "$@"; }',
+            shell_path(self.root / "default.jpg"),
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("is a directory", result.stderr)
+
 class ScreenshotBindingTests(unittest.TestCase):
     def test_frozen_picker_uses_primary_screenshot_shortcut(self):
         binds = (

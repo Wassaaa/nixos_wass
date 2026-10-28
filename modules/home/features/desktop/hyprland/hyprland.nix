@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   flakeRoot,
@@ -84,8 +85,8 @@ in
       source = "${flakeRoot}/wallpapers";
       recursive = true;
     };
-    ".face.icon".source = ./face.jpg;
-    ".face".source = ./face.jpg;
-    ".config/face.jpg".source = ./face.jpg;
   };
+  home.activation.initializeProfilePicture = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    source ${./initialize-profile-picture.sh} ${./face.jpg}
+  '';
 }

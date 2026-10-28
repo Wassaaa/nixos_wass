@@ -30,6 +30,10 @@ Super+Shift+K opens the experimental Omarchy-derived visual shortcut viewer; Sup
 
 Thunar's managed "Open Terminal Here" action uses the configured XDG default terminal. Home Manager backs up an existing `Thunar/uca.xml` before replacing it, so any other custom Thunar actions need to be merged into this configuration. Activation can fail if the backup file already exists.
 
+## Profile picture
+
+Home Manager initializes `~/.face` from the bundled default only when it is absent. Caelestia's profile picker can then replace it with an image from anywhere, and later rebuilds preserve that choice. When absent, `~/.face.icon` and `~/.config/face.jpg` are linked to `~/.face` so other consumers can use the same picture. Existing files or links at those paths are preserved, so they may not follow the Caelestia picture. On migration, Home Manager removes its old managed links before these paths are initialized.
+
 ## 1Password dialogs
 
 The picture-in-picture rule is separate from 1Password dialogs. [Omarchy's configuration](https://github.com/omacom/omarchy/blob/a9cedf93e0356d475411510e818e7e054a924d55/default/hypr/apps/1password.lua#L1-L3) matches both old and new 1Password app IDs and tags those windows for floating. No blanket rule is added without identifying the affected dialog; a fixed size can be inappropriate for a different prompt. If it happens again, record the affected window's class, title and dimensions from `hyprctl clients`, omitting any sensitive information.
