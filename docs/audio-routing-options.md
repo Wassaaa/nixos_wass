@@ -2,7 +2,7 @@
 
 ## Existing setup
 
-The audio feature enables PipeWire with ALSA, PulseAudio and JACK compatibility. The desktop packages include EasyEffects and pavucontrol. The multimedia feature's `enableMediaRouting` opt-in installs OBS Studio and qpwgraph and defines the virtual devices below; it is enabled on `wassaa` only. Enabling it on another host also requires `enableMultimedia` and PipeWire audio. The virtual audio devices have appeared on `wassaa`; the complete routing and autostart still need testing.
+The audio feature enables PipeWire with ALSA, PulseAudio and JACK compatibility. The desktop packages include EasyEffects and pavucontrol. The multimedia feature's `enableMediaRouting` opt-in installs OBS Studio and qpwgraph and defines the virtual devices below; it is enabled on `wassaa` only. Enabling it on another host also requires `enableMultimedia` and PipeWire audio. Smart-filter routing and patchbay autostart still need testing on the target host.
 
 ## Persistent patchbay
 
@@ -14,12 +14,13 @@ Pin the connections that should be restored, or enable Auto Pin for manual conne
 
 After deploying the configuration and rebooting to apply the camera module options:
 
-1. Open qpwgraph and connect the Scarlett microphone's desired input channel to **Microphone Proxy**. Select **Microphone Proxy** as the input in the call application and check its input meter. The proxy has no predefined microphone connection, so it is silent until connected.
-2. To share application audio, connect its playback output to **Microphone Proxy** in qpwgraph. Keep a separate connection to your headphones if you also want to hear it. Disconnect the sharing link when finished, and keep call audio out of the microphone proxy to avoid echo.
-3. Use **OBS Track 1** and **OBS Track 2** as separate application audio buses. Route the desired playback streams to them, and add their monitor sources as audio inputs in OBS. Connect the buses' monitor outputs to headphones if you need to hear them. Configure OBS tracks and avoid also capturing the same audio through desktop audio.
-4. In OBS, add your camera as a video source and select **Start Virtual Camera**. Select **OBS Virtual Camera** in the receiving application. With exclusive capabilities enabled, the device may not appear in the application until OBS starts the virtual camera.
+1. Select the intended physical microphone and playback device as the system defaults. WirePlumber should insert **Microphone Proxy** and **Main Audio** as smart filters in those paths; the physical devices, not the filters, remain the visible defaults. In particular, change any previously saved Microphone Proxy default back to the intended physical microphone.
+2. Before testing the microphone, remove the old Scarlett-to-Microphone Proxy pin if it still matches the new graph. It can otherwise duplicate or interfere with the automatic route. Keep the separate Scarlett-to-OBS pin only if that direct feed is wanted. Inspect qpwgraph and test with meters and headphones at a low volume.
+3. Check that the selected Scarlett microphone uses the intended Input 1 only. The mono filter does not guarantee which channels a stereo physical source contributes. Also test switching physical defaults and unplugging and reconnecting devices; another microphone could become the default when the selected one disappears.
+4. Use **OBS Track 1** and **OBS Track 2** as separate application audio buses. Route the desired playback streams to them, and add their monitor sources as audio inputs in OBS. Connect the buses' monitor outputs to headphones if you need to hear them. Configure OBS tracks and avoid also capturing the same audio through desktop audio.
+5. In OBS, add your camera as a video source and select **Start Virtual Camera**. Select **OBS Virtual Camera** in the receiving application. With exclusive capabilities enabled, the device may not appear in the application until OBS starts the virtual camera.
 
-The devices are declarative, but the routing and OBS scene are manual. qpwgraph can save an activated patchbay for chosen links; do not pin a browser-to-microphone link unless it should be restored automatically. Test audio levels, channel mapping, monitoring and behavior after reconnecting the Scarlett before using the setup live. No independent per-destination mixer or automatic browser-sharing toggle is configured.
+The smart filters and OBS buses are declarative, but extra routes and OBS scenes are manual. qpwgraph pins add persistent connections and do not necessarily override WirePlumber's automatic links. Test whether injecting other audio into the new microphone filter works as intended before relying on it; avoid pinning sensitive sharing routes or feeding call audio back into the microphone. No independent per-destination mixer or automatic browser-sharing toggle is configured. Application-specific device choices may bypass the default filter path.
 
 ## Options
 
