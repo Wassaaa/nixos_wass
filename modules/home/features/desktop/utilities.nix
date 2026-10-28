@@ -1,10 +1,5 @@
 { pkgs, ... }:
 let
-  frozenScreenshot = pkgs.writeShellApplication {
-    name = "frozen-screenshot";
-    runtimeInputs = with pkgs; [ coreutils grim hyprpicker libnotify slurp wl-clipboard ];
-    text = builtins.readFile ./frozen-screenshot.sh;
-  };
   ocr = pkgs.writeShellApplication {
     name = "wl-ocr";
     runtimeInputs = with pkgs; [ grim slurp tesseract5 wl-clipboard libnotify ];
@@ -17,8 +12,15 @@ let
     '';
   };
 in {
+  xdg.configFile."swappy/config".text = ''
+    [Default]
+    save_dir="$HOME/Pictures/Screenshots"
+    save_filename_format=Screenshot-%Y%m%d-%H%M%S.png
+    auto_save=true
+  '';
+
   home.packages = with pkgs; [
     grimblast grim slurp wl-clipboard
-    wireplumber ocr frozenScreenshot
+    wireplumber ocr
   ];
 }

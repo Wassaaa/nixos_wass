@@ -5,6 +5,7 @@
   imports = [
     ./hyprland
     ./caelestia.nix
+    ./keybindings-viewer.nix
     ./vicinae.nix
     ./utilities.nix
     ./foot.nix

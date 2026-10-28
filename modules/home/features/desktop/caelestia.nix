@@ -1,6 +1,11 @@
 { config, host, flakeRoot, inputs, pkgs, ... }:
 let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix") terminal;
+  swappyClipboard = pkgs.writeShellApplication {
+    name = "swappy";
+    runtimeInputs = with pkgs; [ coreutils libnotify swappy wl-clipboard ];
+    text = builtins.readFile ./swappy-clipboard.sh;
+  };
   startCheck = pkgs.writeShellApplication {
     name = "caelestia-start-check";
     runtimeInputs = [ config.programs.caelestia.package pkgs.jq pkgs.libnotify ];
@@ -20,6 +25,9 @@ in {
 
   programs.caelestia = {
     enable = true;
+    package = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli.override {
+      swappy = swappyClipboard;
+    };
     systemd = {
       enable = true;
       target = "hyprland-session.target";

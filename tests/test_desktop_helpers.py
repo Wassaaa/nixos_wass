@@ -119,64 +119,71 @@ notify-send() { printf '%s\\n' "$*" >> "$TEST_ROOT/notifications"; }
                 )
                 self.assertEqual(result.returncode, expected, result.stderr)
 
-    def screenshot(self, scenario):
-        self.env["TEST_SCENARIO"] = scenario
-        self.env["XDG_SCREENSHOTS_DIR"] = shell_path(self.root / "screenshots")
+    def test_swappy_copies_edited_output(self):
         mocks = """
-hyprpicker() {
-  if [ "$TEST_SCENARIO" = freeze-failure ]; then return 1; fi
-  while :; do :; done
+swappy() {
+  printf '%s\\n' "$@" > "$TEST_ROOT/args"
+  printf 'edited-image'
 }
-slurp() {
-  if [ "$TEST_SCENARIO" = cancel ]; then return 1; fi
-  printf '10,20 100x200'
-}
-grim() {
-  if [ "$TEST_SCENARIO" = capture-failure ]; then return 1; fi
-  [ "$1" = -g ] && [ "$2" = '10,20 100x200' ]
-  printf 'image-data' > "$3"
-}
-wl-copy() {
-  if [ "$TEST_SCENARIO" = copy-failure ]; then return 1; fi
-  cat > "$TEST_ROOT/clipboard"
-}
+wl-copy() { cat > "$TEST_ROOT/clipboard"; }
 notify-send() { printf '%s\\n' "$*" >> "$TEST_ROOT/notifications"; }
 """
-        return self.run_script(
-            "modules/home/features/desktop/frozen-screenshot.sh", mocks
+        result = self.run_script(
+            "modules/home/features/desktop/swappy-clipboard.sh", mocks, "-f", "image file.png"
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.root / "clipboard").read_bytes(), b"edited-image")
+        self.assertEqual(
+            (self.root / "args").read_text().splitlines(),
+            ["-o", "-", "-f", "image file.png"],
         )
 
-    def test_screenshot_saves_and_copies_selected_area(self):
-        result = self.screenshot("success")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        files = list((self.root / "screenshots").glob("*.png"))
-        self.assertEqual(len(files), 1)
-        self.assertEqual(files[0].read_bytes(), b"image-data")
-        self.assertEqual((self.root / "clipboard").read_bytes(), b"image-data")
-        self.assertIn("saved and copied", (self.root / "notifications").read_text())
+    def test_swappy_does_not_copy_on_editor_failure_or_empty_output(self):
+        mocks = """
+swappy() { if [ "$TEST_SCENARIO" = failure ]; then return 1; fi; }
+wl-copy() { touch "$TEST_ROOT/copied"; }
+notify-send() { printf '%s\\n' "$*" >> "$TEST_ROOT/notifications"; }
+"""
+        for scenario in ("failure", "empty"):
+            with self.subTest(scenario=scenario):
+                self.env["TEST_SCENARIO"] = scenario
+                result = self.run_script(
+                    "modules/home/features/desktop/swappy-clipboard.sh", mocks, "-f", "image.png"
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse((self.root / "copied").exists())
+                self.assertIn("Screenshot", (self.root / "notifications").read_text())
 
-    def test_screenshot_cancellation_does_not_save(self):
-        result = self.screenshot("cancel")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertFalse((self.root / "screenshots").exists())
-
-    def test_screenshot_capture_failure_removes_partial_file(self):
-        result = self.screenshot("capture-failure")
+    def test_swappy_reports_clipboard_failure(self):
+        mocks = """
+swappy() { printf 'edited-image'; }
+wl-copy() { return 1; }
+notify-send() { printf '%s\\n' "$*" >> "$TEST_ROOT/notifications"; }
+"""
+        result = self.run_script(
+            "modules/home/features/desktop/swappy-clipboard.sh", mocks, "-f", "image.png"
+        )
         self.assertNotEqual(result.returncode, 0)
-        self.assertEqual(list((self.root / "screenshots").glob("*.png")), [])
-        self.assertIn("Could not capture", (self.root / "notifications").read_text())
+        self.assertIn("Could not copy", (self.root / "notifications").read_text())
 
-    def test_screenshot_copy_failure_keeps_saved_image(self):
-        result = self.screenshot("copy-failure")
-        self.assertNotEqual(result.returncode, 0)
-        self.assertEqual(len(list((self.root / "screenshots").glob("*.png"))), 1)
-        self.assertIn("not copied", (self.root / "notifications").read_text())
+class ScreenshotBindingTests(unittest.TestCase):
+    def test_frozen_picker_uses_primary_screenshot_shortcut(self):
+        binds = (
+            ROOT / "modules/home/features/desktop/hyprland/config/binds/applications.lua"
+        ).read_text()
+        self.assertIn(
+            'hl.bind("SUPER + SHIFT + S", hl.dsp.global("caelestia:screenshotFreeze")',
+            binds,
+        )
+        self.assertEqual(binds.count("caelestia:screenshotFreeze"), 1)
+        self.assertNotIn("frozen-screenshot", binds)
 
-    def test_screenshot_freeze_failure_does_not_save(self):
-        result = self.screenshot("freeze-failure")
-        self.assertNotEqual(result.returncode, 0)
-        self.assertFalse((self.root / "screenshots").exists())
-        self.assertIn("Could not freeze", (self.root / "notifications").read_text())
+    def test_ocr_uses_text_shortcut(self):
+        binds = (
+            ROOT / "modules/home/features/desktop/hyprland/config/binds/applications.lua"
+        ).read_text()
+        self.assertIn('hl.bind("SUPER + SHIFT + T", exec("wl-ocr")', binds)
+        self.assertEqual(binds.count('exec("wl-ocr")'), 1)
 
 
 if __name__ == "__main__":
