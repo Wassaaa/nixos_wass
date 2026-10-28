@@ -64,8 +64,8 @@ nh os test                # Test changes (doesn't set bootloader)
 nh os boot                # Build and set bootloader (apply on next boot)
 ncg                       # Run the configured cleanup policy
 
-# Direct nixos-rebuild (if nh unavailable)
-sudo nixos-rebuild switch --flake /home/wassaa/nixos_wass#wassaa
+# Direct nixos-rebuild from the checkout (if nh unavailable)
+sudo nixos-rebuild switch --flake .#wassaa
 ```
 
 ### NixOS command transport

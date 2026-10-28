@@ -34,8 +34,8 @@ nh os switch           # Build and switch
 nh os boot             # Build for the next boot
 ```
 
-`nh` uses the `flakeDir` configured for the host. The Hyprland live-editable
-configuration also expects the checkout at `~/nixos_wass`.
+`nh` and the live-editable Hyprland configuration use the `flakeDir` configured
+for the host. Set it to the absolute path of the writable checkout.
 
 To build a specific host without switching:
 

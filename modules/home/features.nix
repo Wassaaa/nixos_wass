@@ -9,6 +9,8 @@ let
   inherit (import "${flakeRoot}/hosts/${host}/variables.nix")
     enableDesktop
     enableDevelopment
+    enableMultimedia
+    enableMediaRouting
     ;
 
   # Check if host has host-specific home configs
@@ -28,6 +30,9 @@ in
   ]
   ++ lib.optionals enableDevelopment [
     ./features/development
+  ]
+  ++ lib.optionals (enableDesktop && enableMultimedia && enableMediaRouting) [
+    ./features/multimedia/qpwgraph.nix
   ]
   ++ lib.optionals hasHostHome [
     ../../hosts/${host}/home

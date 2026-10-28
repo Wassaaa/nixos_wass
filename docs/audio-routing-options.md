@@ -2,7 +2,13 @@
 
 ## Existing setup
 
-The audio feature enables PipeWire with ALSA, PulseAudio and JACK compatibility. The desktop packages include EasyEffects and pavucontrol. The multimedia feature's `enableMediaRouting` opt-in installs OBS Studio and qpwgraph and defines the virtual devices below; it is enabled on `wassaa` only. Enabling it on another host also requires `enableMultimedia` and PipeWire audio. These changes have not yet been tested on the NixOS machine.
+The audio feature enables PipeWire with ALSA, PulseAudio and JACK compatibility. The desktop packages include EasyEffects and pavucontrol. The multimedia feature's `enableMediaRouting` opt-in installs OBS Studio and qpwgraph and defines the virtual devices below; it is enabled on `wassaa` only. Enabling it on another host also requires `enableMultimedia` and PipeWire audio. The virtual audio devices have appeared on `wassaa`; the complete routing and autostart still need testing.
+
+## Persistent patchbay
+
+On desktop hosts with media routing enabled, qpwgraph starts minimized at login with the host's patchbay activated in non-exclusive mode. Its graph is linked from `~/.config/qpwgraph/audio-routing.qpwgraph` to `hosts/<host>/audio-routing.qpwgraph` in the writable checkout specified by `flakeDir`. If the graph does not exist, the first startup creates an empty one; an existing graph is never replaced. The host directory must exist and be writable. qpwgraph's own settings and node positions stay local to the user.
+
+Pin the connections that should be restored, or enable Auto Pin for manual connections, then use Patchbay Save to write them to the host graph. Review the graph before adding it to Git and committing it. Unpinned connections are temporary; avoid pinning sensitive sharing routes or unintended MIDI loops. Changes to the graph are not committed automatically. Test restoration after logging in and reconnecting devices; qpwgraph must remain running.
 
 ## First use on wassaa
 

@@ -4,12 +4,14 @@
   pkgs,
   inputs,
   flakeRoot,
+  host,
   ...
 }:
 let
+  inherit (import "${flakeRoot}/hosts/${host}/variables.nix") flakeDir;
   editable =
     name:
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos_wass/modules/home/features/desktop/hyprland/config/${name}";
+    config.lib.file.mkOutOfStoreSymlink "${flakeDir}/modules/home/features/desktop/hyprland/config/${name}";
 in
 {
   home.packages = with pkgs; [
