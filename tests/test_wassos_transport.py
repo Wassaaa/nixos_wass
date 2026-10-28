@@ -28,6 +28,8 @@ class BraveDiagnosticTests(unittest.TestCase):
         self.assertIn("Extension registration: missing", output)
         self.assertIn("Profiles inspected: 0", output)
         self.assertIn("Profiles recording 1Password: 0", output)
+        self.assertIn("Profiles with installation metadata: 0", output)
+        self.assertIn("Profiles remembering an external uninstall: 0", output)
 
     def test_valid_registration_and_profile_record(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -40,8 +42,16 @@ class BraveDiagnosticTests(unittest.TestCase):
             )
             profile = browser_dir / "Default"
             profile.mkdir()
+            (profile / "Extensions" / EXTENSION_ID).mkdir(parents=True)
+            (profile / "Preferences").write_text(
+                json.dumps({"extensions": {"settings": {EXTENSION_ID: {"location": 1, "path": "secret"}}}}),
+                encoding="utf-8",
+            )
             (profile / "Secure Preferences").write_text(
-                json.dumps({"extensions": {"settings": {EXTENSION_ID: {"private": "secret"}}}}),
+                json.dumps({"extensions": {
+                    "settings": {EXTENSION_ID: {"disable_reasons": [8192]}},
+                    "external_uninstalls": [EXTENSION_ID],
+                }}),
                 encoding="utf-8",
             )
             output = self.run_diagnostic(config_home)
@@ -49,6 +59,11 @@ class BraveDiagnosticTests(unittest.TestCase):
         self.assertIn("Extension registration: valid", output)
         self.assertIn("Profiles inspected: 1", output)
         self.assertIn("Profiles recording 1Password: 1", output)
+        self.assertIn("Profiles with installation metadata: 1", output)
+        self.assertIn("Profiles with extension files: 1", output)
+        self.assertIn("Profiles remembering an external uninstall: 1", output)
+        self.assertIn("Profiles with recorded disable reasons: 1", output)
+        self.assertIn("Disable reason codes: [8192]", output)
         self.assertNotIn("secret", output)
 
 

@@ -29,7 +29,12 @@ def main() -> int:
             print("Extension registration: missing")
 
         profile_count = 0
-        installed_count = 0
+        recorded_count = 0
+        install_metadata_count = 0
+        extension_files_count = 0
+        external_uninstall_count = 0
+        disabled_count = 0
+        disable_reasons = set()
         if browser_dir.is_dir():
             for profile in browser_dir.iterdir():
                 if not profile.is_dir():
@@ -38,16 +43,43 @@ def main() -> int:
                 if not any(path.is_file() for path in preference_files):
                     continue
                 profile_count += 1
+                recorded = False
+                install_metadata = False
+                external_uninstall = False
+                profile_disable_reasons = set()
                 for path in preference_files:
                     if not path.is_file():
                         continue
                     data = json.loads(path.read_text(encoding="utf-8"))
-                    settings = data.get("extensions", {}).get("settings", {})
-                    if EXTENSION_ID in settings:
-                        installed_count += 1
-                        break
+                    extensions = data.get("extensions", {})
+                    settings = extensions.get("settings", {})
+                    external_uninstall |= EXTENSION_ID in extensions.get("external_uninstalls", [])
+                    entry = settings.get(EXTENSION_ID)
+                    if isinstance(entry, dict):
+                        recorded = True
+                        install_metadata |= isinstance(entry.get("location"), int) and isinstance(
+                            entry.get("path"), str
+                        )
+                        reasons = entry.get("disable_reasons", [])
+                        if isinstance(reasons, int):
+                            reasons = [reasons]
+                        if isinstance(reasons, list):
+                            profile_disable_reasons.update(
+                                reason for reason in reasons if type(reason) is int and 0 < reason < 2**31
+                            )
+                recorded_count += recorded
+                install_metadata_count += install_metadata
+                external_uninstall_count += external_uninstall
+                extension_files_count += (profile / "Extensions" / EXTENSION_ID).is_dir()
+                disabled_count += bool(profile_disable_reasons)
+                disable_reasons.update(profile_disable_reasons)
         print(f"Profiles inspected: {profile_count}")
-        print(f"Profiles recording 1Password: {installed_count}")
+        print(f"Profiles recording 1Password: {recorded_count}")
+        print(f"Profiles with installation metadata: {install_metadata_count}")
+        print(f"Profiles with extension files: {extension_files_count}")
+        print(f"Profiles remembering an external uninstall: {external_uninstall_count}")
+        print(f"Profiles with recorded disable reasons: {disabled_count}")
+        print(f"Disable reason codes: {sorted(disable_reasons)}")
     except (OSError, ValueError, AttributeError, TypeError) as error:
         print(f"Could not inspect Brave configuration: {type(error).__name__}", file=sys.stderr)
         return 1

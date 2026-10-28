@@ -37,25 +37,36 @@ in
   # 2. SSH Client Configuration
   programs.ssh = {
     enable = true;
-    matchBlocks = {
+    enableDefaultConfig = false;
+    settings = {
       "*" = {
-        identityAgent = sockPath;
+        IdentityAgent = sockPath;
+        ForwardAgent = lib.mkDefault false;
+        AddKeysToAgent = lib.mkDefault "no";
+        Compression = lib.mkDefault false;
+        ServerAliveInterval = lib.mkDefault 0;
+        ServerAliveCountMax = lib.mkDefault 3;
+        HashKnownHosts = lib.mkDefault false;
+        UserKnownHostsFile = lib.mkDefault "~/.ssh/known_hosts";
+        ControlMaster = lib.mkDefault "no";
+        ControlPath = lib.mkDefault "~/.ssh/master-%r@%n:%p";
+        ControlPersist = lib.mkDefault "no";
       };
 
       # Host Aliases
       "github.com" = {
-        hostname = "github.com";
-        user = "git";
+        HostName = "github.com";
+        User = "git";
       };
 
       "gitlab.com" = {
-        hostname = "gitlab.com";
-        user = "git";
+        HostName = "gitlab.com";
+        User = "git";
       };
 
       "bitbucket.org" = {
-        hostname = "bitbucket.org";
-        user = "git";
+        HostName = "bitbucket.org";
+        User = "git";
       };
     };
   };
