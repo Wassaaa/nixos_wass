@@ -1,0 +1,26 @@
+<!DOCTYPE patchbay>
+<patchbay name="audio-routing" version="1.0.4">
+ <items>
+  <item node-type="pipewire" port-type="pipewire-midi">
+   <output node="BLE MIDI 1" port="out"/>
+   <input node="BLE MIDI 1" port="in"/>
+  </item>
+  <item node-type="pipewire" port-type="pipewire-midi">
+   <output node="Midi-Bridge" port="Midi Through:Midi Through Port-0"/>
+   <input node="Midi-Bridge" port="Midi Through:Midi Through Port-0"/>
+  </item>
+  <item node-type="pipewire" port-type="pipewire-audio">
+   <output node="Scarlett 2i2 3rd Gen Input 1 Mic/Inst/Line" port="Scarlett 2i2 USB:capture_MONO"/>
+   <input node="Microphone Proxy" port="Microphone Proxy:input_MONO"/>
+  </item>
+  <item node-type="alsa" port-type="alsa-midi">
+   <output node="14:Midi Through" port="0:Midi Through Port-0"/>
+   <input node="14:Midi Through" port="0:Midi Through Port-0"/>
+  </item>
+  <item node-type="pipewire" port-type="pipewire-audio">
+   <output node="Scarlett 2i2 3rd Gen Input 1 Mic/Inst/Line" port="Scarlett 2i2 USB:capture_MONO"/>
+   <input node="OBS-1" port="OBS:input_MONO"/>
+  </item>
+ </items>
+</patchbay>
+
