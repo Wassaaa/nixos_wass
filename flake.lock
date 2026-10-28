@@ -33,7 +33,7 @@
         "type": "github"
       }
     },
-    "caelestia-cli_2": {
+    "caelestia-cli": {
       "inputs": {
         "caelestia-shell": [
           "caelestia-shell"
@@ -59,7 +59,7 @@
     },
     "caelestia-shell": {
       "inputs": {
-        "caelestia-cli": "caelestia-cli_2",
+        "caelestia-cli": "caelestia-cli",
         "m3shapes": "m3shapes",
         "nixpkgs": [
           "nixpkgs"
@@ -708,11 +708,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793128748,
-        "narHash": "sha256-SzkJwLSnaNqAT/fpUGTGYmkGmqtqyxxSw6nfn4sJTdU=",
+        "lastModified": 1793209350,
+        "narHash": "sha256-jMljcKpNQ6MAFux14WKa+OP/DSVwB9xBgqzVshWiLOU=",
         "owner": "Wassaaa",
         "repo": "code-insiders-flake",
-        "rev": "99f6167bc4b4aa70d5fd854b4cc3783cabc828eb",
+        "rev": "f6c28aac866a8fcb8d710556b0a0ffb053c7c50f",
         "type": "github"
       },
       "original": {
