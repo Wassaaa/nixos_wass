@@ -1,7 +1,6 @@
 hl.bind("SUPER + Q", hl.dsp.window.close(), { description = "Close window" })
 hl.bind("SUPER + F", hl.dsp.window.fullscreen(), { description = "Toggle fullscreen" })
 hl.bind("SUPER + SHIFT + F", hl.dsp.window.float({ action = "toggle" }), { description = "Toggle floating" })
-hl.bind("SUPER + P", hl.dsp.window.pseudo(), { description = "Toggle pseudo-tile" })
 hl.bind("SUPER + SHIFT + I", hl.dsp.layout("togglesplit"), { description = "Toggle split direction" })
 for _, direction in ipairs({ "left", "right", "up", "down" }) do
   hl.bind("SUPER + " .. direction, hl.dsp.focus({ direction = direction }), { description = "Focus window " .. direction })

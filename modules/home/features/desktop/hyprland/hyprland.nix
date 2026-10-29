@@ -75,6 +75,7 @@ in
   xdg.configFile = {
     "hypr/plugins/split-monitor-workspaces".source = inputs.split-monitor-workspaces;
     "hypr/settings.lua".source = editable "settings.lua";
+    "hypr/monitor-profiles.lua".source = editable "monitor-profiles.lua";
     "hypr/theme.lua".source = editable "theme.lua";
     "hypr/animations.lua".source = editable "animations.lua";
     "hypr/binds.lua".source = editable "binds.lua";

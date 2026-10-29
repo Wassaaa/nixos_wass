@@ -1,6 +1,12 @@
 package.path = package.path .. ";./?.lua;./?/init.lua"
 local smw = require("plugins.split-monitor-workspaces")
-smw.setup({ workspace_count = 10 })
+smw.setup({ workspace_count = 10, monitor_priority = monitorProfilePriority or {} })
+if monitorProfilePriority then
+  local globals = require("plugins.split-monitor-workspaces.lua.globals")
+  for i, name in ipairs(monitorProfilePriority) do
+    globals.monitor_priorities[name] = { value = i - 1, from_config = true }
+  end
+end
 for i = 1, smw.get_amount_of_workspaces() do
   local key = tostring(i % 10)
   hl.bind("SUPER + " .. key, smw.workspace(key), { description = "Switch to workspace " .. i })

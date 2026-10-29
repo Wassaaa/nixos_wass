@@ -39,6 +39,25 @@
     }
   ];
 
+  # Profiles are cycled in order with Super+P. Overrides inherit the settings above.
+  monitorProfiles = [
+    {
+      name = "Both monitors";
+      overrides = { };
+    }
+    {
+      name = "Second monitor only";
+      mergeTo = "HDMI-A-1";
+      overrides = {
+        "DP-2".enabled = false;
+        "HDMI-A-1" = {
+          x = 0;
+          y = 0;
+        };
+      };
+    }
+  ];
+
   # Program Options
   browser = "brave";
   windowsAppNativeWaylandOnNvidia = true;
