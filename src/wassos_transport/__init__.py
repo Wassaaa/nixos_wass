@@ -1,7 +1,6 @@
 from pathlib import Path
 import os
 import shutil
-import socket
 import subprocess
 import sys
 
@@ -74,37 +73,6 @@ def inspect_i2c(dev_root: Path, module_root: Path) -> bool:
     return True
 
 
-def prepare_configuration() -> bool:
-    if socket.gethostname() != "wassaa":
-        print("This activation is intended only for the wassaa host.", file=sys.stderr)
-        return False
-    if not sys.stdin.isatty():
-        print("An interactive terminal is required for activation.", file=sys.stderr)
-        return False
-    print("\nApplying this checkout rebuilds and activates the full NixOS configuration.")
-    print("It enables i2c-dev and grants I2C device access to local-seat users and the i2c group.")
-    print("nh may request administrator authentication. No monitor input will be changed.")
-    try:
-        answer = input("Type apply to rebuild, probe to skip rebuilding, or Enter to cancel: ").strip()
-    except EOFError:
-        answer = ""
-    if answer == "probe":
-        print("Skipping the rebuild; checking the current system.")
-        return True
-    if answer != "apply":
-        print("Cancelled; no changes made.")
-        return False
-    try:
-        result = subprocess.run(["nh", "os", "switch"], check=False)
-    except OSError as error:
-        print(f"Could not run the NixOS switch: {error}", file=sys.stderr)
-        return False
-    if result.returncode:
-        print(f"NixOS switch failed with status {result.returncode}; stopping.", file=sys.stderr)
-        return False
-    return True
-
-
 def run_query(command: list[str], description: str) -> bool:
     print(f"\n{description} (no monitor settings will be changed).", flush=True)
     try:
@@ -119,8 +87,8 @@ def run_query(command: list[str], description: str) -> bool:
 
 
 def main() -> int:
-    print("Current task: enable I2C on wassaa and check the DP-2 monitor for DDC/CI.")
-    print("The NixOS configuration is changed only if you explicitly confirm the rebuild.")
+    print("Current task: check whether the DP-2 monitor responds to a DDC brightness read.")
+    print("No monitor settings or system configuration will be changed.")
     print("DDC queries may cause display glitches and include serial numbers in their output.")
     print("Review all output for sensitive information before sharing it.")
 
@@ -131,8 +99,6 @@ def main() -> int:
         print("This diagnostic requires Linux.", file=sys.stderr)
         return 1
 
-    if not prepare_configuration():
-        return 1
     connectors_found = inspect_connectors(Path("/sys/class/drm"), Path("/dev"))
     if not inspect_i2c(Path("/dev"), Path("/sys/module/i2c_dev")):
         print("\nThe probe was incomplete. Share the reviewed output before proceeding.")
@@ -160,22 +126,20 @@ def main() -> int:
     print("\nFind the Acer display in the detection output and identify its I2C bus number.")
     print("Only select a bus if you can positively identify the intended display.")
     if not sys.stdin.isatty():
-        print("No interactive terminal available; skipping input-source queries.", file=sys.stderr)
+        print("No interactive terminal available; skipping the brightness query.", file=sys.stderr)
         return 1
     try:
         bus = input("Enter the Acer's bus number (digits only), or press Enter to skip: ").strip()
     except EOFError:
         bus = ""
     if not bus:
-        print("Skipped input-source queries. Share the reviewed detection output.")
+        print("Skipped the brightness query. Share the reviewed detection output.")
         return 0
     if not bus.isascii() or not bus.isdecimal():
-        print("Invalid bus number; no input-source queries were run.", file=sys.stderr)
+        print("Invalid bus number; no brightness query was run.", file=sys.stderr)
         return 1
     base = command + ["--bus", bus]
-    current = run_query(base + ["getvcp", "60"], "Reading the current input source")
-    capabilities = run_query(base + ["capabilities"], "Reading advertised monitor capabilities")
-    if not current or not capabilities:
-        print("\nSome DDC queries failed. Share the reviewed output before trying anything else.")
+    if not run_query(base + ["getvcp", "10"], "Reading current brightness"):
+        print("\nThe brightness query failed. Share the reviewed output before trying anything else.")
         return 1
     return 0
