@@ -33,6 +33,7 @@ in
     pavucontrol # Audio control GUI
     picard # Music tagger GUI
     playerctl # Media control
+    vesktop
     vlc
     ffmpegthumbnailer # Thumbnails
     ytmdl # YouTube downloader

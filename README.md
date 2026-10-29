@@ -12,8 +12,8 @@ and Home Manager modules.
 | `tpad` | Intel | Laptop desktop |
 | `wsl` | WSL | Development environment without the desktop feature |
 
-Host settings live in [`hosts/<host>/variables.nix`](./hosts). Each host also
-has hardware and host-specific package configuration. Hardware presets live in
+Host settings live in [`hosts/<host>/variables.nix`](./hosts). Hosts can also
+have hardware and host-specific package configuration. Hardware presets live in
 [`profiles/`](./profiles); shared system and user configuration live in
 [`modules/core/`](./modules/core) and [`modules/home/`](./modules/home).
 

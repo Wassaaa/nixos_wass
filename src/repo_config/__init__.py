@@ -1,4 +1,4 @@
-"""Publish staged files: uv run publish -m "message".
+"""Publish staged files: uv run publish -m "message" [--body "body"].
 
 Do not run other Git commands in this checkout while publication is in progress.
 """
@@ -68,7 +68,7 @@ def fetch_head(remote: str, branch: str) -> str:
     return git("rev-parse", "FETCH_HEAD")
 
 
-def publish(message: str, assume_yes: bool) -> None:
+def publish(message: str, assume_yes: bool, body: str | None = None) -> None:
     root = Path(git("rev-parse", "--show-toplevel"))
     if Path.cwd().resolve() != root.resolve():
         raise RuntimeError("Run this script from the repository root; no commit created.")
@@ -92,6 +92,8 @@ def publish(message: str, assume_yes: bool) -> None:
 
     print(f"Repository: {repo}; branch: {remote_branch}; account: {account}")
     print(f"Message: {message}")
+    if body is not None:
+        print(f"Body:\n{body}")
     print("Staged changes:")
     for item in additions:
         print(f"  add/update {item['path']!r}")
@@ -119,7 +121,7 @@ def publish(message: str, assume_yes: bool) -> None:
         "variables": {"input": {
             "branch": {"repositoryNameWithOwner": repo, "branchName": remote_branch},
             "expectedHeadOid": head,
-            "message": {"headline": message},
+            "message": {"headline": message, **({"body": body} if body is not None else {})},
             "fileChanges": {"additions": additions, "deletions": deletions},
         }},
     }
@@ -147,12 +149,13 @@ def publish(message: str, assume_yes: bool) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("-m", "--message", required=True, help="Single-line commit message")
+    parser.add_argument("--body", help="Optional commit message body")
     parser.add_argument("--yes", action="store_true", help="Skip the confirmation prompt")
     args = parser.parse_args()
     if not args.message.strip() or "\n" in args.message or "\r" in args.message:
         parser.error("the commit message must be a non-empty single line")
     try:
-        publish(args.message, args.yes)
+        publish(args.message, args.yes, args.body)
     except (RuntimeError, OSError, UnicodeError, EOFError) as error:
         print(f"Error: {error}", file=sys.stderr)
         return 1

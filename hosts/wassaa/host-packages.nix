@@ -1,12 +1,5 @@
-{ pkgs, ... }:
+{ ... }:
 {
-  environment.systemPackages = with pkgs; [
-    (discord.override {
-      # withOpenASAR = true;
-      withVencord = true;
-    })
-  ];
-
   services.nordvpn.enable = true;
   users.users.wassaa.extraGroups = [ "nordvpn" ];
   systemd.tmpfiles.rules = [
