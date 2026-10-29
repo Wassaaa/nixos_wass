@@ -31,6 +31,13 @@ let
       exit 1
     fi
 
+    case ":''${XDG_CURRENT_DESKTOP:-}:" in
+      *:Hyprland:*)
+        export QT_QPA_PLATFORMTHEME=qtengine
+        export QT_PLUGIN_PATH="${pkgs.qtengine}/${pkgs.qt6.qtbase.qtPluginPrefix}:${pkgs.darkly}/${pkgs.qt6.qtbase.qtPluginPrefix}''${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}"
+        ;;
+    esac
+
     exec ${pkgs.qpwgraph}/bin/qpwgraph --activated --nonexclusive --minimized ${lib.escapeShellArg graphLink}
   '';
 in
