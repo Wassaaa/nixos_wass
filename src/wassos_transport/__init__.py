@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import shutil
+import socket
 import subprocess
 import sys
 
@@ -58,6 +59,52 @@ def inspect_connectors(drm_root: Path, dev_root: Path) -> bool:
     return identity_found
 
 
+def inspect_i2c(dev_root: Path, module_root: Path) -> bool:
+    print(f"\ni2c-dev module loaded: {module_root.is_dir()}")
+    devices = sorted(
+        path for path in dev_root.glob("i2c-*")
+        if path.name[4:].isascii() and path.name[4:].isdecimal()
+    )
+    if not devices:
+        print("No /dev/i2c-* devices found. A reboot may be needed after the rebuild.")
+        return False
+    print("I2C devices (current user's read/write access):")
+    for device in devices:
+        print(f"  {device}: {os.access(device, os.R_OK | os.W_OK)}")
+    return True
+
+
+def prepare_configuration() -> bool:
+    if socket.gethostname() != "wassaa":
+        print("This activation is intended only for the wassaa host.", file=sys.stderr)
+        return False
+    if not sys.stdin.isatty():
+        print("An interactive terminal is required for activation.", file=sys.stderr)
+        return False
+    print("\nApplying this checkout rebuilds and activates the full NixOS configuration.")
+    print("It enables i2c-dev and grants I2C device access to local-seat users and the i2c group.")
+    print("nh may request administrator authentication. No monitor input will be changed.")
+    try:
+        answer = input("Type apply to rebuild, probe to skip rebuilding, or Enter to cancel: ").strip()
+    except EOFError:
+        answer = ""
+    if answer == "probe":
+        print("Skipping the rebuild; checking the current system.")
+        return True
+    if answer != "apply":
+        print("Cancelled; no changes made.")
+        return False
+    try:
+        result = subprocess.run(["nh", "os", "switch"], check=False)
+    except OSError as error:
+        print(f"Could not run the NixOS switch: {error}", file=sys.stderr)
+        return False
+    if result.returncode:
+        print(f"NixOS switch failed with status {result.returncode}; stopping.", file=sys.stderr)
+        return False
+    return True
+
+
 def run_query(command: list[str], description: str) -> bool:
     print(f"\n{description} (no monitor settings will be changed).", flush=True)
     try:
@@ -72,8 +119,8 @@ def run_query(command: list[str], description: str) -> bool:
 
 
 def main() -> int:
-    print("Current task: identify the DP-2 monitor and check DDC/CI detection.")
-    print("No monitor settings or system configuration will be changed.")
+    print("Current task: enable I2C on wassaa and check the DP-2 monitor for DDC/CI.")
+    print("The NixOS configuration is changed only if you explicitly confirm the rebuild.")
     print("DDC queries may cause display glitches and include serial numbers in their output.")
     print("Review all output for sensitive information before sharing it.")
 
@@ -84,7 +131,12 @@ def main() -> int:
         print("This diagnostic requires Linux.", file=sys.stderr)
         return 1
 
+    if not prepare_configuration():
+        return 1
     connectors_found = inspect_connectors(Path("/sys/class/drm"), Path("/dev"))
+    if not inspect_i2c(Path("/dev"), Path("/sys/module/i2c_dev")):
+        print("\nThe probe was incomplete. Share the reviewed output before proceeding.")
+        return 1
     ddcutil = shutil.which("ddcutil")
     if ddcutil:
         command = [ddcutil]

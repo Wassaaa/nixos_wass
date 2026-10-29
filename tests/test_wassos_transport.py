@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from unittest import mock
 
-from wassos_transport import edid_identity, inspect_connectors, main, run_query
+from wassos_transport import edid_identity, inspect_connectors, inspect_i2c, main, prepare_configuration, run_query
 
 
 def sample_edid():
@@ -63,6 +63,70 @@ class MonitorDiagnosticTests(unittest.TestCase):
             self.assertFalse(run_query(["ddcutil", "detect"], "Detecting"))
         self.assertIn("failed", errors.getvalue())
 
+    def test_lists_i2c_device_access(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "i2c-7").touch()
+            (root / "i2c-other").touch()
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                self.assertTrue(inspect_i2c(root, root / "i2c_dev"))
+            self.assertIn("i2c-7", output.getvalue())
+            self.assertNotIn("i2c-other", output.getvalue())
+
+    def test_requires_confirmation_before_rebuild(self):
+        with (
+            mock.patch("wassos_transport.socket.gethostname", return_value="wassaa"),
+            mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
+            mock.patch("builtins.input", return_value=""),
+            mock.patch("wassos_transport.subprocess.run") as run,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            self.assertFalse(prepare_configuration())
+            run.assert_not_called()
+
+    def test_rebuild_is_explicitly_confirmed(self):
+        with (
+            mock.patch("wassos_transport.socket.gethostname", return_value="wassaa"),
+            mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
+            mock.patch("builtins.input", return_value="apply"),
+            mock.patch("wassos_transport.subprocess.run", return_value=subprocess.CompletedProcess([], 0)) as run,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            self.assertTrue(prepare_configuration())
+            run.assert_called_once_with(["nh", "os", "switch"], check=False)
+
+    def test_refuses_to_rebuild_another_host(self):
+        with (
+            mock.patch("wassos_transport.socket.gethostname", return_value="other"),
+            mock.patch("wassos_transport.subprocess.run") as run,
+            contextlib.redirect_stderr(io.StringIO()),
+        ):
+            self.assertFalse(prepare_configuration())
+            run.assert_not_called()
+
+    def test_probe_option_skips_rebuild(self):
+        with (
+            mock.patch("wassos_transport.socket.gethostname", return_value="wassaa"),
+            mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
+            mock.patch("builtins.input", return_value="probe"),
+            mock.patch("wassos_transport.subprocess.run") as run,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            self.assertTrue(prepare_configuration())
+            run.assert_not_called()
+
+    def test_failed_rebuild_stops_probe(self):
+        with (
+            mock.patch("wassos_transport.socket.gethostname", return_value="wassaa"),
+            mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
+            mock.patch("builtins.input", return_value="apply"),
+            mock.patch("wassos_transport.subprocess.run", return_value=subprocess.CompletedProcess([], 1)),
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()) as errors,
+        ):
+            self.assertFalse(prepare_configuration())
+        self.assertIn("switch failed", errors.getvalue())
+
     def test_rejects_non_linux(self):
         with (
             mock.patch("sys.argv", ["x"]),
@@ -77,7 +141,9 @@ class MonitorDiagnosticTests(unittest.TestCase):
         with (
             mock.patch("sys.argv", ["x"]),
             mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.prepare_configuration", return_value=True),
             mock.patch("wassos_transport.inspect_connectors", return_value=True),
+            mock.patch("wassos_transport.inspect_i2c", return_value=True),
             mock.patch("wassos_transport.shutil.which", return_value=None),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
             mock.patch("builtins.input", return_value="no"),
@@ -91,7 +157,9 @@ class MonitorDiagnosticTests(unittest.TestCase):
         with (
             mock.patch("sys.argv", ["x"]),
             mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.prepare_configuration", return_value=True),
             mock.patch("wassos_transport.inspect_connectors", return_value=True),
+            mock.patch("wassos_transport.inspect_i2c", return_value=True),
             mock.patch("wassos_transport.shutil.which", return_value=None),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
             mock.patch("builtins.input", side_effect=["yes", ""]),
@@ -108,7 +176,9 @@ class MonitorDiagnosticTests(unittest.TestCase):
         with (
             mock.patch("sys.argv", ["x"]),
             mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.prepare_configuration", return_value=True),
             mock.patch("wassos_transport.inspect_connectors", return_value=True),
+            mock.patch("wassos_transport.inspect_i2c", return_value=True),
             mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
             mock.patch("builtins.input", return_value="7"),
@@ -126,7 +196,9 @@ class MonitorDiagnosticTests(unittest.TestCase):
         with (
             mock.patch("sys.argv", ["x"]),
             mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.prepare_configuration", return_value=True),
             mock.patch("wassos_transport.inspect_connectors", return_value=True),
+            mock.patch("wassos_transport.inspect_i2c", return_value=True),
             mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
             mock.patch("builtins.input", return_value="7;setvcp"),
