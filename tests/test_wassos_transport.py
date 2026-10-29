@@ -37,6 +37,19 @@ class ThemeDiagnosticTests(unittest.TestCase):
             (root / "123").mkdir()
             self.assertEqual(list(qpwgraph_environments(root, (root / "123").stat().st_uid)), [])
 
+    def test_detects_nix_wrapped_qpwgraph(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            process = root / "123"
+            process.mkdir()
+            (process / "comm").write_text(".qpwgraph-wrapp\n")
+            (process / "cmdline").write_bytes(b"/nix/store/example/bin/.qpwgraph-wrapped\0")
+            (process / "environ").write_bytes(b"QT_QPA_PLATFORMTHEME=qtengine\0")
+
+            result = list(qpwgraph_environments(root, process.stat().st_uid))
+
+        self.assertEqual(result, [("123", {"QT_QPA_PLATFORMTHEME": "qtengine"})])
+
     def test_rejects_non_linux(self):
         with (
             mock.patch("sys.argv", ["x"]),

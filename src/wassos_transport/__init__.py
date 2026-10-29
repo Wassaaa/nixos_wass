@@ -22,7 +22,13 @@ def qpwgraph_environments(proc_root: Path, user_id: int):
             if process.stat().st_uid != user_id:
                 continue
             if (process / "comm").read_text().strip() != "qpwgraph":
-                continue
+                executable = (process / "cmdline").read_bytes().split(b"\0", 1)[0]
+                if Path(os.fsdecode(executable)).name not in {
+                    "qpwgraph",
+                    "qpwgraph-wrapped",
+                    ".qpwgraph-wrapped",
+                }:
+                    continue
             entries = (process / "environ").read_bytes().split(b"\0")
         except (OSError, UnicodeError):
             continue
