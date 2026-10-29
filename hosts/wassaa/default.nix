@@ -6,5 +6,4 @@
   ];
 
   hardware.nvidia.open = true;
-  hardware.i2c.enable = true;
 }
