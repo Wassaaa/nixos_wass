@@ -3,6 +3,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 
 
 def edid_identity(data: bytes) -> tuple[str, str, str]:
@@ -86,9 +87,67 @@ def run_query(command: list[str], description: str) -> bool:
     return True
 
 
+def save_inventory(command: list[str], root: Path) -> bool:
+    try:
+        root.mkdir(parents=True, exist_ok=True, mode=0o700)
+        directory = Path(tempfile.mkdtemp(prefix="snapshot-", dir=root))
+    except OSError as error:
+        print(f"Could not create the snapshot directory: {error}", file=sys.stderr)
+        return False
+    print(f"\nSaving diagnostic files to {directory}")
+    print("The snapshot is partial, may contain monitor identifiers, and is not a full backup.")
+    inventory = directory / "known-controls.txt"
+    print("\nReading known MCCS controls; this may take several minutes.", flush=True)
+    try:
+        result = subprocess.run(
+            command + ["getvcp", "known"],
+            timeout=600,
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+        inventory.write_text(result.stdout, encoding="utf-8")
+    except (OSError, subprocess.TimeoutExpired) as error:
+        print(f"Control inventory failed: {error}", file=sys.stderr)
+        inventory_ok = False
+    else:
+        if result.stdout:
+            print(result.stdout, end="" if result.stdout.endswith("\n") else "\n")
+        if result.stderr:
+            print(result.stderr, file=sys.stderr, end="" if result.stderr.endswith("\n") else "\n")
+        has_values = any(
+            line.lstrip().startswith("VCP code") and "status code" not in line
+            for line in result.stdout.splitlines()
+        )
+        inventory_ok = result.returncode == 0 and has_values
+        if not inventory_ok:
+            print(f"Control inventory was incomplete (exit status {result.returncode}).", file=sys.stderr)
+
+    profile = directory / "color-profile.vcp"
+    profile_ok = run_query(command + ["dumpvcp", str(profile)], "Saving the partial color profile")
+    if profile_ok:
+        try:
+            values = [line for line in profile.read_text(encoding="utf-8").splitlines() if line.startswith("VCP ")]
+        except (OSError, UnicodeError) as error:
+            print(f"Could not inspect the color snapshot: {error}", file=sys.stderr)
+            profile_ok = False
+        else:
+            if not values:
+                print("The color snapshot contains no VCP values; it is incomplete.", file=sys.stderr)
+                profile_ok = False
+            else:
+                print(f"Color snapshot contains {len(values)} VCP values.")
+    print(f"\nFiles are in {directory}; review them for sensitive information before sharing.")
+    print("No restoration or monitor setting writes were attempted.")
+    return inventory_ok and profile_ok
+
+
 def main() -> int:
-    print("Current task: check whether the DP-2 monitor responds to a DDC brightness read.")
+    print("Current task: inventory DDC controls and save a partial color snapshot for the Acer monitor.")
     print("No monitor settings or system configuration will be changed.")
+    print("A private snapshot directory will be created only after confirmation.")
     print("DDC queries may cause display glitches and include serial numbers in their output.")
     print("Review all output for sensitive information before sharing it.")
 
@@ -126,20 +185,29 @@ def main() -> int:
     print("\nFind the Acer display in the detection output and identify its I2C bus number.")
     print("Only select a bus if you can positively identify the intended display.")
     if not sys.stdin.isatty():
-        print("No interactive terminal available; skipping the brightness query.", file=sys.stderr)
+        print("No interactive terminal available; skipping the inventory.", file=sys.stderr)
         return 1
     try:
         bus = input("Enter the Acer's bus number (digits only), or press Enter to skip: ").strip()
     except EOFError:
         bus = ""
     if not bus:
-        print("Skipped the brightness query. Share the reviewed detection output.")
+        print("Skipped the inventory. Share the reviewed detection output.")
         return 0
     if not bus.isascii() or not bus.isdecimal():
-        print("Invalid bus number; no brightness query was run.", file=sys.stderr)
+        print("Invalid bus number; no inventory was run.", file=sys.stderr)
         return 1
     base = command + ["--bus", bus]
-    if not run_query(base + ["getvcp", "10"], "Reading current brightness"):
-        print("\nThe brightness query failed. Share the reviewed output before trying anything else.")
+    print("\nThe inventory reads known MCCS features, not every vendor-specific command.")
+    print("The color snapshot is partial and cannot guarantee restoration of monitor settings.")
+    try:
+        answer = input("Type save to run the inventory and create the snapshot files: ").strip()
+    except EOFError:
+        answer = ""
+    if answer != "save":
+        print("Cancelled; no snapshot files were created.")
+        return 1
+    if not save_inventory(base, Path.home() / ".local" / "state" / "wassos" / "monitor-snapshots"):
+        print("\nThe inventory or color snapshot was incomplete; inspect the reported errors.", file=sys.stderr)
         return 1
     return 0

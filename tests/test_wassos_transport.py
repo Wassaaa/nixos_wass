@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from unittest import mock
 
-from wassos_transport import edid_identity, inspect_connectors, inspect_i2c, main, run_query
+from wassos_transport import edid_identity, inspect_connectors, inspect_i2c, main, run_query, save_inventory
 
 
 def sample_edid():
@@ -116,7 +116,7 @@ class MonitorDiagnosticTests(unittest.TestCase):
                 "Detecting DDC-capable displays",
             )
 
-    def test_selected_bus_reads_brightness_only(self):
+    def test_selected_bus_saves_only_after_confirmation(self):
         with (
             mock.patch("sys.argv", ["x"]),
             mock.patch("wassos_transport.sys.platform", "linux"),
@@ -124,15 +124,73 @@ class MonitorDiagnosticTests(unittest.TestCase):
             mock.patch("wassos_transport.inspect_i2c", return_value=True),
             mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
-            mock.patch("builtins.input", return_value="7"),
+            mock.patch("builtins.input", side_effect=["7", "save"]),
             mock.patch("wassos_transport.run_query", return_value=True) as query,
+            mock.patch("wassos_transport.save_inventory", return_value=True) as save,
             contextlib.redirect_stdout(io.StringIO()),
         ):
             self.assertEqual(main(), 0)
-            self.assertEqual([call.args[0] for call in query.call_args_list], [
-                ["ddcutil", "detect"],
-                ["ddcutil", "--bus", "7", "getvcp", "10"],
-            ])
+            query.assert_called_once_with(["ddcutil", "detect"], "Detecting DDC-capable displays")
+            self.assertEqual(save.call_args.args[0], ["ddcutil", "--bus", "7"])
+
+    def test_snapshot_confirmation_is_required(self):
+        with (
+            mock.patch("sys.argv", ["x"]),
+            mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.inspect_connectors", return_value=True),
+            mock.patch("wassos_transport.inspect_i2c", return_value=True),
+            mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
+            mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
+            mock.patch("builtins.input", side_effect=["7", ""]),
+            mock.patch("wassos_transport.run_query", return_value=True),
+            mock.patch("wassos_transport.save_inventory") as save,
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            self.assertEqual(main(), 1)
+            save.assert_not_called()
+
+    def test_inventory_saves_known_controls_and_color_profile(self):
+        commands = []
+
+        def fake_query(command, description):
+            commands.append(command)
+            Path(command[-1]).write_text("MFG_ID ACR\nVCP 10 50\n")
+            return True
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            mock.patch(
+                "wassos_transport.subprocess.run",
+                return_value=subprocess.CompletedProcess([], 0, "VCP code 0x10: current value = 50\n", ""),
+            ) as run,
+            mock.patch("wassos_transport.run_query", side_effect=fake_query),
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            root = Path(directory)
+            self.assertTrue(save_inventory(["ddcutil", "--bus", "8"], root))
+            snapshot = next(root.iterdir())
+            self.assertIn("0x10", (snapshot / "known-controls.txt").read_text())
+            self.assertIn("VCP 10 50", (snapshot / "color-profile.vcp").read_text())
+            self.assertEqual(run.call_args.args[0], ["ddcutil", "--bus", "8", "getvcp", "known"])
+            self.assertEqual(commands[0][:-1], ["ddcutil", "--bus", "8", "dumpvcp"])
+
+    def test_empty_color_snapshot_is_reported_as_incomplete(self):
+        def empty_profile(command, description):
+            Path(command[-1]).write_text("MFG_ID ACR\n")
+            return True
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            mock.patch(
+                "wassos_transport.subprocess.run",
+                return_value=subprocess.CompletedProcess([], 0, "VCP code 0x10: current value = 50\n", ""),
+            ),
+            mock.patch("wassos_transport.run_query", side_effect=empty_profile),
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()) as errors,
+        ):
+            self.assertFalse(save_inventory(["ddcutil", "--bus", "8"], Path(directory)))
+            self.assertIn("no VCP values", errors.getvalue())
 
     def test_invalid_bus_is_not_queried(self):
         with (
