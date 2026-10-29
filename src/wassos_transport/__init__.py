@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 
 def edid_identity(data: bytes) -> tuple[str, str, str]:
@@ -125,43 +126,76 @@ def bus_snapshot(bus: str, sys_root: Path, dev_root: Path) -> tuple[Path, int, i
     return adapter, stat.st_dev, stat.st_ino, stat.st_rdev
 
 
-def read_brightness(command: list[str], bus: str, output: Path) -> bool:
-    print(f"\nReading brightness on /dev/i2c-{bus}; saving diagnostics to {output}", flush=True)
+def run_transfer(command: list[str]) -> tuple[str, str, str, bool]:
     try:
         result = subprocess.run(
-            command + ["--bus", bus, "--skip-ddc-checks", "--ddcdata", "--stats=all", "getvcp", "10"],
-            timeout=240, check=False, capture_output=True, text=True,
-            encoding="utf-8", errors="replace",
+            command, timeout=30, check=False, capture_output=True,
+            text=True, encoding="utf-8", errors="replace",
         )
     except OSError as error:
-        print(f"Brightness read could not start: {error}", file=sys.stderr)
-        return False
+        return "", str(error), "could not start", False
     except subprocess.TimeoutExpired as error:
         stdout = (error.stdout or b"").decode("utf-8", "replace")
         stderr = (error.stderr or b"").decode("utf-8", "replace")
-        status = "timed out"
-        successful = False
-    else:
-        stdout, stderr = result.stdout, result.stderr
-        status = str(result.returncode)
-        successful = result.returncode == 0
+        return stdout, stderr, "timed out", False
+    return result.stdout, result.stderr, str(result.returncode), result.returncode == 0
+
+
+def parse_brightness_reply(stdout: str) -> tuple[int, int]:
+    tokens = stdout.split()
+    if len(tokens) != 11 or any(not re.fullmatch(r"0x[0-9a-f]{2}", token, re.IGNORECASE) for token in tokens):
+        raise ValueError("Expected 11 hexadecimal response bytes")
+    reply = bytes(int(token, 16) for token in tokens)
+    if reply[:3] != b"\x6e\x88\x02" or reply[4] != 0x10:
+        raise ValueError("Response is not a Get VCP brightness reply")
+    checksum = 0x50
+    for byte in reply:
+        checksum ^= byte
+    if checksum != 0:
+        raise ValueError("Response checksum is invalid")
+    if reply[3] != 0:
+        raise ValueError(f"Monitor reports an unsupported feature (result 0x{reply[3]:02x})")
+    if reply[5] != 0:
+        raise ValueError(f"Brightness has unexpected VCP type 0x{reply[5]:02x}")
+    maximum = int.from_bytes(reply[6:8], "big")
+    current = int.from_bytes(reply[8:10], "big")
+    return current, maximum
+
+
+def read_brightness(command: list[str], bus: str, output: Path) -> bool:
+    print(f"\nSending a raw brightness Get VCP request on /dev/i2c-{bus}; saving diagnostics to {output}", flush=True)
+    # 0x51 0x82 0x01 0x10 0xac is a Get VCP request, not a setting write.
+    request = command + ["-y", bus, "w5@0x37", "0x51", "0x82", "0x01", "0x10", "0xac"]
+    read = command + ["-y", bus, "r11@0x37"]
+    write_stdout, write_stderr, write_status, wrote = run_transfer(request)
+    read_stdout = read_stderr = ""
+    read_status = "not attempted"
+    successful = False
+    if wrote:
+        time.sleep(0.1)
+        read_stdout, read_stderr, read_status, successful = run_transfer(read)
+    summary = (
+        f"Request transfer status: {write_status}\n"
+        f"Request stdout:\n{write_stdout}\nRequest stderr:\n{write_stderr}\n"
+        f"Response transfer status: {read_status}\n"
+        f"Response stdout:\n{read_stdout}\nResponse stderr:\n{read_stderr}\n"
+    )
     try:
-        output.write_text(
-            f"ddcutil status: {status}\n\nSTDOUT:\n{stdout}\nSTDERR:\n{stderr}",
-            encoding="utf-8",
-        )
+        output.write_text(summary, encoding="utf-8")
     except OSError as error:
         print(f"Could not save diagnostics: {error}", file=sys.stderr)
         return False
-    if stdout:
-        print(stdout, end="" if stdout.endswith("\n") else "\n")
-    if stderr:
-        print(stderr, file=sys.stderr, end="" if stderr.endswith("\n") else "\n")
-    print(f"\nddcutil status: {status}. Review output for sensitive information before sharing.")
-    if successful and not re.search(r"(?im)^VCP code 0x10\s+.*current value\s*=", stdout):
-        print("ddcutil reported success but did not return a brightness value.", file=sys.stderr)
+    print(summary)
+    if not wrote or not successful:
+        print("Raw transfer failed; a response was not established.", file=sys.stderr)
         return False
-    return successful
+    try:
+        current, maximum = parse_brightness_reply(read_stdout)
+    except ValueError as error:
+        print(f"Invalid brightness response: {error}", file=sys.stderr)
+        return False
+    print(f"Valid brightness response: current value = {current}, max value = {maximum}.")
+    return True
 
 
 def ask_bus(available: set[str]) -> str | None:
@@ -182,12 +216,12 @@ def ask_bus(available: set[str]) -> str | None:
 
 
 def main() -> int:
-    print("Current task: compare Acer brightness reads with initial DDC checks skipped.")
+    print("Current task: compare raw Acer brightness requests on DisplayPort and HDMI.")
     print("No monitor settings or system configuration will be changed.")
     print("You will manually change the Acer's input; return to DisplayPort with its controls.")
     print("Keep Hyprland's layout unchanged and move this terminal to the second monitor.")
     print("A private results directory will be created only after confirmation.")
-    print("DDC queries may cause display glitches and include serial numbers in their output.")
+    print("Raw I2C queries may cause display glitches. Do not run other monitor-control tools concurrently.")
     print("Review all output for sensitive information before sharing it.")
 
     if len(sys.argv) != 1:
@@ -206,27 +240,28 @@ def main() -> int:
         print("An interactive terminal is required for the comparison.", file=sys.stderr)
         return 1
     ddcutil = shutil.which("ddcutil")
-    if ddcutil:
-        command = [ddcutil]
-    else:
-        print("\nddcutil is not installed. A temporary Nix shell can download it into the Nix store.")
+    i2ctransfer = shutil.which("i2ctransfer")
+    missing = [name for name, executable in (("ddcutil", ddcutil), ("i2c-tools", i2ctransfer)) if not executable]
+    if missing:
+        print("\nMissing tools: " + ", ".join(missing) + ". Temporary Nix shells can download them into the Nix store.")
         try:
-            answer = input("Download/run ddcutil for detection? Type yes to continue: ").strip()
+            answer = input("Download/run missing tools? Type yes to continue: ").strip()
         except EOFError:
             answer = ""
         if answer != "yes":
-            print("Skipped DDC detection.")
+            print("Skipped the probe.")
             return 1
-        command = ["nix", "shell", "--inputs-from", ".", "nixpkgs#ddcutil", "--command", "ddcutil"]
-    buses = detect_acer_buses(command)
+    detect_command = [ddcutil] if ddcutil else ["nix", "shell", "--inputs-from", ".", "nixpkgs#ddcutil", "--command", "ddcutil"]
+    raw_command = [i2ctransfer] if i2ctransfer else ["nix", "shell", "--inputs-from", ".", "nixpkgs#i2c-tools", "--command", "i2ctransfer"]
+    buses = detect_acer_buses(detect_command)
     if buses is None:
         return 1
     bus = ask_bus(buses)
     if bus is None:
         return 1
-    print("\nThe comparison requests Get VCP 0x10 (brightness); detection may query other information.")
-    print("ddcutil skips initial DDC checks for both brightness reads, but may still require monitor detection.")
-    print("No Set VCP commands are sent.")
+    print("\nThe raw comparison sends a Get VCP 0x10 request to I2C address 0x37 and reads its response.")
+    print("The request uses I2C write bytes but does not send a Set VCP command.")
+    print("ddcutil detection may query other information.")
     print("Confirm that the Acer displays DisplayPort and this terminal is visible on the second monitor.")
     try:
         answer = input("Type start to read the DisplayPort baseline, or Enter to cancel: ").strip()
@@ -240,11 +275,11 @@ def main() -> int:
         adapter = bus_snapshot(bus, sys_root, dev_root)
         root = Path.home() / ".local" / "state" / "wassos" / "monitor-scans"
         root.mkdir(parents=True, exist_ok=True, mode=0o700)
-        directory = Path(tempfile.mkdtemp(prefix="brightness-compare-", dir=root))
+        directory = Path(tempfile.mkdtemp(prefix="raw-brightness-", dir=root))
     except (OSError, ValueError) as error:
         print(f"Could not prepare the baseline: {error}", file=sys.stderr)
         return 1
-    if not read_brightness(command, bus, directory / "displayport.txt"):
+    if not read_brightness(raw_command, bus, directory / "displayport.txt"):
         print("The DisplayPort brightness read failed; not proceeding to HDMI.", file=sys.stderr)
         print(f"Diagnostics: {directory} (review for sensitive information before sharing).")
         return 1
@@ -267,7 +302,7 @@ def main() -> int:
             print(f"Cannot safely reuse the baseline bus: {error}. HDMI read skipped.", file=sys.stderr)
             return 1
         print("Connector and I2C device match the baseline; attempting the targeted read.")
-        if not read_brightness(command, bus, directory / "hdmi.txt"):
+        if not read_brightness(raw_command, bus, directory / "hdmi.txt"):
             print("HDMI-stage read failed; this does not prove all DDC requests are impossible.", file=sys.stderr)
             return 1
         print("Both brightness reads succeeded; compare the saved diagnostics.")
