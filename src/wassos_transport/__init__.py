@@ -129,7 +129,7 @@ def read_brightness(command: list[str], bus: str, output: Path) -> bool:
     print(f"\nReading brightness on /dev/i2c-{bus}; saving diagnostics to {output}", flush=True)
     try:
         result = subprocess.run(
-            command + ["--bus", bus, "--ddcdata", "--stats=all", "getvcp", "10"],
+            command + ["--bus", bus, "--skip-ddc-checks", "--ddcdata", "--stats=all", "getvcp", "10"],
             timeout=240, check=False, capture_output=True, text=True,
             encoding="utf-8", errors="replace",
         )
@@ -182,7 +182,7 @@ def ask_bus(available: set[str]) -> str | None:
 
 
 def main() -> int:
-    print("Current task: compare targeted Acer brightness reads on DisplayPort and HDMI.")
+    print("Current task: compare Acer brightness reads with initial DDC checks skipped.")
     print("No monitor settings or system configuration will be changed.")
     print("You will manually change the Acer's input; return to DisplayPort with its controls.")
     print("Keep Hyprland's layout unchanged and move this terminal to the second monitor.")
@@ -225,6 +225,7 @@ def main() -> int:
     if bus is None:
         return 1
     print("\nThe comparison requests Get VCP 0x10 (brightness); detection may query other information.")
+    print("ddcutil skips initial DDC checks for both brightness reads, but may still require monitor detection.")
     print("No Set VCP commands are sent.")
     print("Confirm that the Acer displays DisplayPort and this terminal is visible on the second monitor.")
     try:

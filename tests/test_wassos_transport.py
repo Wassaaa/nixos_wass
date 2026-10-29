@@ -121,7 +121,8 @@ class MonitorDiagnosticTests(unittest.TestCase):
             output = Path(directory) / "baseline.txt"
             self.assertTrue(read_brightness(["ddcutil"], "8", output))
             self.assertEqual(run.call_args.args[0],
-                             ["ddcutil", "--bus", "8", "--ddcdata", "--stats=all", "getvcp", "10"])
+                             ["ddcutil", "--bus", "8", "--skip-ddc-checks", "--ddcdata",
+                              "--stats=all", "getvcp", "10"])
             self.assertIn("current value = 50", output.read_text())
             self.assertIn("warning", output.read_text())
 
