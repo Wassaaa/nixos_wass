@@ -1,39 +1,69 @@
 from pathlib import Path
-import socket
-import subprocess
+import os
 import sys
 
 
+THEME_VARIABLES = (
+    "QT_QPA_PLATFORM",
+    "QT_QPA_PLATFORMTHEME",
+    "QT_PLUGIN_PATH",
+    "QT_STYLE_OVERRIDE",
+    "XDG_CURRENT_DESKTOP",
+    "XDG_SESSION_TYPE",
+    "WAYLAND_DISPLAY",
+)
+
+
+def qpwgraph_environments(proc_root: Path, user_id: int):
+    for process in sorted(proc_root.iterdir(), key=lambda path: path.name):
+        if not process.name.isdecimal():
+            continue
+        try:
+            if process.stat().st_uid != user_id:
+                continue
+            if (process / "comm").read_text().strip() != "qpwgraph":
+                continue
+            entries = (process / "environ").read_bytes().split(b"\0")
+        except (OSError, UnicodeError):
+            continue
+
+        values = {}
+        for entry in entries:
+            name, separator, value = entry.partition(b"=")
+            if separator:
+                name = os.fsdecode(name)
+                if name in THEME_VARIABLES:
+                    values[name] = os.fsdecode(value)
+        yield process.name, values
+
+
+def print_environment(label, values):
+    print(f"\n{label}:")
+    for name in THEME_VARIABLES:
+        print(f"  {name}={values.get(name, '<unset>')}")
+
+
 def main() -> int:
+    print("Current task: compare qpwgraph startup and session theme environments.")
+    print("Read-only: no processes, settings, or files will be changed.")
+    print("Review the output for sensitive paths before sharing it.")
+
     if len(sys.argv) != 1:
         print("Usage: uv run x", file=sys.stderr)
         return 1
-
-    print("Current task: deploy the media routing configuration on wassaa.")
-    print("This builds and switches the NixOS configuration with sudo; services may restart.")
-    print("It does not reboot. Reboot afterward to apply the virtual camera module options.")
-
-    if sys.platform != "linux" or socket.gethostname() != "wassaa":
-        print("This task must run on the wassaa NixOS host.", file=sys.stderr)
-        return 1
-    if not (Path.cwd() / "flake.nix").is_file():
-        print("Run this task from the repository root.", file=sys.stderr)
-        return 1
-    if not sys.stdin.isatty():
-        print("Interactive confirmation is required.", file=sys.stderr)
+    proc_root = Path("/proc")
+    if sys.platform != "linux" or not proc_root.is_dir():
+        print("This diagnostic requires Linux with /proc.", file=sys.stderr)
         return 1
 
-    try:
-        if input("Type 'apply' to build and switch, or press Enter to cancel: ") != "apply":
-            print("Cancelled; no changes made.")
-            return 0
-        return subprocess.run(
-            ["sudo", "nixos-rebuild", "switch", "--flake", ".#wassaa"],
-            check=False,
-        ).returncode
-    except (EOFError, KeyboardInterrupt):
-        print("\nCancelled.", file=sys.stderr)
+    print_environment("Current terminal", os.environ)
+    found = False
+    for process_id, values in qpwgraph_environments(proc_root, os.getuid()):
+        found = True
+        print_environment(f"qpwgraph PID {process_id}", values)
+    if not found:
+        print("\nNo readable qpwgraph process found for the current user.")
         return 1
-    except OSError as error:
-        print(f"Could not start the rebuild: {error}", file=sys.stderr)
-        return 1
+
+    print("\nProcess values reflect startup, not the current visual theme.")
+    return 0

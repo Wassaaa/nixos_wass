@@ -1,54 +1,51 @@
 import contextlib
 import io
+from pathlib import Path
+import tempfile
 import unittest
 from unittest import mock
 
-from wassos_transport import main
+from wassos_transport import main, print_environment, qpwgraph_environments
 
 
-class DeploymentTests(unittest.TestCase):
-    def run_task(self, *, confirmation="apply", host="wassaa", interactive=True, root=True, exit_code=0):
+class ThemeDiagnosticTests(unittest.TestCase):
+    def test_reads_only_qpwgraph_and_allowed_environment_values(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            process = root / "123"
+            process.mkdir()
+            (process / "comm").write_text("qpwgraph\n")
+            (process / "environ").write_bytes(
+                b"QT_QPA_PLATFORMTHEME=qtengine\0SECRET=do-not-print\0"
+            )
+            other = root / "456"
+            other.mkdir()
+            (other / "comm").write_text("other\n")
+            (other / "environ").write_bytes(b"QT_STYLE_OVERRIDE=unrelated\0")
+
+            result = list(qpwgraph_environments(root, process.stat().st_uid))
+
+        self.assertEqual(result, [("123", {"QT_QPA_PLATFORMTHEME": "qtengine"})])
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            print_environment("qpwgraph PID 123", result[0][1])
+        self.assertIn("QT_QPA_PLATFORMTHEME=qtengine", output.getvalue())
+        self.assertNotIn("do-not-print", output.getvalue())
+
+    def test_skips_vanished_or_inaccessible_processes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "123").mkdir()
+            self.assertEqual(list(qpwgraph_environments(root, (root / "123").stat().st_uid)), [])
+
+    def test_rejects_non_linux(self):
         with (
             mock.patch("sys.argv", ["x"]),
-            mock.patch("wassos_transport.sys.platform", "linux"),
-            mock.patch("wassos_transport.socket.gethostname", return_value=host),
-            mock.patch("wassos_transport.Path.is_file", return_value=root),
-            mock.patch("sys.stdin.isatty", return_value=interactive),
-            mock.patch("builtins.input", return_value=confirmation),
-            mock.patch("wassos_transport.subprocess.run") as rebuild,
+            mock.patch("wassos_transport.sys.platform", "win32"),
             contextlib.redirect_stdout(io.StringIO()),
-            contextlib.redirect_stderr(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()) as errors,
         ):
-            rebuild.return_value.returncode = exit_code
-            result = main()
-        return result, rebuild
-
-    def test_confirmed_deployment(self):
-        result, rebuild = self.run_task()
-        self.assertEqual(result, 0)
-        rebuild.assert_called_once_with(
-            ["sudo", "nixos-rebuild", "switch", "--flake", ".#wassaa"],
-            check=False,
-        )
-
-    def test_cancel_does_not_deploy(self):
-        result, rebuild = self.run_task(confirmation="")
-        self.assertEqual(result, 0)
-        rebuild.assert_not_called()
-
-    def test_rejects_wrong_host_noninteractive_or_wrong_directory(self):
-        cases = (
-            self.run_task(host="tpad"),
-            self.run_task(interactive=False),
-            self.run_task(root=False),
-        )
-        for result, rebuild in cases:
-            self.assertEqual(result, 1)
-            rebuild.assert_not_called()
-
-    def test_rebuild_failure_is_returned(self):
-        result, _ = self.run_task(exit_code=3)
-        self.assertEqual(result, 3)
+            self.assertEqual(main(), 1)
+        self.assertIn("requires Linux", errors.getvalue())
 
 
 if __name__ == "__main__":
