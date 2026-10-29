@@ -6,7 +6,10 @@ import tempfile
 import unittest
 from unittest import mock
 
-from wassos_transport import edid_identity, inspect_connectors, inspect_i2c, main, run_query, save_vendor_reads
+from wassos_transport import (
+    VENDOR_CODES, compare_values, detect_acer_buses, edid_identity, inspect_connectors,
+    inspect_i2c, main, read_vendor_values,
+)
 
 
 def sample_edid():
@@ -60,8 +63,27 @@ class MonitorDiagnosticTests(unittest.TestCase):
             contextlib.redirect_stdout(io.StringIO()),
             contextlib.redirect_stderr(io.StringIO()) as errors,
         ):
-            self.assertFalse(run_query(["ddcutil", "detect"], "Detecting"))
+            self.assertIsNone(detect_acer_buses(["ddcutil"], "DisplayPort"))
         self.assertIn("failed", errors.getvalue())
+
+    def test_detect_only_identifies_acer_bus_without_printing_serials(self):
+        response = (
+            "Display 1\n   I2C bus: /dev/i2c-7\n   Monitor: SAM:S27C31x:secret1\n\n"
+            "Display 2\n   I2C bus: /dev/i2c-8\n   Monitor: ACR:XB271HU:secret2\n"
+        )
+        with (
+            mock.patch(
+                "wassos_transport.subprocess.run",
+                return_value=subprocess.CompletedProcess([], 0, response, ""),
+            ) as run,
+            contextlib.redirect_stdout(io.StringIO()) as output,
+        ):
+            self.assertEqual(detect_acer_buses(["ddcutil"], "HDMI"), {"8"})
+            self.assertNotIn("secret", output.getvalue())
+            run.assert_called_once_with(
+                ["ddcutil", "detect", "--brief"], timeout=240, check=False,
+                capture_output=True, text=True, encoding="utf-8", errors="replace",
+            )
 
     def test_lists_i2c_device_access(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -106,17 +128,17 @@ class MonitorDiagnosticTests(unittest.TestCase):
             mock.patch("wassos_transport.inspect_i2c", return_value=True),
             mock.patch("wassos_transport.shutil.which", return_value=None),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
-            mock.patch("builtins.input", side_effect=["yes", ""]),
-            mock.patch("wassos_transport.run_query", return_value=True) as detect,
+            mock.patch("builtins.input", return_value="yes"),
+            mock.patch("wassos_transport.detect_acer_buses", return_value=set()) as detect,
             contextlib.redirect_stdout(io.StringIO()),
         ):
-            self.assertEqual(main(), 0)
+            self.assertEqual(main(), 1)
             detect.assert_called_once_with(
-                ["nix", "shell", "--inputs-from", ".", "nixpkgs#ddcutil", "--command", "ddcutil", "detect"],
-                "Detecting DDC-capable displays",
+                ["nix", "shell", "--inputs-from", ".", "nixpkgs#ddcutil", "--command", "ddcutil"],
+                "DisplayPort",
             )
 
-    def test_selected_bus_saves_only_after_confirmation(self):
+    def test_comparison_requires_two_confirmations_and_reselects_bus(self):
         with (
             mock.patch("sys.argv", ["x"]),
             mock.patch("wassos_transport.sys.platform", "linux"),
@@ -124,16 +146,22 @@ class MonitorDiagnosticTests(unittest.TestCase):
             mock.patch("wassos_transport.inspect_i2c", return_value=True),
             mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
-            mock.patch("builtins.input", side_effect=["7", "scan"]),
-            mock.patch("wassos_transport.run_query", return_value=True) as query,
-            mock.patch("wassos_transport.save_vendor_reads", return_value=True) as save,
+            mock.patch("builtins.input", side_effect=["8", "start", "ready", "9"]),
+            mock.patch("wassos_transport.detect_acer_buses", side_effect=[{"8"}, {"9"}]) as query,
+            mock.patch("wassos_transport.read_vendor_values", side_effect=[
+                ({"e0": "00 00 00 00"}, True),
+                ({"e0": "00 00 00 01"}, True),
+            ]) as read,
+            tempfile.TemporaryDirectory() as directory,
+            mock.patch("pathlib.Path.home", return_value=Path(directory)),
             contextlib.redirect_stdout(io.StringIO()),
         ):
             self.assertEqual(main(), 0)
-            query.assert_called_once_with(["ddcutil", "detect"], "Detecting DDC-capable displays")
-            self.assertEqual(save.call_args.args[0], ["ddcutil", "--bus", "7"])
+            self.assertEqual(query.call_count, 2)
+            self.assertEqual(read.call_args_list[0].args[0], ["ddcutil", "--bus", "8"])
+            self.assertEqual(read.call_args_list[1].args[0], ["ddcutil", "--bus", "9"])
 
-    def test_scan_confirmation_is_required(self):
+    def test_baseline_confirmation_is_required(self):
         with (
             mock.patch("sys.argv", ["x"]),
             mock.patch("wassos_transport.sys.platform", "linux"),
@@ -142,30 +170,75 @@ class MonitorDiagnosticTests(unittest.TestCase):
             mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
             mock.patch("builtins.input", side_effect=["7", ""]),
-            mock.patch("wassos_transport.run_query", return_value=True),
-            mock.patch("wassos_transport.save_vendor_reads") as save,
+            mock.patch("wassos_transport.detect_acer_buses", return_value={"7"}),
+            mock.patch("wassos_transport.read_vendor_values") as read,
             contextlib.redirect_stdout(io.StringIO()),
         ):
             self.assertEqual(main(), 1)
-            save.assert_not_called()
+            read.assert_not_called()
 
-    def test_scan_saves_exact_vendor_range_without_writes(self):
+    def test_comparison_cancel_after_baseline_does_not_query_again(self):
+        with (
+            mock.patch("sys.argv", ["x"]),
+            mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.inspect_connectors", return_value=True),
+            mock.patch("wassos_transport.inspect_i2c", return_value=True),
+            mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
+            mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
+            mock.patch("builtins.input", side_effect=["8", "start", ""]),
+            mock.patch("wassos_transport.detect_acer_buses", return_value={"8"}) as query,
+            mock.patch("wassos_transport.read_vendor_values", return_value=({"e0": "00 00 00 00"}, True)) as read,
+            tempfile.TemporaryDirectory() as directory,
+            mock.patch("pathlib.Path.home", return_value=Path(directory)),
+            contextlib.redirect_stdout(io.StringIO()) as output,
+        ):
+            self.assertEqual(main(), 1)
+            self.assertEqual(query.call_count, 1)
+            self.assertEqual(read.call_count, 1)
+            self.assertIn("return to DisplayPort", output.getvalue())
+
+    def test_missing_acer_on_hdmi_does_not_query_other_display(self):
+        with (
+            mock.patch("sys.argv", ["x"]),
+            mock.patch("wassos_transport.sys.platform", "linux"),
+            mock.patch("wassos_transport.inspect_connectors", return_value=True),
+            mock.patch("wassos_transport.inspect_i2c", return_value=True),
+            mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
+            mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
+            mock.patch("builtins.input", side_effect=["8", "start", "ready"]),
+            mock.patch("wassos_transport.detect_acer_buses", side_effect=[{"8"}, set()]),
+            mock.patch("wassos_transport.read_vendor_values", return_value=({"e0": "00 00 00 00"}, True)) as read,
+            tempfile.TemporaryDirectory() as directory,
+            mock.patch("pathlib.Path.home", return_value=Path(directory)),
+            contextlib.redirect_stdout(io.StringIO()) as output,
+        ):
+            self.assertEqual(main(), 1)
+            self.assertEqual(read.call_count, 1)
+            self.assertIn("No Acer bus selected", output.getvalue())
+            self.assertIn("return to DisplayPort", output.getvalue())
+
+    def test_reads_only_previously_responsive_vendor_codes(self):
+        raw = "".join(
+            f"Raw value: opcode=0x{code}, mh=0x00, ml=0x00, sh=0x00, sl=0x01\n"
+            for code in VENDOR_CODES
+        )
         with (
             tempfile.TemporaryDirectory() as directory,
             mock.patch(
                 "wassos_transport.subprocess.run",
-                return_value=subprocess.CompletedProcess([], 0, "VCP code 0xe0: value\n", ""),
+                return_value=subprocess.CompletedProcess([], 0, raw, ""),
             ) as run,
             contextlib.redirect_stdout(io.StringIO()),
         ):
-            root = Path(directory)
-            self.assertTrue(save_vendor_reads(["ddcutil", "--bus", "8"], root))
-            scan = next(root.iterdir())
-            self.assertIn("0xe0", (scan / "vendor-read.txt").read_text())
+            output = Path(directory) / "baseline.txt"
+            values, complete = read_vendor_values(["ddcutil", "--bus", "8"], output)
+            self.assertTrue(complete)
+            self.assertEqual(values["e0"], "00 00 00 01")
+            self.assertIn("0xe0", output.read_text())
             self.assertEqual(
                 run.call_args.args[0],
                 ["ddcutil", "--bus", "8", "--verbose", "getvcp"]
-                + [f"{value:02x}" for value in range(0xE0, 0x100)],
+                + list(VENDOR_CODES),
             )
 
     def test_failed_reads_preserve_output_and_report_incomplete(self):
@@ -178,23 +251,46 @@ class MonitorDiagnosticTests(unittest.TestCase):
             contextlib.redirect_stdout(io.StringIO()),
             contextlib.redirect_stderr(io.StringIO()) as errors,
         ):
-            root = Path(directory)
-            self.assertFalse(save_vendor_reads(["ddcutil", "--bus", "8"], root))
-            self.assertIn("EIO", (next(root.iterdir()) / "vendor-read.txt").read_text())
+            output = Path(directory) / "baseline.txt"
+            self.assertIsNone(read_vendor_values(["ddcutil", "--bus", "8"], output))
+            self.assertIn("EIO", output.read_text())
             self.assertIn("status: 1", errors.getvalue())
 
     def test_timeout_preserves_partial_output(self):
-        timeout = subprocess.TimeoutExpired("ddcutil", 600, output=b"partial", stderr=b"warning")
+        timeout = subprocess.TimeoutExpired("ddcutil", 300, output=b"partial", stderr=b"warning")
         with (
             tempfile.TemporaryDirectory() as directory,
             mock.patch("wassos_transport.subprocess.run", side_effect=timeout),
             contextlib.redirect_stdout(io.StringIO()),
             contextlib.redirect_stderr(io.StringIO()) as errors,
         ):
-            root = Path(directory)
-            self.assertFalse(save_vendor_reads(["ddcutil", "--bus", "8"], root))
-            self.assertIn("partial", (next(root.iterdir()) / "vendor-read.txt").read_text())
+            output = Path(directory) / "baseline.txt"
+            self.assertIsNone(read_vendor_values(["ddcutil", "--bus", "8"], output))
+            self.assertIn("partial", output.read_text())
             self.assertIn("timed out", errors.getvalue())
+
+    def test_partial_values_are_retained_without_claiming_completeness(self):
+        raw = "Raw value: opcode=0xe0, mh=0x00, ml=0x00, sh=0x00, sl=0x01\n"
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            mock.patch(
+                "wassos_transport.subprocess.run",
+                return_value=subprocess.CompletedProcess([], 1, raw, "EIO"),
+            ),
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()) as errors,
+        ):
+            values, complete = read_vendor_values(["ddcutil", "--bus", "8"], Path(directory) / "baseline.txt")
+            self.assertFalse(complete)
+            self.assertEqual(values["e0"], "00 00 00 01")
+            self.assertIn("results may be incomplete", errors.getvalue())
+
+    def test_compare_does_not_confuse_missing_values_with_changes(self):
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertTrue(compare_values({"e0": "00", "e1": "01"}, {"e0": "00", "f9": "01"}))
+        self.assertIn("0xe0: 00 -> 00 (unchanged)", output.getvalue())
+        self.assertIn("Unavailable in one stage: 0xe1, 0xf9", output.getvalue())
+        self.assertNotIn("0xe1: ", output.getvalue())
 
     def test_invalid_bus_is_not_queried(self):
         with (
@@ -205,7 +301,7 @@ class MonitorDiagnosticTests(unittest.TestCase):
             mock.patch("wassos_transport.shutil.which", return_value="ddcutil"),
             mock.patch("wassos_transport.sys.stdin.isatty", return_value=True),
             mock.patch("builtins.input", return_value="7;setvcp"),
-            mock.patch("wassos_transport.run_query", return_value=True) as query,
+            mock.patch("wassos_transport.detect_acer_buses", return_value={"8"}) as query,
             contextlib.redirect_stdout(io.StringIO()),
             contextlib.redirect_stderr(io.StringIO()),
         ):

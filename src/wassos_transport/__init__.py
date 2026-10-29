@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -74,34 +75,49 @@ def inspect_i2c(dev_root: Path, module_root: Path) -> bool:
     return True
 
 
-def run_query(command: list[str], description: str) -> bool:
-    print(f"\n{description} (no monitor settings will be changed).", flush=True)
-    try:
-        result = subprocess.run(command, timeout=240, check=False)
-    except (OSError, subprocess.TimeoutExpired) as error:
-        print(f"DDC query failed: {error}", file=sys.stderr)
-        return False
-    if result.returncode:
-        print(f"DDC query exited with status {result.returncode}.", file=sys.stderr)
-        return False
-    return True
-
-
-def save_vendor_reads(command: list[str], root: Path) -> bool:
-    try:
-        root.mkdir(parents=True, exist_ok=True, mode=0o700)
-        directory = Path(tempfile.mkdtemp(prefix="vendor-read-", dir=root))
-    except OSError as error:
-        print(f"Could not create the scan directory: {error}", file=sys.stderr)
-        return False
-    output = directory / "vendor-read.txt"
-    codes = [f"{code:02x}" for code in range(0xE0, 0x100)]
-    print(f"\nReading 32 manufacturer-specific codes; results will be saved to {output}")
-    print("This may take several minutes. Values do not identify their purpose.", flush=True)
+def detect_acer_buses(command: list[str], stage: str) -> set[str] | None:
+    print(f"\nDetecting displays with the Acer on {stage}.", flush=True)
     try:
         result = subprocess.run(
-            command + ["--verbose", "getvcp", *codes],
-            timeout=600,
+            command + ["detect", "--brief"], timeout=240, check=False,
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        print(f"DDC detection failed: {error}", file=sys.stderr)
+        return None
+    if result.stderr:
+        print(result.stderr, file=sys.stderr, end="" if result.stderr.endswith("\n") else "\n")
+    if result.returncode:
+        print(f"DDC detection exited with status {result.returncode}.", file=sys.stderr)
+        return None
+    buses = set()
+    for block in re.split(r"(?m)^(?=Display\s+\d+\s*$)", result.stdout):
+        bus = re.search(r"(?m)^\s*I2C bus:\s*/dev/i2c-(\d+)\s*$", block)
+        monitor = re.search(r"(?m)^\s*Monitor:\s*ACR:XB271HU:", block)
+        if bus and monitor:
+            buses.add(bus.group(1))
+    if buses:
+        print("Detected Acer XB271HU bus(es): " + ", ".join(sorted(buses, key=int)))
+    else:
+        print("No DDC-capable Acer XB271HU was identified in the detection output.")
+    return buses
+
+
+VENDOR_CODES = ("e0", "e1", "f9", "fa", "fb", "fc", "fd", "fe", "ff")
+RAW_VALUE = re.compile(
+    r"Raw value:\s*opcode=0x([0-9a-f]{2}),\s*"
+    r"mh=0x([0-9a-f]{2}),\s*ml=0x([0-9a-f]{2}),\s*"
+    r"sh=0x([0-9a-f]{2}),\s*sl=0x([0-9a-f]{2})",
+    re.IGNORECASE,
+)
+
+
+def read_vendor_values(command: list[str], output: Path) -> tuple[dict[str, str], bool] | None:
+    print(f"\nReading previously responsive vendor codes; saving output to {output}", flush=True)
+    try:
+        result = subprocess.run(
+            command + ["--verbose", "getvcp", *VENDOR_CODES],
+            timeout=300,
             check=False,
             capture_output=True,
             text=True,
@@ -110,7 +126,7 @@ def save_vendor_reads(command: list[str], root: Path) -> bool:
         )
     except OSError as error:
         print(f"Vendor read could not start: {error}", file=sys.stderr)
-        return False
+        return None
     except subprocess.TimeoutExpired as error:
         stdout = (error.stdout or b"").decode("utf-8", "replace")
         stderr = (error.stderr or b"").decode("utf-8", "replace")
@@ -127,7 +143,7 @@ def save_vendor_reads(command: list[str], root: Path) -> bool:
         )
     except OSError as error:
         print(f"Could not save vendor read results: {error}", file=sys.stderr)
-        return False
+        return None
     if stdout:
         print(stdout, end="" if stdout.endswith("\n") else "\n")
     if stderr:
@@ -135,21 +151,61 @@ def save_vendor_reads(command: list[str], root: Path) -> bool:
     print(f"\nResults saved to {output}; review them for sensitive information before sharing.")
     if not successful:
         print(
-            f"ddcutil status: {status}; some reads failed, were unsupported, or did not finish.",
+            f"ddcutil status: {status}; results may be incomplete.",
             file=sys.stderr,
         )
+    values = {
+        match.group(1).lower(): " ".join(group.lower() for group in match.groups()[1:])
+        for match in RAW_VALUE.finditer(stdout)
+        if match.group(1).lower() in VENDOR_CODES
+    }
+    if not values:
+        print("No comparable vendor values were returned.", file=sys.stderr)
+        return None
+    missing = set(VENDOR_CODES) - values.keys()
+    if missing:
+        print("No parsed value for: " + ", ".join("0x" + code for code in sorted(missing)), file=sys.stderr)
+    return values, successful and not missing
+
+
+def ask_bus(stage: str, available: set[str]) -> str | None:
+    if not available:
+        print(f"No Acer bus is available for the {stage} stage.")
+        return None
+    try:
+        bus = input("Enter the Acer's bus number (digits only), or Enter to stop: ").strip()
+    except EOFError:
+        bus = ""
+    if not bus:
+        print("Stopped without selecting a bus.")
+        return None
+    if not bus.isascii() or not bus.isdecimal() or bus not in available:
+        print("Bus was not identified as an Acer XB271HU; no read was run.", file=sys.stderr)
+        return None
+    return bus
+
+
+def compare_values(before: dict[str, str], after: dict[str, str]) -> bool:
+    common = set(before) & set(after)
+    if not common:
+        print("No vendor values could be compared between the two inputs.")
         return False
-    if not stdout.strip():
-        print("ddcutil returned no scan output.", file=sys.stderr)
-        return False
+    for code in sorted(common):
+        state = "unchanged" if before[code] == after[code] else "changed"
+        print(f"  0x{code}: {before[code]} -> {after[code]} ({state})")
+    missing = (set(before) | set(after)) - common
+    if missing:
+        print("Unavailable in one stage: " + ", ".join("0x" + code for code in sorted(missing)))
+    print("A changed value does not establish a feature's meaning or that it can switch inputs.")
     return True
 
 
 def main() -> int:
-    print("Current task: read manufacturer-specific DDC codes E0 through FF on the Acer monitor.")
-    print("No monitor settings or system configuration will be changed.")
+    print("Current task: compare Acer vendor-code reads on DisplayPort and HDMI.")
+    print("You will manually change the Acer's input; this script does not change settings.")
     print("A private results directory will be created only after confirmation.")
-    print("Unknown reads can cause glitches; physical monitor controls are the fallback.")
+    print("Keep Hyprland's current layout; move this terminal to the PC's second monitor.")
+    print("Use the Acer's physical controls to return to DisplayPort when finished.")
     print("DDC queries may cause display glitches and include serial numbers in their output.")
     print("Review all output for sensitive information before sharing it.")
 
@@ -180,36 +236,62 @@ def main() -> int:
             print("Skipped DDC detection.")
             return 1
         command = ["nix", "shell", "--inputs-from", ".", "nixpkgs#ddcutil", "--command", "ddcutil"]
-    detected = run_query(command + ["detect"], "Detecting DDC-capable displays")
-    if not connectors_found or not detected:
+    if not sys.stdin.isatty():
+        print("An interactive terminal is required for the comparison.", file=sys.stderr)
+        return 1
+    buses = detect_acer_buses(command, "DisplayPort")
+    if not connectors_found or buses is None:
         print("\nThe probe was incomplete. Share the reviewed output so the next step can be chosen.")
         return 1
-    print("\nFind the Acer display in the detection output and identify its I2C bus number.")
-    print("Only select a bus if you can positively identify the intended display.")
-    if not sys.stdin.isatty():
-        print("No interactive terminal available; skipping the vendor reads.", file=sys.stderr)
+    bus = ask_bus("DisplayPort", buses)
+    if bus is None:
         return 1
+    print("\nThis probe reads E0, E1, and F9-FF only; no Set VCP commands are sent.")
+    print("Confirm that the Acer is on DisplayPort and this terminal is visible on the second monitor.")
     try:
-        bus = input("Enter the Acer's bus number (digits only), or press Enter to skip: ").strip()
-    except EOFError:
-        bus = ""
-    if not bus:
-        print("Skipped the vendor reads.")
-        return 0
-    if not bus.isascii() or not bus.isdecimal():
-        print("Invalid bus number; no vendor reads were run.", file=sys.stderr)
-        return 1
-    base = command + ["--bus", bus]
-    print("\nThe scan only sends Get VCP requests for E0 through FF; it sends no Set VCP commands.")
-    print("This is not a backup; unreadable codes may be unsupported or may have failed.")
-    try:
-        answer = input("Type scan to run the reads and save their output: ").strip()
+        answer = input("Type start to save the DisplayPort baseline, or Enter to cancel: ").strip()
     except EOFError:
         answer = ""
-    if answer != "scan":
-        print("Cancelled; no scan files were created.")
+    if answer != "start":
+        print("Cancelled; no comparison files were created.")
         return 1
-    if not save_vendor_reads(base, Path.home() / ".local" / "state" / "wassos" / "monitor-scans"):
-        print("\nThe vendor read was incomplete; inspect the reported output and errors.", file=sys.stderr)
+    root = Path.home() / ".local" / "state" / "wassos" / "monitor-scans"
+    try:
+        root.mkdir(parents=True, exist_ok=True, mode=0o700)
+        directory = Path(tempfile.mkdtemp(prefix="input-compare-", dir=root))
+    except OSError as error:
+        print(f"Could not create the comparison directory: {error}", file=sys.stderr)
         return 1
-    return 0
+    baseline = read_vendor_values(command + ["--bus", bus], directory / "displayport.txt")
+    if baseline is None:
+        print("No usable baseline; not proceeding to HDMI.", file=sys.stderr)
+        return 1
+    before, baseline_complete = baseline
+    print("\nUse the Acer's physical controls to select the laptop's HDMI input.")
+    print("Leave the Hyprland layout unchanged, then return to this terminal on the second monitor.")
+    try:
+        answer = input("Type ready after switching to HDMI, or Enter to stop: ").strip()
+    except EOFError:
+        answer = ""
+    try:
+        if answer != "ready":
+            print("Stopped; the DisplayPort baseline remains saved.")
+            return 1
+        hdmi_buses = detect_acer_buses(command, "HDMI")
+        if hdmi_buses is None:
+            print("DDC detection failed on the HDMI stage.", file=sys.stderr)
+            return 1
+        hdmi_bus = ask_bus("HDMI", hdmi_buses)
+        if hdmi_bus is None:
+            print("No Acer bus selected; HDMI-side comparison was not run.")
+            return 1
+        comparison = read_vendor_values(command + ["--bus", hdmi_bus], directory / "hdmi.txt")
+        if comparison is None:
+            return 1
+        after, comparison_complete = comparison
+        print("\nComparable values (MH ML SH SL):")
+        comparable = compare_values(before, after)
+        return 0 if comparable and baseline_complete and comparison_complete else 1
+    finally:
+        print("\nUse the Acer's physical controls to return to DisplayPort when finished.")
+        print(f"Comparison files: {directory} (review for sensitive information before sharing).")
