@@ -6,7 +6,18 @@
     enableBashIntegration = true;
     nix-direnv.enable = true;
     stdlib = ''
-      source <(${pkgs.devenv}/bin/devenv direnvrc)
+      use_devenv() {
+        local devenv_direnvrc
+        if ! devenv_direnvrc="$(${pkgs.devenv}/bin/devenv direnvrc)"; then
+          log_error "Could not load the devenv direnv integration"
+          return 1
+        fi
+        if ! eval "$devenv_direnvrc"; then
+          log_error "Could not initialize the devenv direnv integration"
+          return 1
+        fi
+        use_devenv "$@"
+      }
     '';
   };
 

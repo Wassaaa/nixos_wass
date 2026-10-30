@@ -1,42 +1,39 @@
 import contextlib
 import io
 import subprocess
-import tempfile
 import unittest
-from pathlib import Path
 from unittest.mock import patch
 
 from wassos_transport import main
 
 
 class TransportTests(unittest.TestCase):
-    def test_reproduces_failure_without_printing_environment(self):
-        with tempfile.TemporaryDirectory() as directory:
-            home = Path(directory)
-            script = home / ".config" / "direnv" / "lib" / "hm-nix-direnv.sh"
-            script.parent.mkdir(parents=True)
-            script.write_text('_nix_direnv_preflight() {\n  echo preflight\n}\n')
-            result = subprocess.CompletedProcess(
-                [], 1, stdout="SECRET=private", stderr="--no-warn-dirty: command not found\n"
-            )
-            with patch("wassos_transport.Path.home", return_value=home), \
-                 patch("builtins.input", return_value="yes"), \
-                 patch("wassos_transport.subprocess.run", return_value=result) as run, \
-                 contextlib.redirect_stdout(io.StringIO()) as output:
-                self.assertEqual(main(), 1)
-            self.assertIn("Reproduced the reported", output.getvalue())
-            self.assertNotIn("SECRET=private", output.getvalue())
-            self.assertEqual(run.call_args.args[0], ["direnv", "export", "json"])
-            self.assertNotIn("DIRENV_DIFF", run.call_args.kwargs["env"])
-            self.assertIn("BASH_ENV", run.call_args.kwargs["env"])
-            self.assertIn("trace did not run", output.getvalue())
-
-    def test_declining_does_not_run_diagnostic(self):
+    def test_declining_does_not_run_commands(self):
         with patch("builtins.input", return_value="no"), \
              patch("wassos_transport.subprocess.run") as run, \
              contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(main(), 1)
         run.assert_not_called()
+
+    def test_checks_direnv_after_successful_switch_without_printing_environment(self):
+        switch = subprocess.CompletedProcess([], 0)
+        check = subprocess.CompletedProcess([], 0, stdout="SECRET=private", stderr="loaded\n")
+        with patch("builtins.input", return_value="yes"), \
+             patch("wassos_transport.subprocess.run", side_effect=[switch, check]) as run, \
+             contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(main(), 0)
+        self.assertEqual(run.call_args_list[0].args[0], ["nh", "os", "switch"])
+        self.assertEqual(run.call_args_list[1].args[0], ["direnv", "export", "json"])
+        self.assertNotIn("DIRENV_DIFF", run.call_args_list[1].kwargs["env"])
+        self.assertNotIn("SECRET=private", output.getvalue())
+
+    def test_failed_switch_does_not_run_direnv(self):
+        with patch("builtins.input", return_value="yes"), \
+             patch("wassos_transport.subprocess.run", return_value=subprocess.CompletedProcess([], 1)) as run, \
+             contextlib.redirect_stdout(io.StringIO()), \
+             contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(main(), 1)
+        self.assertEqual(run.call_count, 1)
 
 
 if __name__ == "__main__":

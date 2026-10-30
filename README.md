@@ -67,6 +67,8 @@ It supplies Lua, LuaLS, StyLua, Python, `uv`,
 `nixd`, `nixfmt` and Git. From the repository root, run `direnv allow` once to
 load it automatically, or use `nix develop` for a shell without direnv.
 Direnv executes the repository's `.envrc`, so only allow a checkout you trust.
+The user-level direnv configuration loads devenv's integration on demand, so
+its internal helpers do not override nix-direnv when entering a flake shell.
 It creates an ignored `.direnv/hyprland-lua` link to LuaLS stubs generated from
 the Hyprland revision in `flake.lock`; changing that input regenerates them.
 The stubs describe Hyprland's API for the editor and are not runtime code.
