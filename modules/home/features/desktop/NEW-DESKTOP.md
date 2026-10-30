@@ -40,6 +40,8 @@ Home Manager initializes `~/.face` from the bundled default only when it is abse
 
 ## 1Password dialogs
 
+Quick Access has a targeted Hyprland rule matching its initial title, `Quick Access — 1Password`, to keep focus and pin it across workspaces. This is separate from authentication dialogs and does not change 1Password startup. Verify it on the host: open Quick Access, move the pointer over another window, then close Quick Access and confirm normal focus returns. If the title changes or is localized, the rule may no longer match.
+
 The picture-in-picture rule is separate from 1Password dialogs. [Omarchy's configuration](https://github.com/omacom/omarchy/blob/a9cedf93e0356d475411510e818e7e054a924d55/default/hypr/apps/1password.lua#L1-L3) matches both old and new 1Password app IDs and tags those windows for floating. No blanket rule is added without identifying the affected dialog; a fixed size can be inappropriate for a different prompt. If it happens again, record the affected window's class, title and dimensions from `hyprctl clients`, omitting any sensitive information.
 
 ## Removed
