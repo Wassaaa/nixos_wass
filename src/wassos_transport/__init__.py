@@ -1,33 +1,21 @@
-import os
-
-
 def main() -> int:
-    print("Task: check the current Hyprland terminal for NVIDIA VA-API settings.")
-    print("This is read-only and does not check whether video decoding works.")
-    print("Review output for sensitive information before sharing it.")
+    print("""Task: add the ALSA runtime library to Horizon's launcher environment.
+This prints instructions only; it does not change your files.
 
-    checks = {
-        "LIBVA_DRIVER_NAME": "nvidia",
-        "NVD_BACKEND": "direct",
-        "XDG_SESSION_TYPE": "wayland",
-    }
-    passed = True
-    for name, expected in checks.items():
-        if os.environ.get(name) == expected:
-            print(f"{name}: expected value present ({expected})")
-        else:
-            print(f"{name}: expected {expected}; missing or different")
-            passed = False
+In the Horizon checkout, edit launcher/.envrc. Keep your existing
+HORIZON_MSA_CLIENT_ID line. Add the following after it; if you already have
+`use nix`, keep just one copy and put the library lines after it:
 
-    for name in ("HYPRLAND_INSTANCE_SIGNATURE", "WAYLAND_DISPLAY"):
-        if os.environ.get(name):
-            print(f"{name}: present")
-        else:
-            print(f"{name}: missing")
-            passed = False
+    use nix
+    horizon_alsa_lib=$(nix-build '<nixpkgs>' -A alsa-lib --no-out-link) || return 1
+    export LD_LIBRARY_PATH="$horizon_alsa_lib/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export NIX_LD_LIBRARY_PATH="$horizon_alsa_lib/lib${NIX_LD_LIBRARY_PATH:+:$NIX_LD_LIBRARY_PATH}"
 
-    if passed:
-        print("The current terminal has the expected settings. Other launchers may inherit a different environment.")
-        return 0
-    print("Start a fresh Hyprland login after applying the configuration, then check again.")
-    return 1
+From the launcher directory, run `direnv allow`, then `cargo run --release`.
+The first load may download or build ALSA. Run Cargo directly in the direnv
+environment: starting another nix-shell can replace LD_LIBRARY_PATH.
+
+This addresses the reported missing libasound.so.2; the failing program has
+not been identified, and further missing libraries may need investigation.
+Avoid committing your local .envrc to the Horizon checkout.""")
+    return 0
