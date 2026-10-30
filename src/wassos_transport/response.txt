@@ -1,0 +1,1208 @@
+$ env -u CARGO_BUILD_RUSTC_WRAPPER -u CARGO_TARGET_DIR -u RUSTC_WORKSPACE_WRAPPER -u RUSTC_WRAPPER -u RUSTUP_TOOLCHAIN CARGO_HOME="/home/wassaa/.local/share/horizon-launcher/cargo" PATH="/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin:/nix/store/s70gz6bvz74c36xigh5m2ab2cqli08cv-pkg-config-wrapper-0.29.2/bin:/nix/store/i52d7j6ma8bh4ggg4r2hl4af7bychdpa-clang-wrapper-21.1.8/bin:/nix/store/wra7pnc8v3vk7xl597kq79bbmvncxz8j-clang-21.1.8/bin:/nix/store/j64r0mf0yy7pvcbavlqidfnpsdnrldj2-glibc-2.44-57-bin/bin:/nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin:/nix/store/0a584d1b9csvk900bdg4pf7vzkx1v7jl-binutils-wrapper-2.46/bin:/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin:/nix/store/c761q93rp3m4qyg71w2d5dwynha1kr97-mold-unwrapped-wrapper-3.0.0/bin:/nix/store/mabgbkgz9pyaw5pdzmwmp3rb9n1hsd5j-mold-unwrapped-3.0.0/bin:/nix/store/dl38pix4jvabi5smb9wywhp6pimmpva6-patchelf-0.19.2/bin:/nix/store/r5ri78axx1qggkjq3vawywlzglg70b5w-gcc-wrapper-16.2.0/bin:/nix/store/xpaz3fi6ibqxb9sla4gjlp0c82v566y8-gcc-16.2.0/bin:/nix/store/fi98g122a3kzbschgvbvsqvpyxrmqvvl-binutils-wrapper-2.46/bin:/nix/store/0n8ncy1wlkkhnix0m91ly7x6lpwi2bm3-compiler-rt-libc-21.1.8/bin:/nix/store/mp9krn4yrm1hwh657y1aa2jv0x97fbin-libxkbcommon-1.13.2/bin:/nix/store/jpnd5wfvvva2hp63wl348ldxgl4lk25a-freetype-2.14.3-dev/bin:/nix/store/ai2km55ba8bxrn64xx7p9lgvrrzdzv43-bzip2-1.0.8-bin/bin:/nix/store/aqg090a82fsn92fvq2pafs1kig928m6g-brotli-1.2.0/bin:/nix/store/27jrn36s7jkk6xv6vgi9kq8shkybafp1-libpng-apng-1.6.59-dev/bin:/nix/store/5m6pqb4gihxwzj174k7s0xparwbvv8xa-expat-2.9.0-dev/bin:/nix/store/a8hfazxxb69rgvlgbl2mn3zn6khvrb8r-fontconfig-2.18.3-bin/bin:/nix/store/4kj51k0kzrbwx5m4h3fpjkkl5wc2gdbd-alsa-lib-1.2.16.1/bin:/nix/store/gvglnxscmvx4mh9my0cy0xgi0l1z6l9s-openssl-3.5.9-bin/bin:/nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin:/nix/store/99v13ig4382mngi6ggf0csqi7rfa04j5-findutils-4.11.0/bin:/nix/store/9mpja553cbkr2rc37kzdg8zbbg2dyyvl-diffutils-3.12/bin:/nix/store/9wc73n5izv0m7ppjbibi4hbr68rba1lj-gnused-4.10/bin:/nix/store/c3f45pxlb81gzz4w1nym7lpznfypva7s-gnugrep-3.12/bin:/nix/store/h96s16mjssibkvk62pvmfm3lwfc3wnwp-gawk-5.4.1/bin:/nix/store/n318yf1q5vysgh2qn6fd1q8yjy9vmwvh-gnutar-1.35/bin:/nix/store/rpswfv0ff4wap9anx7k1224x2m94pfcc-gzip-1.15/bin:/nix/store/ai2km55ba8bxrn64xx7p9lgvrrzdzv43-bzip2-1.0.8-bin/bin:/nix/store/8xz4d9wp4jy49mhl306wyg55096wis3p-gnumake-4.4.1/bin:/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20/bin:/nix/store/d5jz315vxbphknfawsrjs192ci9bc6df-patch-2.8/bin:/nix/store/nflpm51il93hxh2rba6dvz59kaff0i7v-xz-5.8.4-bin/bin:/nix/store/2qpmak7162vhqxjwfik4aqs9lff6sn7w-file-5.48/bin:/home/wassaa/Projects/horizon/launcher/.direnv/bin:/run/wrappers/bin:/home/wassaa/.nix-profile/bin:/nix/profile/bin:/home/wassaa/.local/state/nix/profile/bin:/etc/profiles/per-user/wassaa/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/nix/store/6l9kbzxwq9ij2lcmwl2qb1jdpqisjr8l-rustc-wrapper-1.99.0/bin" RUSTC="/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin/rustc" "/home/wassaa/.local/share/horizon-launcher/native/tools/0d6b103c7063/bin/horizon-mixins" "apply" "--workspace" "/home/wassaa/.local/share/horizon-launcher/native/source/1da354b67a509812c4141b67de2affd6de65c342" "--mods" "/home/wassaa/.local/share/horizon-launcher/native/mods.incoming" "--out" "/home/wassaa/.local/share/horizon-launcher/native/stage.new"
+{
+  "bridges": 0,
+  "injections": 8,
+  "modules": 2,
+  "seconds": 4.430157675,
+  "stage": "/home/wassaa/.local/share/horizon-launcher/native/stage.new",
+  "stage_changed": true,
+  "states": 0,
+  "status": "ok",
+  "transformation_seconds": 4.430153105
+}
+$ cd "/home/wassaa/.local/share/horizon-launcher/native/stage" && env -u CARGO_BUILD_RUSTC_WRAPPER -u RUSTC_WORKSPACE_WRAPPER -u RUSTC_WRAPPER -u RUSTUP_TOOLCHAIN CARGO_HOME="/home/wassaa/.local/share/horizon-launcher/cargo" CARGO_TARGET_DIR="/home/wassaa/.local/share/horizon-launcher/native/target" PATH="/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin:/nix/store/s70gz6bvz74c36xigh5m2ab2cqli08cv-pkg-config-wrapper-0.29.2/bin:/nix/store/i52d7j6ma8bh4ggg4r2hl4af7bychdpa-clang-wrapper-21.1.8/bin:/nix/store/wra7pnc8v3vk7xl597kq79bbmvncxz8j-clang-21.1.8/bin:/nix/store/j64r0mf0yy7pvcbavlqidfnpsdnrldj2-glibc-2.44-57-bin/bin:/nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin:/nix/store/0a584d1b9csvk900bdg4pf7vzkx1v7jl-binutils-wrapper-2.46/bin:/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin:/nix/store/c761q93rp3m4qyg71w2d5dwynha1kr97-mold-unwrapped-wrapper-3.0.0/bin:/nix/store/mabgbkgz9pyaw5pdzmwmp3rb9n1hsd5j-mold-unwrapped-3.0.0/bin:/nix/store/dl38pix4jvabi5smb9wywhp6pimmpva6-patchelf-0.19.2/bin:/nix/store/r5ri78axx1qggkjq3vawywlzglg70b5w-gcc-wrapper-16.2.0/bin:/nix/store/xpaz3fi6ibqxb9sla4gjlp0c82v566y8-gcc-16.2.0/bin:/nix/store/fi98g122a3kzbschgvbvsqvpyxrmqvvl-binutils-wrapper-2.46/bin:/nix/store/0n8ncy1wlkkhnix0m91ly7x6lpwi2bm3-compiler-rt-libc-21.1.8/bin:/nix/store/mp9krn4yrm1hwh657y1aa2jv0x97fbin-libxkbcommon-1.13.2/bin:/nix/store/jpnd5wfvvva2hp63wl348ldxgl4lk25a-freetype-2.14.3-dev/bin:/nix/store/ai2km55ba8bxrn64xx7p9lgvrrzdzv43-bzip2-1.0.8-bin/bin:/nix/store/aqg090a82fsn92fvq2pafs1kig928m6g-brotli-1.2.0/bin:/nix/store/27jrn36s7jkk6xv6vgi9kq8shkybafp1-libpng-apng-1.6.59-dev/bin:/nix/store/5m6pqb4gihxwzj174k7s0xparwbvv8xa-expat-2.9.0-dev/bin:/nix/store/a8hfazxxb69rgvlgbl2mn3zn6khvrb8r-fontconfig-2.18.3-bin/bin:/nix/store/4kj51k0kzrbwx5m4h3fpjkkl5wc2gdbd-alsa-lib-1.2.16.1/bin:/nix/store/gvglnxscmvx4mh9my0cy0xgi0l1z6l9s-openssl-3.5.9-bin/bin:/nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin:/nix/store/99v13ig4382mngi6ggf0csqi7rfa04j5-findutils-4.11.0/bin:/nix/store/9mpja553cbkr2rc37kzdg8zbbg2dyyvl-diffutils-3.12/bin:/nix/store/9wc73n5izv0m7ppjbibi4hbr68rba1lj-gnused-4.10/bin:/nix/store/c3f45pxlb81gzz4w1nym7lpznfypva7s-gnugrep-3.12/bin:/nix/store/h96s16mjssibkvk62pvmfm3lwfc3wnwp-gawk-5.4.1/bin:/nix/store/n318yf1q5vysgh2qn6fd1q8yjy9vmwvh-gnutar-1.35/bin:/nix/store/rpswfv0ff4wap9anx7k1224x2m94pfcc-gzip-1.15/bin:/nix/store/ai2km55ba8bxrn64xx7p9lgvrrzdzv43-bzip2-1.0.8-bin/bin:/nix/store/8xz4d9wp4jy49mhl306wyg55096wis3p-gnumake-4.4.1/bin:/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20/bin:/nix/store/d5jz315vxbphknfawsrjs192ci9bc6df-patch-2.8/bin:/nix/store/nflpm51il93hxh2rba6dvz59kaff0i7v-xz-5.8.4-bin/bin:/nix/store/2qpmak7162vhqxjwfik4aqs9lff6sn7w-file-5.48/bin:/home/wassaa/Projects/horizon/launcher/.direnv/bin:/run/wrappers/bin:/home/wassaa/.nix-profile/bin:/nix/profile/bin:/home/wassaa/.local/state/nix/profile/bin:/etc/profiles/per-user/wassaa/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/nix/store/6l9kbzxwq9ij2lcmwl2qb1jdpqisjr8l-rustc-wrapper-1.99.0/bin" RUSTC="/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin/rustc" "/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin/cargo" "build" "--locked" "--profile" "release" "-p" "horizon-client" "--bin" "horizon-client"
+   Compiling thiserror-impl v2.0.21
+   Compiling bytemuck_derive v1.12.1
+   Compiling synstructure v0.14.0
+   Compiling indexmap v2.14.2
+   Compiling displaydoc v0.2.7
+   Compiling serde_derive v1.0.229
+   Compiling zerovec-derive v0.11.6
+   Compiling zerocopy v0.8.60
+   Compiling wayland-client v0.31.15
+   Compiling ash v0.38.0+1.3.281
+   Compiling thiserror v1.0.69
+   Compiling rustls-webpki v0.103.16
+error: non-item in item list
+    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/indexmap-2.14.2/src/set.rs:1040:5
+     |
+ 896 | impl<T, S> IndexSet<T, S> {
+     |                           - item list starts here
+...
+1040 |     /// Sort the set's values in place using a key extraction function.
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ non-item starts here
+...
+1247 | }
+     | - item list ends here
+
+   Compiling wayland-csd-frame v0.3.0
+   Compiling wgpu-core v30.0.1
+   Compiling hidapi v2.6.7
+   Compiling cpal v0.16.0
+   Compiling ab_glyph v0.2.32
+   Compiling x11rb v0.13.2
+   Compiling toml_parser v1.1.3+spec-1.1.0
+   Compiling document-features v0.2.12
+   Compiling inotify-sys v0.1.8
+   Compiling curve25519-dalek v4.1.3
+   Compiling calloop v0.13.0
+   Compiling sha1 v0.10.7
+   Compiling inout v0.1.4
+error: failed to run custom build command for `hidapi v2.6.7`
+
+Caused by:
+  process didn't exit successfully: `/home/wassaa/.local/share/horizon-launcher/native/target/release/build/hidapi-226090aca8b3f170/build-script-build` (exit status: 101)
+  --- stdout
+  cargo:rustc-check-cfg=cfg(hidapi)
+  cargo:rustc-check-cfg=cfg(libusb)
+  cargo:rerun-if-changed=etc/hidapi/linux/hid.c
+  cargo:rerun-if-env-changed=LIBUDEV_NO_PKG_CONFIG
+  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG
+  cargo:rerun-if-env-changed=PKG_CONFIG
+  cargo:rerun-if-env-changed=LIBUDEV_STATIC
+  cargo:rerun-if-env-changed=LIBUDEV_DYNAMIC
+  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC
+  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC
+  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH
+  cargo:rerun-if-env-changed=PKG_CONFIG_PATH
+  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR
+  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR
+  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR
+  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+
+  --- stderr
+
+  thread 'main' (78621) panicked at /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hidapi-2.6.7/build.rs:59:50:
+  Unable to find libudev: 
+  pkg-config exited with status code 1
+  > PKG_CONFIG_PATH=/nix/store/5pq7mhgzqn8qgv41ff6dj3c2rhkqgalx-libxkbcommon-1.13.2-dev/lib/pkgconfig:/nix/store/yxzfyllyg8ghjpywdv8z9489d32mjq4x-wayland-1.26.0-dev/lib/pkgconfig:/nix/store/lw8pmjfrf1c9vr9ncg8k2lp2kqp482fw-vulkan-loader-1.4.363.0-dev/lib/pkgconfig:/nix/store/nbdi0r6jklg8r7lnzz5pw51aa1h1fhih-fontconfig-2.18.3-dev/lib/pkgconfig:/nix/store/jpnd5wfvvva2hp63wl348ldxgl4lk25a-freetype-2.14.3-dev/lib/pkgconfig:/nix/store/a76rmqrp6l3w6h9pppfwzb3s6dzi0y4g-zlib-1.3.2-dev/share/pkgconfig:/nix/store/spahkc8n306pyh52fzfp5chzrcsaibhx-bzip2-1.0.8-dev/lib/pkgconfig:/nix/store/vqqz42af3hm89plcfg6sxmic32v2praa-brotli-1.2.0-dev/lib/pkgconfig:/nix/store/27jrn36s7jkk6xv6vgi9kq8shkybafp1-libpng-apng-1.6.59-dev/lib/pkgconfig:/nix/store/5m6pqb4gihxwzj174k7s0xparwbvv8xa-expat-2.9.0-dev/lib/pkgconfig:/nix/store/2i6275l3cc1y4iy7gi6p6v4h51wlr1xs-alsa-lib-1.2.16.1-dev/lib/pkgconfig:/nix/store/wps4g7kaj73d2zs53a5cfimw1bnb3c99-openssl-3.5.9-dev/lib/pkgconfig:/nix/store/69z94i0332zi2n18vqjx19i2cwn99q3a-libx11-1.8.14-dev/lib/pkgconfig:/nix/store/ysvdkrs0mb3wn66fd2jkf2110r6nycvv-xorgproto-2025.1/share/pkgconfig:/nix/store/axiicpnijqgmj403jpqga6k0j1sqypjj-libxcb-1.17.0-dev/lib/pkgconfig:/nix/store/aq127zj3z2b8lz7g22sfn7532vmld8py-libxcursor-1.2.3-dev/lib/pkgconfig:/nix/store/50dzchwhxy44zlkqxyas88dhrmbnyvax-libxrandr-1.5.5-dev/lib/pkgconfig:/nix/store/dw7dv51r11rk9kqpq8hasviafs132vzq-libxrender-0.9.13-dev/lib/pkgconfig:/nix/store/qsxr22p245q5rqi7kdj9cskgzil6w5ms-libxi-1.8.4-dev/lib/pkgconfig:/nix/store/vf9s4g5b6ph328qy7rwpq35dv95fdwmc-libxext-1.3.7-dev/lib/pkgconfig:/nix/store/h63nh9nh68id4waxjip21fk32fddqcns-libxau-1.0.12-dev/lib/pkgconfig:/nix/store/l51w3h45m9542fcbf1izbqhnvslsvs91-libxfixes-6.0.2-dev/lib/pkgconfig PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 pkg-config --libs --cflags libudev
+
+  pkg-config output:
+    Package libudev was not found in the pkg-config search path.
+    Perhaps you should add the directory containing `libudev.pc'
+    to the PKG_CONFIG_PATH environment variable
+    No package 'libudev' found
+
+  The system library `libudev` required by crate `hidapi` was not found.
+  The file `libudev.pc` needs to be installed and the PKG_CONFIG_PATH environment variable must contain its parent directory.
+  PKG_CONFIG_PATH contains the following:
+      - /nix/store/5pq7mhgzqn8qgv41ff6dj3c2rhkqgalx-libxkbcommon-1.13.2-dev/lib/pkgconfig
+      - /nix/store/yxzfyllyg8ghjpywdv8z9489d32mjq4x-wayland-1.26.0-dev/lib/pkgconfig
+      - /nix/store/lw8pmjfrf1c9vr9ncg8k2lp2kqp482fw-vulkan-loader-1.4.363.0-dev/lib/pkgconfig
+      - /nix/store/nbdi0r6jklg8r7lnzz5pw51aa1h1fhih-fontconfig-2.18.3-dev/lib/pkgconfig
+      - /nix/store/jpnd5wfvvva2hp63wl348ldxgl4lk25a-freetype-2.14.3-dev/lib/pkgconfig
+      - /nix/store/a76rmqrp6l3w6h9pppfwzb3s6dzi0y4g-zlib-1.3.2-dev/share/pkgconfig
+      - /nix/store/spahkc8n306pyh52fzfp5chzrcsaibhx-bzip2-1.0.8-dev/lib/pkgconfig
+      - /nix/store/vqqz42af3hm89plcfg6sxmic32v2praa-brotli-1.2.0-dev/lib/pkgconfig
+      - /nix/store/27jrn36s7jkk6xv6vgi9kq8shkybafp1-libpng-apng-1.6.59-dev/lib/pkgconfig
+      - /nix/store/5m6pqb4gihxwzj174k7s0xparwbvv8xa-expat-2.9.0-dev/lib/pkgconfig
+      - /nix/store/2i6275l3cc1y4iy7gi6p6v4h51wlr1xs-alsa-lib-1.2.16.1-dev/lib/pkgconfig
+      - /nix/store/wps4g7kaj73d2zs53a5cfimw1bnb3c99-openssl-3.5.9-dev/lib/pkgconfig
+      - /nix/store/69z94i0332zi2n18vqjx19i2cwn99q3a-libx11-1.8.14-dev/lib/pkgconfig
+      - /nix/store/ysvdkrs0mb3wn66fd2jkf2110r6nycvv-xorgproto-2025.1/share/pkgconfig
+      - /nix/store/axiicpnijqgmj403jpqga6k0j1sqypjj-libxcb-1.17.0-dev/lib/pkgconfig
+      - /nix/store/aq127zj3z2b8lz7g22sfn7532vmld8py-libxcursor-1.2.3-dev/lib/pkgconfig
+      - /nix/store/50dzchwhxy44zlkqxyas88dhrmbnyvax-libxrandr-1.5.5-dev/lib/pkgconfig
+      - /nix/store/dw7dv51r11rk9kqpq8hasviafs132vzq-libxrender-0.9.13-dev/lib/pkgconfig
+      - /nix/store/qsxr22p245q5rqi7kdj9cskgzil6w5ms-libxi-1.8.4-dev/lib/pkgconfig
+      - /nix/store/vf9s4g5b6ph328qy7rwpq35dv95fdwmc-libxext-1.3.7-dev/lib/pkgconfig
+      - /nix/store/h63nh9nh68id4waxjip21fk32fddqcns-libxau-1.0.12-dev/lib/pkgconfig
+      - /nix/store/l51w3h45m9542fcbf1izbqhnvslsvs91-libxfixes-6.0.2-dev/lib/pkgconfig
+
+  HINT: you may need to install a package such as libudev, libudev-dev or libudev-devel.
+
+  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+warning: build failed, waiting for other jobs to finish...
+error: expected one of `!` or `::`, found `[`
+     --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions_generated.rs:10260:6
+      |
+10260 |     #[doc = "VK_KHR_xlib_surface"]
+      |      ^ expected one of `!` or `::`
+
+error[E0599]: `&mut IndexSet<T, S>` is not an iterator
+   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/indexmap-2.14.2/src/set.rs:928:25
+    |
+ 84 | pub struct IndexSet<T, S = RandomState> {
+    | --------------------------------------- doesn't satisfy `IndexSet<T, S>: Iterator`
+...
+928 |         let last = self.last()?;
+    |                         ^^^^ `&mut IndexSet<T, S>` is not an iterator
+    |
+    = note: the following trait bounds were not satisfied:
+            `IndexSet<T, S>: Iterator`
+            which is required by `&mut IndexSet<T, S>: Iterator`
+            `&mut IndexSet<T, S>: Iterator`
+            which is required by `&mut &mut IndexSet<T, S>: Iterator`
+note: the trait `Iterator` must be implemented
+   --> /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/core/src/iter/traits/iterator.rs:42:0
+    = help: items from traits can only be used if the trait is implemented and in scope
+    = note: the trait `Iterator` defines an item `last`, but is explicitly unimplemented
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `indexmap` (lib) due to 2 previous errors
+error[E0433]: cannot find `amd` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/amd/buffer_marker.rs:5:13
+  |
+5 | impl crate::amd::buffer_marker::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::amd::buffer_marker::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `amd` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/amd/shader_info.rs:8:13
+  |
+8 | impl crate::amd::shader_info::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::amd::shader_info::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `amdx` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/amdx/shader_enqueue.rs:9:13
+  |
+9 | impl crate::amdx::shader_enqueue::Device {
+  |             ^^^^ unresolved import
+  |
+help: a similar path exists
+  |
+9 | impl crate::extensions::amdx::shader_enqueue::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `android` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/android/external_memory_android_hardware_buffer.rs:7:13
+  |
+7 | impl crate::android::external_memory_android_hardware_buffer::Device {
+  |             ^^^^^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::android::external_memory_android_hardware_buffer::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/acquire_drm_display.rs:7:13
+  |
+7 | impl crate::ext::acquire_drm_display::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::ext::acquire_drm_display::Instance {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/buffer_device_address.rs:5:13
+  |
+5 | impl crate::ext::buffer_device_address::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::ext::buffer_device_address::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/calibrated_timestamps.rs:8:13
+  |
+8 | impl crate::ext::calibrated_timestamps::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::calibrated_timestamps::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/calibrated_timestamps.rs:32:13
+   |
+32 | impl crate::ext::calibrated_timestamps::Instance {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+32 | impl crate::extensions::ext::calibrated_timestamps::Instance {
+   |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/debug_marker.rs:6:13
+  |
+6 | impl crate::ext::debug_marker::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::ext::debug_marker::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/debug_report.rs:8:13
+  |
+8 | impl crate::ext::debug_report::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::debug_report::Instance {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/debug_utils.rs:8:13
+  |
+8 | impl crate::ext::debug_utils::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::debug_utils::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/debug_utils.rs:80:13
+   |
+80 | impl crate::ext::debug_utils::Instance {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+80 | impl crate::extensions::ext::debug_utils::Instance {
+   |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/descriptor_buffer.rs:7:13
+  |
+7 | impl crate::ext::descriptor_buffer::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::ext::descriptor_buffer::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/extended_dynamic_state.rs:6:13
+  |
+6 | impl crate::ext::extended_dynamic_state::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::ext::extended_dynamic_state::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/extended_dynamic_state2.rs:5:13
+  |
+5 | impl crate::ext::extended_dynamic_state2::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::ext::extended_dynamic_state2::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/extended_dynamic_state3.rs:5:13
+  |
+5 | impl crate::ext::extended_dynamic_state3::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::ext::extended_dynamic_state3::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/full_screen_exclusive.rs:8:13
+  |
+8 | impl crate::ext::full_screen_exclusive::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::full_screen_exclusive::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/full_screen_exclusive.rs:43:13
+   |
+43 | impl crate::ext::full_screen_exclusive::Instance {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+43 | impl crate::extensions::ext::full_screen_exclusive::Instance {
+   |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/hdr_metadata.rs:5:13
+  |
+5 | impl crate::ext::hdr_metadata::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::ext::hdr_metadata::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/headless_surface.rs:8:13
+  |
+8 | impl crate::ext::headless_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::headless_surface::Instance {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/host_image_copy.rs:8:13
+  |
+8 | impl crate::ext::host_image_copy::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::host_image_copy::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/image_compression_control.rs:7:13
+  |
+7 | impl crate::ext::image_compression_control::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::ext::image_compression_control::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/image_drm_format_modifier.rs:6:13
+  |
+6 | impl crate::ext::image_drm_format_modifier::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::ext::image_drm_format_modifier::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/mesh_shader.rs:5:13
+  |
+5 | impl crate::ext::mesh_shader::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::ext::mesh_shader::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/metal_surface.rs:8:13
+  |
+8 | impl crate::ext::metal_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::metal_surface::Instance {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/pipeline_properties.rs:6:13
+  |
+6 | impl crate::ext::pipeline_properties::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::ext::pipeline_properties::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/pipeline_properties.rs:12:47
+   |
+12 |         pipeline_properties: &mut impl crate::ext::pipeline_properties::GetPipelinePropertiesEXTParamPipelineProperties,
+   |                                               ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+12 |         pipeline_properties: &mut impl crate::extensions::ext::pipeline_properties::GetPipelinePropertiesEXTParamPipelineProperties,
+   |                                                  ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/private_data.rs:8:13
+  |
+8 | impl crate::ext::private_data::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::ext::private_data::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/sample_locations.rs:5:13
+  |
+5 | impl crate::ext::sample_locations::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::ext::sample_locations::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/sample_locations.rs:17:13
+   |
+17 | impl crate::ext::sample_locations::Instance {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+17 | impl crate::extensions::ext::sample_locations::Instance {
+   |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/shader_object.rs:9:13
+  |
+9 | impl crate::ext::shader_object::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+9 | impl crate::extensions::ext::shader_object::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/swapchain_maintenance1.rs:6:13
+  |
+6 | impl crate::ext::swapchain_maintenance1::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::ext::swapchain_maintenance1::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/tooling_info.rs:7:13
+  |
+7 | impl crate::ext::tooling_info::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::ext::tooling_info::Instance {
+  |                ++++++++++++
+
+error[E0433]: cannot find `ext` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/ext/vertex_input_dynamic_state.rs:5:13
+  |
+5 | impl crate::ext::vertex_input_dynamic_state::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::ext::vertex_input_dynamic_state::Device {
+  |                ++++++++++++
+
+error[E0433]: cannot find `google` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/google/display_timing.rs:8:13
+  |
+8 | impl crate::google::display_timing::Device {
+  |             ^^^^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::google::display_timing::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/acceleration_structure.rs:9:13
+  |
+9 | impl crate::khr::acceleration_structure::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+9 | impl crate::extensions::khr::acceleration_structure::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/android_surface.rs:8:13
+  |
+8 | impl crate::khr::android_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::android_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/buffer_device_address.rs:5:13
+  |
+5 | impl crate::khr::buffer_device_address::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::buffer_device_address::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/calibrated_timestamps.rs:8:13
+  |
+8 | impl crate::khr::calibrated_timestamps::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::calibrated_timestamps::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/calibrated_timestamps.rs:32:13
+   |
+32 | impl crate::khr::calibrated_timestamps::Instance {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+32 | impl crate::extensions::khr::calibrated_timestamps::Instance {
+   |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/cooperative_matrix.rs:7:13
+  |
+7 | impl crate::khr::cooperative_matrix::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::cooperative_matrix::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/copy_commands2.rs:5:13
+  |
+5 | impl crate::khr::copy_commands2::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::copy_commands2::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/create_renderpass2.rs:8:13
+  |
+8 | impl crate::khr::create_renderpass2::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::create_renderpass2::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/deferred_host_operations.rs:8:13
+  |
+8 | impl crate::khr::deferred_host_operations::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::deferred_host_operations::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/device_group.rs:10:13
+   |
+10 | impl crate::khr::device_group::Device {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+10 | impl crate::extensions::khr::device_group::Device {
+   |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/device_group.rs:123:13
+    |
+123 | impl crate::khr::device_group::Instance {
+    |             ^^^ unresolved import
+    |
+help: a similar path exists
+    |
+123 | impl crate::extensions::khr::device_group::Instance {
+    |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/device_group_creation.rs:8:13
+  |
+8 | impl crate::khr::device_group_creation::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::device_group_creation::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/display.rs:9:13
+  |
+9 | impl crate::khr::display::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+9 | impl crate::extensions::khr::display::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/display_swapchain.rs:8:13
+  |
+8 | impl crate::khr::display_swapchain::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::display_swapchain::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/draw_indirect_count.rs:5:13
+  |
+5 | impl crate::khr::draw_indirect_count::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::draw_indirect_count::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/dynamic_rendering.rs:5:13
+  |
+5 | impl crate::khr::dynamic_rendering::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::dynamic_rendering::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/dynamic_rendering_local_read.rs:5:13
+  |
+5 | impl crate::khr::dynamic_rendering_local_read::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::dynamic_rendering_local_read::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/external_fence_fd.rs:7:13
+  |
+7 | impl crate::khr::external_fence_fd::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::external_fence_fd::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/external_fence_win32.rs:7:13
+  |
+7 | impl crate::khr::external_fence_win32::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::external_fence_win32::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/external_memory_fd.rs:7:13
+  |
+7 | impl crate::khr::external_memory_fd::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::external_memory_fd::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/external_memory_win32.rs:7:13
+  |
+7 | impl crate::khr::external_memory_win32::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::external_memory_win32::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/external_semaphore_fd.rs:7:13
+  |
+7 | impl crate::khr::external_semaphore_fd::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::external_semaphore_fd::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/external_semaphore_win32.rs:7:13
+  |
+7 | impl crate::khr::external_semaphore_win32::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::external_semaphore_win32::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/get_memory_requirements2.rs:7:13
+  |
+7 | impl crate::khr::get_memory_requirements2::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::get_memory_requirements2::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/get_physical_device_properties2.rs:8:13
+  |
+8 | impl crate::khr::get_physical_device_properties2::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::get_physical_device_properties2::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/get_surface_capabilities2.rs:8:13
+  |
+8 | impl crate::khr::get_surface_capabilities2::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::get_surface_capabilities2::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/line_rasterization.rs:5:13
+  |
+5 | impl crate::khr::line_rasterization::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::line_rasterization::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/maintenance1.rs:5:13
+  |
+5 | impl crate::khr::maintenance1::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::maintenance1::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/maintenance3.rs:5:13
+  |
+5 | impl crate::khr::maintenance3::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::maintenance3::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/maintenance4.rs:7:13
+  |
+7 | impl crate::khr::maintenance4::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::maintenance4::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/maintenance5.rs:8:13
+  |
+8 | impl crate::khr::maintenance5::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::maintenance5::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/maintenance6.rs:5:13
+  |
+5 | impl crate::khr::maintenance6::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::maintenance6::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/performance_query.rs:8:13
+  |
+8 | impl crate::khr::performance_query::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::performance_query::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/performance_query.rs:25:13
+   |
+25 | impl crate::khr::performance_query::Instance {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+25 | impl crate::extensions::khr::performance_query::Instance {
+   |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/pipeline_executable_properties.rs:7:13
+  |
+7 | impl crate::khr::pipeline_executable_properties::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::pipeline_executable_properties::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/present_wait.rs:6:13
+  |
+6 | impl crate::khr::present_wait::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::khr::present_wait::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/push_descriptor.rs:6:13
+  |
+6 | impl crate::khr::push_descriptor::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::khr::push_descriptor::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/ray_tracing_maintenance1.rs:5:13
+  |
+5 | impl crate::khr::ray_tracing_maintenance1::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::khr::ray_tracing_maintenance1::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/ray_tracing_pipeline.rs:8:13
+  |
+8 | impl crate::khr::ray_tracing_pipeline::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::ray_tracing_pipeline::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/sampler_ycbcr_conversion.rs:8:13
+  |
+8 | impl crate::khr::sampler_ycbcr_conversion::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::sampler_ycbcr_conversion::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/surface.rs:9:13
+  |
+9 | impl crate::khr::surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+9 | impl crate::extensions::khr::surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/swapchain.rs:11:13
+   |
+11 | impl crate::khr::swapchain::Device {
+   |             ^^^ unresolved import
+   |
+help: a similar path exists
+   |
+11 | impl crate::extensions::khr::swapchain::Device {
+   |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/swapchain.rs:165:13
+    |
+165 | impl crate::khr::swapchain::Instance {
+    |             ^^^ unresolved import
+    |
+help: a similar path exists
+    |
+165 | impl crate::extensions::khr::swapchain::Instance {
+    |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/synchronization2.rs:6:13
+  |
+6 | impl crate::khr::synchronization2::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+6 | impl crate::extensions::khr::synchronization2::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/timeline_semaphore.rs:7:13
+  |
+7 | impl crate::khr::timeline_semaphore::Device {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::khr::timeline_semaphore::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/wayland_surface.rs:8:13
+  |
+8 | impl crate::khr::wayland_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::wayland_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/win32_surface.rs:8:13
+  |
+8 | impl crate::khr::win32_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::win32_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/xcb_surface.rs:8:13
+  |
+8 | impl crate::khr::xcb_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::xcb_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `khr` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/khr/xlib_surface.rs:8:13
+  |
+8 | impl crate::khr::xlib_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::khr::xlib_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `mvk` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/mvk/ios_surface.rs:8:13
+  |
+8 | impl crate::mvk::ios_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::mvk::ios_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `mvk` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/mvk/macos_surface.rs:8:13
+  |
+8 | impl crate::mvk::macos_surface::Instance {
+  |             ^^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::mvk::macos_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nn` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nn/vi_surface.rs:8:13
+  |
+8 | impl crate::nn::vi_surface::Instance {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::nn::vi_surface::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/copy_memory_indirect.rs:5:13
+  |
+5 | impl crate::nv::copy_memory_indirect::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::nv::copy_memory_indirect::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/coverage_reduction_mode.rs:8:13
+  |
+8 | impl crate::nv::coverage_reduction_mode::Instance {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::nv::coverage_reduction_mode::Instance {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/cuda_kernel_launch.rs:9:13
+  |
+9 | impl crate::nv::cuda_kernel_launch::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+9 | impl crate::extensions::nv::cuda_kernel_launch::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/device_diagnostic_checkpoints.rs:8:13
+  |
+8 | impl crate::nv::device_diagnostic_checkpoints::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+8 | impl crate::extensions::nv::device_diagnostic_checkpoints::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/device_generated_commands_compute.rs:5:13
+  |
+5 | impl crate::nv::device_generated_commands_compute::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::nv::device_generated_commands_compute::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/low_latency2.rs:7:13
+  |
+7 | impl crate::nv::low_latency2::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+7 | impl crate::extensions::nv::low_latency2::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/memory_decompression.rs:5:13
+  |
+5 | impl crate::nv::memory_decompression::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::nv::memory_decompression::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/mesh_shader.rs:5:13
+  |
+5 | impl crate::nv::mesh_shader::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+5 | impl crate::extensions::nv::mesh_shader::Device {
+  |             ++++++++++++
+
+error[E0433]: cannot find `nv` in the crate root
+ --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ash-0.38.0+1.3.281/src/extensions/nv/ray_tracing.rs:9:13
+  |
+9 | impl crate::nv::ray_tracing::Device {
+  |             ^^ unresolved import
+  |
+help: a similar path exists
+  |
+9 | impl crate::extensions::nv::ray_tracing::Device {
+  |             ++++++++++++
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `ash` (lib) due to 97 previous errors
