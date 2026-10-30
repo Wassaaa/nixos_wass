@@ -28,6 +28,8 @@ class TransportTests(unittest.TestCase):
             self.assertNotIn("SECRET=private", output.getvalue())
             self.assertEqual(run.call_args.args[0], ["direnv", "export", "json"])
             self.assertNotIn("DIRENV_DIFF", run.call_args.kwargs["env"])
+            self.assertIn("BASH_ENV", run.call_args.kwargs["env"])
+            self.assertIn("trace did not run", output.getvalue())
 
     def test_declining_does_not_run_diagnostic(self):
         with patch("builtins.input", return_value="no"), \
