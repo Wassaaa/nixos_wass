@@ -3,360 +3,103 @@ $ env -u CARGO_BUILD_RUSTC_WRAPPER -u CARGO_TARGET_DIR -u RUSTC_WORKSPACE_WRAPPE
   "bridges": 0,
   "injections": 8,
   "modules": 2,
-  "seconds": 4.474209091,
+  "seconds": 4.345472666,
   "stage": "/home/wassaa/.local/share/horizon-launcher/native/stage.new",
   "stage_changed": true,
   "states": 0,
   "status": "ok",
-  "transformation_seconds": 4.474205411
+  "transformation_seconds": 4.345469166
 }
 $ cd "/home/wassaa/.local/share/horizon-launcher/native/stage" && env -u CARGO_BUILD_RUSTC_WRAPPER -u RUSTC_WORKSPACE_WRAPPER -u RUSTC_WRAPPER -u RUSTUP_TOOLCHAIN CARGO_HOME="/home/wassaa/.local/share/horizon-launcher/cargo" CARGO_TARGET_DIR="/home/wassaa/.local/share/horizon-launcher/native/target" PATH="/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin:/nix/store/s70gz6bvz74c36xigh5m2ab2cqli08cv-pkg-config-wrapper-0.29.2/bin:/nix/store/i52d7j6ma8bh4ggg4r2hl4af7bychdpa-clang-wrapper-21.1.8/bin:/nix/store/wra7pnc8v3vk7xl597kq79bbmvncxz8j-clang-21.1.8/bin:/nix/store/j64r0mf0yy7pvcbavlqidfnpsdnrldj2-glibc-2.44-57-bin/bin:/nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin:/nix/store/0a584d1b9csvk900bdg4pf7vzkx1v7jl-binutils-wrapper-2.46/bin:/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin:/nix/store/c761q93rp3m4qyg71w2d5dwynha1kr97-mold-unwrapped-wrapper-3.0.0/bin:/nix/store/mabgbkgz9pyaw5pdzmwmp3rb9n1hsd5j-mold-unwrapped-3.0.0/bin:/nix/store/dl38pix4jvabi5smb9wywhp6pimmpva6-patchelf-0.19.2/bin:/nix/store/r5ri78axx1qggkjq3vawywlzglg70b5w-gcc-wrapper-16.2.0/bin:/nix/store/xpaz3fi6ibqxb9sla4gjlp0c82v566y8-gcc-16.2.0/bin:/nix/store/fi98g122a3kzbschgvbvsqvpyxrmqvvl-binutils-wrapper-2.46/bin:/nix/store/0n8ncy1wlkkhnix0m91ly7x6lpwi2bm3-compiler-rt-libc-21.1.8/bin:/nix/store/mp9krn4yrm1hwh657y1aa2jv0x97fbin-libxkbcommon-1.13.2/bin:/nix/store/jpnd5wfvvva2hp63wl348ldxgl4lk25a-freetype-2.14.3-dev/bin:/nix/store/ai2km55ba8bxrn64xx7p9lgvrrzdzv43-bzip2-1.0.8-bin/bin:/nix/store/aqg090a82fsn92fvq2pafs1kig928m6g-brotli-1.2.0/bin:/nix/store/27jrn36s7jkk6xv6vgi9kq8shkybafp1-libpng-apng-1.6.59-dev/bin:/nix/store/5m6pqb4gihxwzj174k7s0xparwbvv8xa-expat-2.9.0-dev/bin:/nix/store/a8hfazxxb69rgvlgbl2mn3zn6khvrb8r-fontconfig-2.18.3-bin/bin:/nix/store/4kj51k0kzrbwx5m4h3fpjkkl5wc2gdbd-alsa-lib-1.2.16.1/bin:/nix/store/gvglnxscmvx4mh9my0cy0xgi0l1z6l9s-openssl-3.5.9-bin/bin:/nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin:/nix/store/99v13ig4382mngi6ggf0csqi7rfa04j5-findutils-4.11.0/bin:/nix/store/9mpja553cbkr2rc37kzdg8zbbg2dyyvl-diffutils-3.12/bin:/nix/store/9wc73n5izv0m7ppjbibi4hbr68rba1lj-gnused-4.10/bin:/nix/store/c3f45pxlb81gzz4w1nym7lpznfypva7s-gnugrep-3.12/bin:/nix/store/h96s16mjssibkvk62pvmfm3lwfc3wnwp-gawk-5.4.1/bin:/nix/store/n318yf1q5vysgh2qn6fd1q8yjy9vmwvh-gnutar-1.35/bin:/nix/store/rpswfv0ff4wap9anx7k1224x2m94pfcc-gzip-1.15/bin:/nix/store/ai2km55ba8bxrn64xx7p9lgvrrzdzv43-bzip2-1.0.8-bin/bin:/nix/store/8xz4d9wp4jy49mhl306wyg55096wis3p-gnumake-4.4.1/bin:/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20/bin:/nix/store/d5jz315vxbphknfawsrjs192ci9bc6df-patch-2.8/bin:/nix/store/nflpm51il93hxh2rba6dvz59kaff0i7v-xz-5.8.4-bin/bin:/nix/store/2qpmak7162vhqxjwfik4aqs9lff6sn7w-file-5.48/bin:/home/wassaa/Projects/horizon/launcher/.direnv/bin:/run/wrappers/bin:/home/wassaa/.nix-profile/bin:/nix/profile/bin:/home/wassaa/.local/state/nix/profile/bin:/etc/profiles/per-user/wassaa/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/nix/store/6l9kbzxwq9ij2lcmwl2qb1jdpqisjr8l-rustc-wrapper-1.99.0/bin" RUSTC="/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin/rustc" "/home/wassaa/.local/share/horizon-launcher/rust/1.99.1-x86_64-unknown-linux-gnu/bin/cargo" "build" "--locked" "--profile" "release" "-p" "horizon-client" "--bin" "horizon-client"
-   Compiling zerofrom v0.1.8
-   Compiling naga-types v30.0.1
-   Compiling cobs v0.3.0
-   Compiling wayland-protocols-wlr v0.3.12
+   Compiling yoke v0.8.3
+   Compiling horizon-world v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-world)
    Compiling gpu-allocator v0.28.0
-   Compiling tiny-skia-path v0.11.4
-   Compiling petgraph v0.8.3
-   Compiling symphonia-metadata v0.5.5
-   Compiling hidapi v2.6.7
+   Compiling wgpu-naga-bridge v30.0.1
+   Compiling smithay-client-toolkit v0.19.2
    Compiling zip v2.4.2
-   Compiling alsa v0.9.1
-error: non-item in item list
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/gpu-allocator-0.28.0/src/vulkan/mod.rs:921:5
-    |
-704 | impl Allocator {
-    |                - item list starts here
-...
-921 |     pub fn report_memory_leaks(&self, log_level: Level) {
-    |     ^^^ non-item starts here
-...
-986 | }
-    | - item list ends here
-
-   Compiling inotify-sys v0.1.8
-   Compiling ahash v0.8.12
-   Compiling tracing v0.1.44
-   Compiling libudev-sys v0.1.4
-   Compiling ruzstd v0.9.1
-   Compiling wgpu v30.0.1
-   Compiling winit v0.30.13
+   Compiling tiny-skia v0.11.4
+   Compiling hidapi v2.6.7
+   Compiling tree_magic_mini v3.2.2
+   Compiling symphonia-utils-xiph v0.5.5
+   Compiling cpal v0.16.0
+   Compiling fdeflate v0.3.7
+   Compiling miniz_oxide v0.8.9
+   Compiling dpi v0.1.2
+   Compiling opaque-debug v0.3.1
+   Compiling smol_str v0.2.2
+   Compiling hkdf v0.12.4
    Compiling nix v0.31.3
-   Compiling toml v1.1.6+spec-1.1.0
-   Compiling x11-dl v2.21.0
-   Compiling cipher v0.4.4
+   Compiling libudev-sys v0.1.4
+   Compiling mimalloc v0.1.52
+   Compiling chacha20 v0.9.1
+   Compiling inotify v0.11.5
+   Compiling aead v0.5.2
    Compiling curve25519-dalek v4.1.3
-error: expected one of `!` or `::`, found keyword `pub`
-    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:1723:5
+   Compiling poly1305 v0.8.0
+   Compiling zerovec v0.11.8
+   Compiling zerotrie v0.2.5
+   Compiling symphonia-codec-vorbis v0.5.5
+   Compiling symphonia-format-ogg v0.5.5
+   Compiling uuid v1.28.0
+   Compiling horizon-theme v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-theme)
+   Compiling iana-time-zone v0.1.65
+   Compiling semver v1.0.28
+   Compiling vec_map v0.8.2
+   Compiling wgpu-hal v30.0.1 (/home/wassaa/.local/share/horizon-launcher/native/stage/third_party/wgpu-hal)
+   Compiling wl-clipboard-rs v0.9.4
+   Compiling gilrs v0.11.2
+   Compiling wasmparser v0.254.2
+   Compiling chacha20poly1305 v0.10.1
+   Compiling chrono v0.4.45
+   Compiling png v0.18.1
+   Compiling horizon-threads v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-threads)
+   Compiling symphonia v0.5.5
+   Compiling gilrs-core v0.6.8
+   Compiling horizon-assets v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-assets)
+   Compiling socket2 v0.5.10
+   Compiling spake2 v0.4.0
+   Compiling if-addrs v0.13.4
+   Compiling tinystr v0.8.4
+   Compiling potential_utf v0.1.6
+   Compiling horizon-dualsense v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-dualsense)
+   Compiling fnv v1.0.7
+   Compiling icu_collections v2.3.0
+   Compiling unicode-bidi v0.3.18
+   Compiling icu_locale_core v2.3.0
+   Compiling minisign-verify v0.3.0
+   Compiling glam v0.30.10
+   Compiling arboard v3.6.1
+   Compiling horizon-shader-api v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-shader-api)
+   Compiling horizon-shaders v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-shaders)
+   Compiling sctk-adwaita v0.10.1
+   Compiling pollster v0.4.0
+   Compiling horizon-client v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-client)
+   Compiling horizon-friends v0.1.0 (/home/wassaa/.local/share/horizon-launcher/native/stage/crates/horizon-friends)
+   Compiling winit v0.30.13
+error: expected one of `!` or `::`, found doc comment `///`
+    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winit-0.30.13/src/window.rs:1027:5
      |
-1518 | impl<'a> ZipFile<'a> {
-     |                      - while parsing this item list starting here
+ 917 | impl Window {
+     |             - while parsing this item list starting here
 ...
-1722 |     /// Get if the files is encrypted or not
-     |                                             - expected one of `!` or `::`
-1723 |     pub fn encrypted(&self) -> bool {
+1026 |     /// Sets the enabled window buttons.
+     |                                         - expected one of `!` or `::`
+1027 |     ///
      |     ^^^ unexpected token
 ...
-1805 | }
+1413 | }
      | - the item list ends here
-
-   Compiling yoke v0.8.3
-   Compiling naga v30.0.1
-   Compiling postcard v1.1.3
-   Compiling wgpu-types v30.0.1
-   Compiling xkbcommon-dl v0.4.2
-   Compiling wayland-protocols-plasma v0.3.12
-   Compiling hmac v0.12.1
-error: non-item in item list
-    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/yoke-0.8.3/src/yoke.rs:1165:5
      |
- 850 | impl<Y: for<'a> Yokeable<'a>, C> Yoke<Y, C> {
-     |                                             - item list starts here
-...
-1165 |     /// This is similar to [`Yoke::try_map_project_cloned`], but it works around older versions
-     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ non-item starts here
-...
-1195 | }
-     | - item list ends here
+help: add a space before the last `/` to write a regular comment
+     |
+1027 |     // /
+     |       +
 
-   Compiling universal-hash v0.5.1
-   Compiling curve25519-dalek-derive v0.1.1
-warning: hidapi@2.6.7: etc/hidapi/linux/hid.c:43:10: fatal error: libudev.h: No such file or directory
-warning: hidapi@2.6.7:    43 | #include <libudev.h>
-warning: hidapi@2.6.7:       |          ^~~~~~~~~~~
-warning: hidapi@2.6.7: compilation terminated.
-error: failed to run custom build command for `hidapi v2.6.7`
-
-Caused by:
-  process didn't exit successfully: `/home/wassaa/.local/share/horizon-launcher/native/target/release/build/hidapi-226090aca8b3f170/build-script-build` (exit status: 1)
-  --- stdout
-  cargo:rustc-check-cfg=cfg(hidapi)
-  cargo:rustc-check-cfg=cfg(libusb)
-  cargo:rerun-if-changed=etc/hidapi/linux/hid.c
-  cargo:rerun-if-env-changed=LIBUDEV_NO_PKG_CONFIG
-  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG
-  cargo:rerun-if-env-changed=PKG_CONFIG
-  cargo:rerun-if-env-changed=LIBUDEV_STATIC
-  cargo:rerun-if-env-changed=LIBUDEV_DYNAMIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH
-  cargo:rerun-if-env-changed=PKG_CONFIG_PATH
-  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR
-  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR
-  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR
-  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
-  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
-  cargo:rerun-if-env-changed=SYSROOT
-  cargo:rerun-if-env-changed=LIBUDEV_STATIC
-  cargo:rerun-if-env-changed=LIBUDEV_DYNAMIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC
-  cargo:rustc-link-search=native=/nix/store/avshcbcrykiffn4vlhmz848ab69wbp9n-systemd-262/lib
-  cargo:rustc-link-lib=udev
-  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG
-  cargo:rerun-if-env-changed=PKG_CONFIG
-  cargo:rerun-if-env-changed=LIBUDEV_STATIC
-  cargo:rerun-if-env-changed=LIBUDEV_DYNAMIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC
-  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH
-  cargo:rerun-if-env-changed=PKG_CONFIG_PATH
-  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR
-  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR
-  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-unknown-linux-gnu
-  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_unknown_linux_gnu
-  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR
-  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
-  cargo:rerun-if-env-changed=CC_FORCE_DISABLE
-  CC_FORCE_DISABLE = None
-  cargo:rerun-if-env-changed=CC_x86_64-unknown-linux-gnu
-  CC_x86_64-unknown-linux-gnu = None
-  cargo:rerun-if-env-changed=CC_x86_64_unknown_linux_gnu
-  CC_x86_64_unknown_linux_gnu = None
-  cargo:rerun-if-env-changed=HOST_CC
-  HOST_CC = None
-  cargo:rerun-if-env-changed=CC
-  CC = Some(gcc)
-  cargo:rerun-if-env-changed=CC_KNOWN_WRAPPER_CUSTOM
-  CC_KNOWN_WRAPPER_CUSTOM = None
-  cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
-  cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
-  CRATE_CC_NO_DEFAULTS = None
-  cargo:rerun-if-env-changed=CFLAGS
-  CFLAGS = None
-  cargo:rerun-if-env-changed=HOST_CFLAGS
-  HOST_CFLAGS = None
-  cargo:rerun-if-env-changed=CFLAGS_x86_64_unknown_linux_gnu
-  CFLAGS_x86_64_unknown_linux_gnu = None
-  cargo:rerun-if-env-changed=CFLAGS_x86_64-unknown-linux-gnu
-  CFLAGS_x86_64-unknown-linux-gnu = None
-  cargo:warning=etc/hidapi/linux/hid.c:43:10: fatal error: libudev.h: No such file or directory
-  cargo:warning=   43 | #include <libudev.h>
-  cargo:warning=      |          ^~~~~~~~~~~
-  cargo:warning=compilation terminated.
-
-  --- stderr
-
-
-  error occurred in cc-rs: command did not execute successfully (status code exit status: 1): "gcc" "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "-m64" "-I" "etc/hidapi/hidapi" "-Wall" "-Wextra" "-o" "/home/wassaa/.local/share/horizon-launcher/native/target/release/build/hidapi-15819ca743a0fba5/out/679628f6e8944299-hid.o" "-c" "etc/hidapi/linux/hid.c"
-
-
+   Compiling icu_provider v2.3.1
+   Compiling icu_normalizer v2.3.0
+   Compiling icu_properties v2.3.0
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling url v2.5.8
+error: could not compile `winit` (lib) due to 1 previous error
 warning: build failed, waiting for other jobs to finish...
-error: could not compile `yoke` (lib) due to 1 previous error
-error[E0599]: no method named `is_symlink` found for mutable reference `&mut ZipFile<'_>` in the current scope
-  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read/stream.rs:70:25
-   |
-70 |                 if file.is_symlink() {
-   |                         ^^^^^^^^^^ method not found in `&mut ZipFile<'_>`
-
-error[E0599]: no method named `size` found for mutable reference `&mut ZipFile<'_>` in the current scope
-  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read/stream.rs:71:62
-   |
-71 |                     let mut target = Vec::with_capacity(file.size() as usize);
-   |                                                              ^^^^ method not found in `&mut ZipFile<'_>`
-   |
-   = help: items from traits can only be used if the trait is implemented and in scope
-   = note: the following trait defines an item `size`, perhaps you need to implement it:
-           candidate #1: `std::os::unix::fs::MetadataExt`
-
-error[E0599]: no method named `is_dir` found for mutable reference `&mut ZipFile<'_>` in the current scope
-  --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read/stream.rs:77:25
-   |
-77 |                 if file.is_dir() {
-   |                         ^^^^^^ method not found in `&mut ZipFile<'_>`
-   |
-help: one of the expressions' fields has a method of the same name
-   |
-77 |                 if file.data.is_dir() {
-   |                         +++++
-
-error[E0599]: no method named `is_symlink` found for struct `ZipFile<'a>` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:903:42
-    |
-251 | pub struct ZipFile<'a> {
-    | ---------------------- method `is_symlink` not found for this struct
-...
-903 |             let symlink_target = if file.is_symlink() && (cfg!(unix) || cfg!(wi...
-    |                                          ^^^^^^^^^^ method not found in `ZipFile<'_>`
-
-error[E0599]: no method named `size` found for struct `ZipFile<'a>` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:904:58
-    |
-251 | pub struct ZipFile<'a> {
-    | ---------------------- method `size` not found for this struct
-...
-904 |                 let mut target = Vec::with_capacity(file.size() as usize);
-    |                                                          ^^^^ method not found in `ZipFile<'_>`
-    |
-    = help: items from traits can only be used if the trait is implemented and in scope
-    = note: the following trait defines an item `size`, perhaps you need to implement it:
-            candidate #1: `std::os::unix::fs::MetadataExt`
-
-error[E0599]: no method named `is_dir` found for struct `ZipFile<'a>` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:908:25
-    |
-251 | pub struct ZipFile<'a> {
-    | ---------------------- method `is_dir` not found for this struct
-...
-908 |                 if file.is_dir() {
-    |                         ^^^^^^ method not found in `ZipFile<'_>`
-    |
-help: one of the expressions' fields has a method of the same name
-    |
-908 |                 if file.data.is_dir() {
-    |                         +++++
-
-error[E0599]: no method named `unix_mode` found for struct `ZipFile<'a>` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:927:42
-    |
-251 | pub struct ZipFile<'a> {
-    | ---------------------- method `unix_mode` not found for this struct
-...
-927 |                 if let Some(mode) = file.unix_mode() {
-    |                                          ^^^^^^^^^ method not found in `ZipFile<'_>`
-    |
-help: one of the expressions' fields has a method of the same name
-    |
-927 |                 if let Some(mode) = file.data.unix_mode() {
-    |                                          +++++
-
-error[E0599]: no method named `options` found for struct `ZipFile<'a>` in the current scope
-    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/write.rs:1288:28
-     |
-1288 |         let options = file.options();
-     |                            ^^^^^^^ method not found in `ZipFile<'_>`
-     |
-    ::: /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:251:1
-     |
- 251 | pub struct ZipFile<'a> {
-     | ---------------------- method `options` not found for this struct
-
-error[E0599]: no method named `crc32` found for struct `ZipFile<'a>` in the current scope
-    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/write.rs:1299:25
-     |
-1299 |             crc32: file.crc32(),
-     |                         ^^^^^ method not found in `ZipFile<'_>`
-     |
-    ::: /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:251:1
-     |
- 251 | pub struct ZipFile<'a> {
-     | ---------------------- method `crc32` not found for this struct
-
-error[E0599]: no method named `compressed_size` found for struct `ZipFile<'a>` in the current scope
-    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/write.rs:1300:35
-     |
-1300 |             compressed_size: file.compressed_size(),
-     |                                   ^^^^^^^^^^^^^^^
-     |
-    ::: /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:251:1
-     |
- 251 | pub struct ZipFile<'a> {
-     | ---------------------- method `compressed_size` not found for this struct
-     |
-help: there is a method `compression` with a similar name
-     |
-1300 -             compressed_size: file.compressed_size(),
-1300 +             compressed_size: file.compression(),
-     |
-
-error[E0599]: no method named `size` found for struct `ZipFile<'a>` in the current scope
-    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/write.rs:1301:37
-     |
-1301 |             uncompressed_size: file.size(),
-     |                                     ^^^^ method not found in `ZipFile<'_>`
-     |
-    ::: /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:251:1
-     |
- 251 | pub struct ZipFile<'a> {
-     | ---------------------- method `size` not found for this struct
-     |
-     = help: items from traits can only be used if the trait is implemented and in scope
-     = note: the following trait defines an item `size`, perhaps you need to implement it:
-             candidate #1: `std::os::unix::fs::MetadataExt`
-
-error[E0599]: no method named `options` found for struct `ZipFile<'a>` in the current scope
-    --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/write.rs:1384:32
-     |
-1384 |         let mut options = file.options();
-     |                                ^^^^^^^ method not found in `ZipFile<'_>`
-     |
-    ::: /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zip-2.4.2/src/read.rs:251:1
-     |
- 251 | pub struct ZipFile<'a> {
-     | ---------------------- method `options` not found for this struct
-
-error[E0599]: no method named `generate_report` found for reference `&vulkan::Allocator` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/gpu-allocator-0.28.0/src/vulkan/mod.rs:700:14
-    |
-700 |         self.generate_report().fmt(f)
-    |              ^^^^^^^^^^^^^^^ method not found in `&vulkan::Allocator`
-
-error[E0599]: no method named `find_memorytype_index` found for mutable reference `&mut vulkan::Allocator` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/gpu-allocator-0.28.0/src/vulkan/mod.rs:818:18
-    |
-818 | ...self.find_memorytype_index(&desc.requirements, mem_loc_preferred_bits);
-    |         ^^^^^^^^^^^^^^^^^^^^^ method not found in `&mut vulkan::Allocator`
-
-error[E0599]: no method named `find_memorytype_index` found for mutable reference `&mut vulkan::Allocator` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/gpu-allocator-0.28.0/src/vulkan/mod.rs:830:22
-    |
-830 | ...self.find_memorytype_index(&desc.requirements, mem_loc_required_bits);
-    |         ^^^^^^^^^^^^^^^^^^^^^ method not found in `&mut vulkan::Allocator`
-
-error[E0599]: no method named `find_memorytype_index` found for mutable reference `&mut vulkan::Allocator` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/gpu-allocator-0.28.0/src/vulkan/mod.rs:859:26
-    |
-859 | ...self.find_memorytype_index(&desc.requirements, mem_loc_preferred_bits);
-    |         ^^^^^^^^^^^^^^^^^^^^^ method not found in `&mut vulkan::Allocator`
-
-error[E0599]: no method named `report_memory_leaks` found for mutable reference `&mut vulkan::Allocator` in the current scope
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/gpu-allocator-0.28.0/src/vulkan/mod.rs:991:18
-    |
-991 |             self.report_memory_leaks(Level::Warn);
-    |                  ^^^^^^^^^^^^^^^^^^^ method not found in `&mut vulkan::Allocator`
-    |
-    = help: items from traits can only be used if the trait is implemented and in scope
-note: `SubAllocator` defines an item `report_memory_leaks`, perhaps you need to implement it
-   --> /home/wassaa/.local/share/horizon-launcher/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/gpu-allocator-0.28.0/src/allocator/mod.rs:113:1
-    |
-113 | pub(crate) trait SubAllocator: SubAllocatorBase + fmt::Debug + Sync + Send {
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-For more information about this error, try `rustc --explain E0599`.
-error: could not compile `gpu-allocator` (lib) due to 6 previous errors
-error: could not compile `zip` (lib) due to 13 previous errors
