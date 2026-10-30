@@ -62,7 +62,8 @@ previous NixOS generation to roll back if a switch causes problems.
 
 ## Repository development
 
-The x86_64 Linux development shell supplies Lua, LuaLS, StyLua, Python, `uv`,
+The x86_64 Linux development shell is defined in [devshell.nix](./devshell.nix).
+It supplies Lua, LuaLS, StyLua, Python, `uv`,
 `nixd`, `nixfmt` and Git. From the repository root, run `direnv allow` once to
 load it automatically, or use `nix develop` for a shell without direnv.
 Direnv executes the repository's `.envrc`, so only allow a checkout you trust.
