@@ -1,43 +1,40 @@
 import contextlib
 import io
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from subprocess import CompletedProcess
 
 from wassos_transport import main
 
 
 class TransportTests(unittest.TestCase):
-    def test_reports_relevant_setup_without_dumping_other_lines(self):
+    def test_reproduces_failure_without_printing_environment(self):
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory)
-            config = home / ".config" / "direnv"
-            (config / "lib").mkdir(parents=True)
-            (config / "direnvrc").write_text("source /nix/store/devenv/direnvrc\nSECRET=private\n")
-            (config / "lib" / "hm-nix-direnv.sh").write_text(
-                '_nix_direnv_nix=""\n_nix() {\n  ${_nix_direnv_nix} --no-warn-dirty\n}\n'
+            script = home / ".config" / "direnv" / "lib" / "hm-nix-direnv.sh"
+            script.parent.mkdir(parents=True)
+            script.write_text('_nix_direnv_preflight() {\n  echo preflight\n}\n')
+            result = subprocess.CompletedProcess(
+                [], 1, stdout="SECRET=private", stderr="--no-warn-dirty: command not found\n"
             )
-            result = CompletedProcess([], 0, stdout="version\n", stderr="")
             with patch("wassos_transport.Path.home", return_value=home), \
-                 patch("wassos_transport.shutil.which", side_effect=lambda name: f"/bin/{name}"), \
-                 patch("wassos_transport.subprocess.run", return_value=result), \
+                 patch("builtins.input", return_value="yes"), \
+                 patch("wassos_transport.subprocess.run", return_value=result) as run, \
                  contextlib.redirect_stdout(io.StringIO()) as output:
-                self.assertEqual(main(), 0)
-            self.assertIn("_nix_direnv_nix", output.getvalue())
-            self.assertIn("--no-warn-dirty", output.getvalue())
+                self.assertEqual(main(), 1)
+            self.assertIn("Reproduced the reported", output.getvalue())
             self.assertNotIn("SECRET=private", output.getvalue())
+            self.assertEqual(run.call_args.args[0], ["direnv", "export", "json"])
+            self.assertNotIn("DIRENV_DIFF", run.call_args.kwargs["env"])
 
-    def test_missing_executable_and_config_are_errors(self):
-        with tempfile.TemporaryDirectory() as directory, \
-             patch("wassos_transport.Path.home", return_value=Path(directory)), \
-             patch("wassos_transport.shutil.which", return_value=None), \
-             contextlib.redirect_stdout(io.StringIO()), \
-             contextlib.redirect_stderr(io.StringIO()) as errors:
+    def test_declining_does_not_run_diagnostic(self):
+        with patch("builtins.input", return_value="no"), \
+             patch("wassos_transport.subprocess.run") as run, \
+             contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(main(), 1)
-        self.assertIn("not found on PATH", errors.getvalue())
-        self.assertIn("Could not read", errors.getvalue())
+        run.assert_not_called()
 
 
 if __name__ == "__main__":
