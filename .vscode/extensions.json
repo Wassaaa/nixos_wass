@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "mkhl.direnv",
+    "sumneko.lua",
+    "JohnnyMorganz.stylua",
+    "jnoortheen.nix-ide"
+  ]
+}

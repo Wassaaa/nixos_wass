@@ -60,6 +60,35 @@ For a Git-backed flake, add new files to the Git index before building; Nix
 otherwise omits untracked files. Review changes with `git status` first. Use a
 previous NixOS generation to roll back if a switch causes problems.
 
+## Repository development
+
+The x86_64 Linux development shell supplies Lua, LuaLS, StyLua, Python, `uv`,
+`nixd`, `nixfmt` and Git. From the repository root, run `direnv allow` once to
+load it automatically, or use `nix develop` for a shell without direnv.
+Direnv executes the repository's `.envrc`, so only allow a checkout you trust.
+It creates an ignored `.direnv/hyprland-lua` link to LuaLS stubs generated from
+the Hyprland revision in `flake.lock`; changing that input regenerates them.
+The stubs describe Hyprland's API for the editor and are not runtime code.
+
+For VS Code or Insiders, install the recommended direnv, Lua, StyLua and Nix IDE
+extensions, trust the workspace and allow the `.envrc`. The workspace settings
+load the generated stubs independently of the editor's launch environment.
+After the first direnv load, reload the VS Code window if LuaLS started before
+the link existed. The direnv extension provides the environment to integrated
+terminals; it does not necessarily change the environment of every extension.
+Without direnv, `nix develop` provides the tools but does not create the editor
+link. LuaLS can use its bundled language server when the editor was not started
+from the development shell.
+
+Run the Hyprland unit tests from the development shell with:
+
+```sh
+lua tests/hyprland-monitor-profiles.lua
+lua tests/hyprland-theme.lua
+```
+
+These tests use small mocks; they do not replace testing inside Hyprland.
+
 For one-off commands supplied through this repository, pull the latest commit
 and run `uv run x` from the repository root. The current task and any side
 effects are shown before execution; the task changes between troubleshooting

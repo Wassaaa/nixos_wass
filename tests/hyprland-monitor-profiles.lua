@@ -1,6 +1,6 @@
 local profiles = dofile("modules/home/features/desktop/hyprland/config/monitor-profiles.lua")
 local originalGetenv, originalOpen = os.getenv, io.open
-local saved, active, connected, windows, bindings, notifications, rules, moves, failMove
+local saved, active, connected, windows, bindings, bindingOptions, notifications, rules, moves, failMove
 local primary = { id = 1, name = "DP-2" }
 local secondary = { id = 2, name = "HDMI-A-1" }
 local mapping = { [1] = {}, [2] = {} }
@@ -38,12 +38,12 @@ local configs = {
   } },
 }
 
-hl = {
+rawset(_G, "hl", {
   notification = { create = function(value) notifications[#notifications + 1] = value end },
   monitor = function(value) rules[#rules + 1] = value end,
   get_monitors = function(options) return options and connected or active end,
   get_windows = function() return windows end,
-  bind = function(key, callback) bindings[key] = callback end,
+  bind = function(key, callback, options) bindings[key], bindingOptions[key] = callback, options end,
   dsp = { window = {
     move = function(value) return value end,
     pseudo = function() return "pseudo" end,
@@ -53,11 +53,11 @@ hl = {
     moves[#moves + 1] = value
     return { ok = true }
   end,
-}
+})
 
 local function reset()
   saved, active, connected, windows = nil, { primary, secondary }, { primary, secondary }, {}
-  bindings, notifications, rules, moves, failMove = {}, {}, {}, {}, false
+  bindings, bindingOptions, notifications, rules, moves, failMove = {}, {}, {}, {}, {}, false
 end
 local function switch() bindings["SUPER + P"]() end
 local function workspace(name, monitor, special)
@@ -72,6 +72,7 @@ windows = {
 }
 profiles.setup(configs)
 assert(#rules == 2 and bindings["SUPER + P"])
+assert(bindingOptions["SUPER + P"].description == "Cycle monitor profiles")
 switch()
 assert(saved == "Second" and #moves == 1 and moves[1].workspace == "12")
 assert(rules[3].output == "HDMI-A-1" and rules[3].position == "0x0")
@@ -129,6 +130,7 @@ assert(saved == nil and notifications[#notifications].text:match("target must al
 reset()
 profiles.setup({ configs[1] })
 assert(bindings["SUPER + P"] == "pseudo" and #rules == 2)
+assert(bindingOptions["SUPER + P"].description == "Toggle pseudo-tile")
 
 local pluginGlobals = { monitor_priorities = {} }
 package.loaded["plugins.split-monitor-workspaces.lua.globals"] = pluginGlobals

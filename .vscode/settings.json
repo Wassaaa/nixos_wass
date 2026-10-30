@@ -1,7 +1,20 @@
 {
-  "git.enableCommitSigning": false,
+  "Lua.workspace.library": [".direnv/hyprland-lua"],
+  "nix.enableLanguageServer": true,
+  "nix.serverPath": "nixd",
+  "nix.hiddenLanguageServerErrors": [],
+  "nix.serverSettings": {
+    "nixd": {
+      "formatting": {
+        "command": ["nixfmt"]
+      }
+    }
+  },
   "[lua]": {
     "editor.defaultFormatter": "JohnnyMorganz.stylua",
     "editor.formatOnSave": true
+  },
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide"
   }
 }

@@ -72,10 +72,11 @@
   // Nix language server
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nixd",
-  "nix.hiddenLanguageServerErrors": ["textDocument/definition"],
-  "nixd": {
-    "formatting": {
-      "command": ["nixfmt"]
+  "nix.serverSettings": {
+    "nixd": {
+      "formatting": {
+        "command": ["nixfmt"]
+      }
     }
   },
 

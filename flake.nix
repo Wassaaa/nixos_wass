@@ -36,6 +36,14 @@
   outputs = { nixpkgs, nixos-wsl, ... }@inputs:
     let
       flakeRoot = ./.;
+      devPkgs = import nixpkgs { system = "x86_64-linux"; };
+      hyprlandLuaStubs = devPkgs.runCommand "hyprland-lua-stubs" {
+        nativeBuildInputs = [ devPkgs.python314 ];
+      } ''
+        mkdir -p "$out"
+        python ${inputs.hyprland}/meta/generateLuaStubs.py \
+          --root ${inputs.hyprland} --output "$out/hl.meta.lua"
+      '';
       mkSystem = { username, host, profile, extraModules ? [ ] }:
         nixpkgs.lib.nixosSystem {
           modules = [
@@ -47,6 +55,20 @@
           };
         };
     in {
+      devShells.x86_64-linux.default = devPkgs.mkShell {
+        packages = with devPkgs; [
+          git
+          lua5_4
+          lua-language-server
+          nixd
+          nixfmt
+          python314
+          stylua
+          uv
+        ];
+        WASSOS_HYPRLAND_LUA_STUBS = "${hyprlandLuaStubs}";
+      };
+
       packages.x86_64-linux.windows-app-for-linux =
         let
           pkgs = import nixpkgs { system = "x86_64-linux"; };

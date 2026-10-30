@@ -21,9 +21,9 @@ dofile = function(path)
   return { primary = scenario, onSurfaceVariant = "abcdef" }
 end
 
-hl = {
+rawset(_G, "hl", {
   config = function(config) result = config end,
-}
+})
 
 scenario = "missing"
 originalDofile(themeFile)
