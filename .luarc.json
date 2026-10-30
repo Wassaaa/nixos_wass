@@ -1,5 +1,8 @@
 {
+  "workspace": {
+    "library": [".direnv/hyprland-lua"]
+  },
   "diagnostics": {
-    "globals": ["hl", "browser", "terminal", "keyboardLayout"]
+    "globals": ["browser", "terminal", "keyboardLayout"]
   }
 }

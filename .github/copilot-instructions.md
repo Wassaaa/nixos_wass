@@ -70,6 +70,10 @@ sudo nixos-rebuild switch --flake .#wassaa
 
 ### NixOS command transport
 
+The user runs NixOS build, test, switch and boot commands manually. Suggest the
+appropriate command (for example `fb`, `fr` or `frb`); never run or embed these
+operations in `x` or other agent-generated scripts, even with confirmation.
+
 When the user needs to run a task on NixOS, update the `x` entry point and
 publish it so they can run `git pull --ff-only` followed by `uv run x` from the
 repository root. State the current task and side effects before execution.

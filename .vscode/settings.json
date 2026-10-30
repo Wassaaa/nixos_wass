@@ -1,5 +1,4 @@
 {
-  "Lua.workspace.library": [".direnv/hyprland-lua"],
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nixd",
   "nix.hiddenLanguageServerErrors": [],

@@ -72,10 +72,11 @@ its internal helpers do not override nix-direnv when entering a flake shell.
 It creates an ignored `.direnv/hyprland-lua` link to LuaLS stubs generated from
 the Hyprland revision in `flake.lock`; changing that input regenerates them.
 The stubs describe Hyprland's API for the editor and are not runtime code.
+The repository's `.luarc.json` loads them for LuaLS in any supported editor.
 
 For VS Code or Insiders, install the recommended direnv, Lua, StyLua and Nix IDE
-extensions, trust the workspace and allow the `.envrc`. The workspace settings
-load the generated stubs independently of the editor's launch environment.
+extensions, trust the workspace and allow the `.envrc`. LuaLS loads the
+generated stubs independently of the editor's launch environment.
 After the first direnv load, reload the VS Code window if LuaLS started before
 the link existed. The direnv extension provides the environment to integrated
 terminals; it does not necessarily change the environment of every extension.
