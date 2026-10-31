@@ -29,6 +29,7 @@
 
     # Development utilities
     inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.omp.packages.${pkgs.stdenv.hostPlatform.system}.default
     direnv
     devenv
     nixd # Nix LSP server

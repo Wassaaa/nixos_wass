@@ -32,21 +32,37 @@
       url = "github:mariuszkopowski/windows-app-for-linux/721e8d87edfc137d4ce2beeeaafef3009d7c8bb5";
       flake = false;
     };
+    ompurl = "github:can1357/oh-my-pi";
   };
-  outputs = { nixpkgs, nixos-wsl, ... }@inputs:
+  outputs =
+    { nixpkgs, nixos-wsl, ... }@inputs:
     let
       flakeRoot = ./.;
-      mkSystem = { username, host, profile, extraModules ? [ ] }:
+      mkSystem =
+        {
+          username,
+          host,
+          profile,
+          extraModules ? [ ],
+        }:
         nixpkgs.lib.nixosSystem {
           modules = [
             { nixpkgs.hostPlatform = "x86_64-linux"; }
             ./profiles/${profile}
-          ] ++ extraModules;
+          ]
+          ++ extraModules;
           specialArgs = {
-            inherit inputs flakeRoot username host profile;
+            inherit
+              inputs
+              flakeRoot
+              username
+              host
+              profile
+              ;
           };
         };
-    in {
+    in
+    {
       devShells.x86_64-linux.default = import ./devshell.nix {
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         inherit (inputs) hyprland;
@@ -69,10 +85,20 @@
         };
 
       nixosConfigurations = {
-        wassaa = mkSystem { username = "wassaa"; host = "wassaa"; profile = "nvidia"; };
-        tpad = mkSystem { username = "allar"; host = "tpad"; profile = "intel"; };
+        wassaa = mkSystem {
+          username = "wassaa";
+          host = "wassaa";
+          profile = "nvidia";
+        };
+        tpad = mkSystem {
+          username = "allar";
+          host = "tpad";
+          profile = "intel";
+        };
         wsl = mkSystem {
-          username = "wsl"; host = "wsl"; profile = "wsl";
+          username = "wsl";
+          host = "wsl";
+          profile = "wsl";
           extraModules = [ nixos-wsl.nixosModules.default ];
         };
       };
