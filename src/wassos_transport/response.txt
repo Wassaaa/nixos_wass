@@ -1,1 +1,90 @@
-977153e4a39ae156c0dcbfcbd7270915fbc12c3459591535b351875a226aff97
+omp-native-deps> error: could not compile `syn` (lib)
+omp-native-deps> 
+omp-native-deps> Caused by:
+omp-native-deps>   process didn't exit successfully: `rustc --crate-name syn --edition=2021 /nix/store/34kzgndkzwqrsy92siwlys8w0fj3b5b9-vendor-cargo-deps/c19b7c6f923b580ac259164a89f2577984ad5ab09ee9d583b888f934adbbe8d0/syn-2.0.119/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat,unused-externs-silent --crate-type lib --emit=dep-info,metadata,link -Z embed-metadata=no -C opt-level=3 -C embed-bitcode=no -C codegen-units=1 --cfg 'feature="clone-impls"' --cfg 'feature="default"' --cfg 'feature="derive"' --cfg 'feature="extra-traits"' --cfg 'feature="full"' --cfg 'feature="parsing"' --cfg 'feature="printing"' --cfg 'feature="proc-macro"' --cfg 'feature="visit"' --cfg 'feature="visit-mut"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("clone-impls", "default", "derive", "extra-traits", "fold", "full", "parsing", "printing", "proc-macro", "test", "visit", "visit-mut"))' -C metadata=a5b954370eceb824 -C extra-filename=-07d2dd77fd87062e --out-dir /build/omp-rust-source/target/release/build/syn/07d2dd77fd87062e/out -C strip=debuginfo -L dependency=/build/omp-rust-source/target/release/build/proc-macro2/c7da048f9c2b529a/out -L dependency=/build/omp-rust-source/target/release/build/unicode-ident/3a43f00fb61b1b98/out --extern proc_macro2=/build/omp-rust-source/target/release/build/proc-macro2/c7da048f9c2b529a/out/libproc_macro2-c7da048f9c2b529a.rmeta --extern quote=/build/omp-rust-source/target/release/build/quote/efa91ed1fcfd801e/out/libquote-efa91ed1fcfd801e.rmeta --extern unicode_ident=/build/omp-rust-source/target/release/build/unicode-ident/3a43f00fb61b1b98/out/libunicode_ident-3a43f00fb61b1b98.rmeta --cap-lints allow -C target-cpu=x86-64-v2 --force-warn=unused_crate_dependencies` (signal: 11, SIGSEGV: invalid memory reference)
+omp-native-deps> warning: build failed, waiting for other jobs to finish...
+error: Cannot build '/nix/store/n5yj0rr2y0k4bk8mqqgqn7nrz4ac3134-omp-native-deps-0.0.0.drv'.
+       Reason: builder failed with exit code 101.
+       Output paths:
+         /nix/store/3gj48frmdfi183mj9jnp8y34lrg6s1sp-omp-native-deps-0.0.0
+       Last 25 log lines:
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(+0x6340974) [0x7ffff5340974]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(_RNvCsd870qKLMfEr_18rustc_hir_analysis11check_crate+0x347) [0x7ffff5340025]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(_RNvNtCs2fVnFLQRhRl_15rustc_interface6passes8analysis+0x1e3) [0x7ffff54395b9]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(+0x6d19a1f) [0x7ffff5d19a1f]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(+0x6d19813) [0x7ffff5d19813]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(+0x6ee54b9) [0x7ffff5ee54b9]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(+0x6f1cd42) [0x7ffff5f1cd42]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(+0x6f1caed) [0x7ffff5f1caed]
+       > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-2026-10-06/lib/librustc_driver-f344ad00d19f4329.so(+0x6f17d9b) [0x7ffff5f17d9b]
+       > /nix/store/qqiqd3ah10x8hzsif4j1y4xc1miw23nx-glibc-2.42-67/lib/libc.so.6(+0x9ce53) [0x7fffeec9ce53]
+       > /nix/store/qqiqd3ah10x8hzsif4j1y4xc1miw23nx-glibc-2.42-67/lib/libc.so.6(+0x12407c) [0x7fffeed2407c]
+       >
+       > note: rustc unexpectedly overflowed its stack! this is a bug
+       > note: we would appreciate a report at https://github.com/rust-lang/rust
+       > help: you can increase rustc's stack size by setting RUST_MIN_STACK=35651584
+       > note: backtrace dumped due to SIGSEGV! resuming signal
+       >    Compiling jobserver v0.1.35
+       >    Compiling getrandom v0.2.17
+       >    Compiling crypto-common v0.2.2
+       >    Compiling errno v0.3.14
+       > error: could not compile `syn` (lib)
+       >
+       > Caused by:
+       >   process didn't exit successfully: `rustc --crate-name syn --edition=2021 /nix/store/34kzgndkzwqrsy92siwlys8w0fj3b5b9-vendor-cargo-deps/c19b7c6f923b580ac259164a89f2577984ad5ab09ee9d583b888f934adbbe8d0/syn-2.0.119/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat,unused-externs-silent --crate-type lib --emit=dep-info,metadata,link -Z embed-metadata=no -C opt-level=3 -C embed-bitcode=no -C codegen-units=1 --cfg 'feature="clone-impls"' --cfg 'feature="default"' --cfg 'feature="derive"' --cfg 'feature="extra-traits"' --cfg 'feature="full"' --cfg 'feature="parsing"' --cfg 'feature="printing"' --cfg 'feature="proc-macro"' --cfg 'feature="visit"' --cfg 'feature="visit-mut"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("clone-impls", "default", "derive", "extra-traits", "fold", "full", "parsing", "printing", "proc-macro", "test", "visit", "visit-mut"))' -C metadata=a5b954370eceb824 -C extra-filename=-07d2dd77fd87062e --out-dir /build/omp-rust-source/target/release/build/syn/07d2dd77fd87062e/out -C strip=debuginfo -L dependency=/build/omp-rust-source/target/release/build/proc-macro2/c7da048f9c2b529a/out -L dependency=/build/omp-rust-source/target/release/build/unicode-ident/3a43f00fb61b1b98/out --extern proc_macro2=/build/omp-rust-source/target/release/build/proc-macro2/c7da048f9c2b529a/out/libproc_macro2-c7da048f9c2b529a.rmeta --extern quote=/build/omp-rust-source/target/release/build/quote/efa91ed1fcfd801e/out/libquote-efa91ed1fcfd801e.rmeta --extern unicode_ident=/build/omp-rust-source/target/release/build/unicode-ident/3a43f00fb61b1b98/out/libunicode_ident-3a43f00fb61b1b98.rmeta --cap-lints allow -C target-cpu=x86-64-v2 --force-warn=unused_crate_dependencies` (signal: 11, SIGSEGV: invalid memory reference)
+       > warning: build failed, waiting for other jobs to finish...
+       For full logs, run:
+         nix log /nix/store/n5yj0rr2y0k4bk8mqqgqn7nrz4ac3134-omp-native-deps-0.0.0.drv
+error: Cannot build '/nix/store/1ba49qcnj23xk896fdrxqq79xxkkkp0n-omp-native-18.14.0.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/054ad0c6xz1zc4j88zzfpjvpxmg1n85f-omp-native-18.14.0
+error: Cannot build '/nix/store/1i157rb5vsa6c803llk00x1viwgahzxg-omp-18.14.0.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/kkkbcik99lfhh7mm6lybjc6add7i5n08-omp-18.14.0
+error: Cannot build '/nix/store/0ap1vs2spxj61npph0051xrwa5zc94bg-man-paths.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/4x0vyrvd3p9pnfrl3c7hgs9n76p2njk0-man-paths
+error: Cannot build '/nix/store/jm7s09811ahw5r6aasqs6w16b1klrvhc-omp-18.14.0_fish-completions.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/160s62v059dynqjy5wxfxv2a0dngc0jn-omp-18.14.0_fish-completions
+error: Cannot build '/nix/store/ljv1jqk7i493zysljwzsfbdyfl88y4r2-system-path.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/4dxqqav5xmaf5mnkyr3w2gph0vpfkv86-system-path
+error: Cannot build '/nix/store/q7sxrvxk0044d971lgmx1m95ldrmzd3j-nixos-system-wassaa-26.11.20261027.31ecbac.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/hycppin1x1mc43pkbs067chivb3jdpac-nixos-system-wassaa-26.11.20261027.31ecbac
+┏━ 7 Errors: 
+ ⋮ 
+┃        > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-202…
+┃        > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-202…
+┃        > /nix/store/iaiyydfjjb1ww7z4mwrsq1cfc043ignj-rust-default-1.101.0-nightly-202…
+┃        > /nix/store/qqiqd3ah10x8hzsif4j1y4xc1miw23nx-glibc-2.42-67/lib/libc.so.6(+0x9…
+┃        > /nix/store/qqiqd3ah10x8hzsif4j1y4xc1miw23nx-glibc-2.42-67/lib/libc.so.6(+0x1…
+┃        >
+┃        > note: rustc unexpectedly overflowed its stack! this is a bug
+┃        > note: we would appreciate a report at https://github.com/rust-lang/rust
+┃        > help: you can increase rustc's stack size by setting RUST_MIN_STACK=35651584
+┃        > note: backtrace dumped due to SIGSEGV! resuming signal
+┃        >    Compiling jobserver v0.1.35
+┃        >    Compiling getrandom v0.2.17
+┃        >    Compiling crypto-common v0.2.2
+┃        >    Compiling errno v0.3.14
+┃        > error: could not compile `syn` (lib)
+┃        >
+┃        > Caused by:
+┃        >   process didn't exit successfully: `rustc --crate-name syn --edition=2021 /…
+┃        > warning: build failed, waiting for other jobs to finish...
+┃        For full logs, run:
+┃          nix log /nix/store/n5yj0rr2y0k4bk8mqqgqn7nrz4ac3134-omp-native-deps-0.0.0.drv
+┣━ Dependency Graph:
+┃       ┌─ ⏸ system-units waiting for 1 ⚠                     
+┃       ├─ ⏸ nixos-env-preinit.fish waiting for 1 ⚠           
+┃       │  ┌─ ⏸ set-environment waiting for 1 ⚠               
+┃       ├─ ⏸ etc-zshenv                                       
+┃       │                    ┌─ ⚠ omp-native-deps-0.0.0 failed with exit code 101 after…
