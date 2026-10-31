@@ -29,21 +29,7 @@
 
     # Development utilities
     inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
-    (inputs.omp.packages.${pkgs.stdenv.hostPlatform.system}.default.override (
-      { craneLib, ... }:
-      let
-        # The pinned Rust compiler overflows its stack while building OMP dependencies.
-        withStack = build: args: build (args // {
-          env = (args.env or { }) // { RUST_MIN_STACK = "35651584"; };
-        });
-      in
-      {
-        craneLib = craneLib // {
-          buildDepsOnly = withStack craneLib.buildDepsOnly;
-          buildPackage = withStack craneLib.buildPackage;
-        };
-      }
-    ))
+    inputs.omp.packages.${pkgs.stdenv.hostPlatform.system}.default
     direnv
     devenv
     nixd # Nix LSP server

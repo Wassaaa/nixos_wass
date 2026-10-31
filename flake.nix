@@ -32,7 +32,10 @@
       url = "github:mariuszkopowski/windows-app-for-linux/721e8d87edfc137d4ce2beeeaafef3009d7c8bb5";
       flake = false;
     };
-    omp.url = "github:can1357/oh-my-pi";
+    omp = {
+      url = "github:nklmilojevic/omp-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     { nixpkgs, nixos-wsl, ... }@inputs:
