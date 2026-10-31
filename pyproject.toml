@@ -9,8 +9,9 @@ x = "wassos_transport:main"
 publish = "repo_config:main"
 
 [tool.uv.build-backend]
+module-root = ".agents/skills/copilot-device/scripts"
 module-name = ["wassos_transport", "repo_config"]
 
 [build-system]
-requires = ["uv_build>=0.9.0,<0.12.0"]
+requires = ["uv_build>=0.9.0,<0.14.0"]
 build-backend = "uv_build"

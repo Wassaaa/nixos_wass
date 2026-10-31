@@ -2,5 +2,4 @@ result
 /.venv/
 /.direnv/
 __pycache__/
-/AGENTS.md
 code-insiders-flake/

@@ -17,12 +17,18 @@ have hardware and host-specific package configuration. Hardware presets live in
 [`profiles/`](./profiles); shared system and user configuration live in
 [`modules/core/`](./modules/core) and [`modules/home/`](./modules/home).
 
+## Feature flags
+
 Host variables control features independently: `enableDesktop`, `enableAudio`,
 `enableBluetooth`, `enableSyncthing`, `enableGaming`, `enableDevelopment`,
-`enableVirtualization` and `enableMultimedia`. Audio enables PipeWire, including
-ALSA, PulseAudio and JACK compatibility. Multimedia provides graphics, codecs
-and command-line media tools; desktop applications belong to the desktop feature.
-Bluetooth is enabled on `tpad`; Syncthing is available but disabled on all hosts.
+`enableVirtualization`, `enableMultimedia` and `enableMediaRouting`.
+
+Audio enables PipeWire, including ALSA, PulseAudio and JACK compatibility.
+Multimedia provides graphics, codecs and command-line media tools; desktop
+applications belong to the desktop feature. `enableMediaRouting` adds OBS
+Studio, qpwgraph and the virtual audio devices; it requires `enableMultimedia`
+and PipeWire audio, and is enabled on `wassaa` only. Bluetooth is enabled on
+`tpad`; Syncthing is available but disabled on all hosts.
 
 ## Building and applying
 
@@ -52,9 +58,9 @@ keep at least five generations and those from the last seven days, and leave
 GC roots, including nix-direnv roots, alone. Cleanup still deletes older
 generations and collects unreferenced store paths. Neither cleanup refreshes the
 boot menu; the next system switch or boot rebuild does. Preview profile deletions
-with `ncg --dry`. In particular,
-review the preview after a rollback: the pinned `nh` version does not explicitly
-protect a current generation that falls outside both retention criteria.
+with `ncg --dry`. In particular, review the preview after a rollback: the pinned
+`nh` version does not explicitly protect a current generation that falls outside
+both retention criteria.
 
 For a Git-backed flake, add new files to the Git index before building; Nix
 otherwise omits untracked files. Review changes with `git status` first. Use a
@@ -63,9 +69,10 @@ previous NixOS generation to roll back if a switch causes problems.
 ## Repository development
 
 The x86_64 Linux development shell is defined in [devshell.nix](./devshell.nix).
-It supplies Lua, LuaLS, StyLua, Python, `uv`,
-`nixd`, `nixfmt` and Git. From the repository root, run `direnv allow` once to
-load it automatically, or use `nix develop` for a shell without direnv.
+It supplies Lua, LuaLS, StyLua, Python, `uv`, `nixd`, `nixfmt`, `statix`,
+`deadnix` and Git. From the repository root, run `direnv allow` once to load it
+automatically, or use `nix develop` for a shell without direnv.
+
 Direnv executes the repository's `.envrc`, so only allow a checkout you trust.
 The user-level direnv configuration loads devenv's integration on demand, so
 its internal helpers do not override nix-direnv when entering a flake shell.
@@ -84,6 +91,17 @@ Without direnv, `nix develop` provides the tools but does not create the editor
 link. LuaLS can use its bundled language server when the editor was not started
 from the development shell.
 
+Format and lint the Nix file you touched with:
+
+```sh
+nixfmt path/to/file.nix
+statix check path/to/file.nix
+deadnix path/to/file.nix
+```
+
+`statix` and `deadnix` still report pre-existing findings in the repository;
+treat those as advisory unless you are changing that file.
+
 Run the Hyprland unit tests from the development shell with:
 
 ```sh
@@ -91,19 +109,27 @@ lua tests/hyprland-monitor-profiles.lua
 lua tests/hyprland-theme.lua
 ```
 
-These tests use small mocks; they do not replace testing inside Hyprland.
+Run the repository Python tests with:
 
-For one-off commands supplied through this repository, pull the latest commit
-and run `uv run x` from the repository root. The current task and any side
-effects are shown before execution; the task changes between troubleshooting
-sessions. Actions requiring changes ask for confirmation.
+```sh
+uv run python -m unittest discover -s tests
+```
+
+These tests use small mocks; they do not replace testing inside Hyprland or on
+the target host. New tests are added when a behavior needs one.
+
+## Agent instructions
+
+AI agents start at [AGENTS.md](./AGENTS.md). Repo-specific procedures live in
+[.agents/skills/](./.agents/skills).
 
 ## Desktop
 
 Desktop hosts use Hyprland with Caelestia, Foot and Vicinae. GDM and GNOME
 remain available as an alternative session. Caelestia handles locking and
-idle in Hyprland. See the [desktop notes](./modules/home/features/desktop/NEW-DESKTOP.md)
-for shortcuts, integration and runtime checks.
+idle in Hyprland. Discord uses Vesktop on desktop hosts. See the
+[desktop notes](./modules/home/features/desktop/NEW-DESKTOP.md) for shortcuts,
+integration and runtime checks.
 
 Set `browser` and `terminal` in each desktop host's variables, for example
 [wassaa's](./hosts/wassaa/variables.nix). The browser choice controls
@@ -150,9 +176,10 @@ gamescope -f -- %command%
 Steam Remote Play firewall ports are not opened by default.
 
 The RTX 2080 on `wassaa` uses NVIDIA's open kernel modules and the stable
-driver from the locked Nixpkgs revision. After changing the driver or kernel
-module flavor, build with `nh os boot` and reboot. Keep a working boot
-generation available for rollback.
+driver from the locked Nixpkgs revision. The experimental NVIDIA VA-API path is
+not enabled; it was rolled back after inconsistent decoding and WebGL breakage.
+After changing the driver or kernel module flavor, build with `nh os boot` and
+reboot. Keep a working boot generation available for rollback.
 
 ## Secrets and networking
 
@@ -192,3 +219,9 @@ notification even without a new editor build. Check its log with
 The Insiders fork snapshots Microsoft's build every 12 hours when it changes.
 NordVPN is updated with Nixpkgs through the flake lockfile. Review lockfile
 changes before applying them.
+
+## Documentation
+
+[`docs/README.md`](./docs/README.md) indexes the research notes and the desktop
+experiment. Research notes are point-in-time; verify versions and runtime
+behavior on the target host before relying on them.

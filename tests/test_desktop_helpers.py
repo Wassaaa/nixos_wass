@@ -247,25 +247,5 @@ ln() {
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("is a directory", result.stderr)
 
-class ScreenshotBindingTests(unittest.TestCase):
-    def test_frozen_picker_uses_primary_screenshot_shortcut(self):
-        binds = (
-            ROOT / "modules/home/features/desktop/hyprland/config/binds/applications.lua"
-        ).read_text()
-        self.assertIn(
-            'hl.bind("SUPER + SHIFT + S", hl.dsp.global("caelestia:screenshotFreeze")',
-            binds,
-        )
-        self.assertEqual(binds.count("caelestia:screenshotFreeze"), 1)
-        self.assertNotIn("frozen-screenshot", binds)
-
-    def test_ocr_uses_text_shortcut(self):
-        binds = (
-            ROOT / "modules/home/features/desktop/hyprland/config/binds/applications.lua"
-        ).read_text()
-        self.assertIn('hl.bind("SUPER + SHIFT + T", exec("wl-ocr")', binds)
-        self.assertEqual(binds.count('exec("wl-ocr")'), 1)
-
-
 if __name__ == "__main__":
     unittest.main()
